@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language Chinese (zh_cn)
-:: last_update 2015-07-10 23:58 GMT+0800 CST
+:: last_update 2015-07-11 00:02 GMT+0800 CST
 
 # 猎影插件接口定义 version 0.2.0
 
@@ -10,19 +10,19 @@ author: sceext <sceext@foxmail.com>
 
 ## 内容目录
 
-+ **[0. 基本说明](#0--基本说明)**
++ **[0. 基本说明](#0-基本说明)**
 
-+ **[1. 猎影插件包的形式](#1--猎影插件包的形式)**
++ **[1. 猎影插件包的形式](#1-猎影插件包的形式)**
 
-+ **[2. 猎影插件接口函数定义](#2--猎影插件接口函数定义)**
++ **[2. 猎影插件接口函数定义](#2-猎影插件接口函数定义)**
   
-  + **[2.1 `GetVersion()`](#2-1-GetVersion--)**
-  + **[2.2 `Parse()`](#2-2-Parse--)**
-  + **[2.3 `ParseURL()`](#2-3-ParseURL--)**
-  + **[2.4 `ParseSomeURL()`](#2-4-ParseSomeURL--)**
-  + **[2.5 `StartConfig()`](#2-5-StartConfig--)**
+  + **[2.1 `GetVersion()`](#21-GetVersion)**
+  + **[2.2 `Parse()`](#22-Parse)**
+  + **[2.3 `ParseURL()`](#23-ParseURL)**
+  + **[2.4 `ParseSomeURL()`](#24-ParseSomeURL)**
+  + **[2.5 `StartConfig()`](#25-StartConfig)**
 
-+ **[3. 示例](#3--示例)**
++ **[3. 示例](#3-示例)**
 
 
 ## 0. 基本说明
@@ -59,19 +59,19 @@ author: sceext <sceext@foxmail.com>
 
 ## 1. 猎影插件包的形式
 
-## 1.1 编程语言
+### 1.1 编程语言
 
 *猎影插件* 使用 **[python3](https://docs.python.org/3/)** 作为 编程语言. 
 
 *猎影* 会附带 **完整**的 python 3.4 运行环境, 包括 标准库, 和默认随 python3 安装的软件包. 
 但是不附带其他使用 pip 安装的软件包. 
 
-## 1.2 打包格式
+### 1.2 打包格式
 
 *猎影插件包* 为标准的 `zip` 格式的 **压缩包**. 
 压缩包 中可包含任意数量的 文件, 其中只有一个 `run.py` 即 猎影插件的**入口文件**, 是**必须**的. 
 
-## 1.3 入口文件 (`run.py`)
+### 1.3 入口文件 (`run.py`)
 
 `run.py` 是 *猎影插件* 的 **入口文件**. 
 `run.py` **必须**位于 压缩包 的**指定位置**. 
