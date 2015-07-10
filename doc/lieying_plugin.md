@@ -1,9 +1,9 @@
-:: lieying_plugin.md, language Chinese (zh_cn)
-:: last_update 2015-07-11 00:02 GMT+0800 CST
+:: lieying_plugin.md, language *Chinese* (`zh_cn`)
+:: *last_update* `2015-07-11 00:04 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.2.0
 
-author: sceext <sceext@foxmail.com>
+author: `sceext <sceext@foxmail.com>`
 
 此文件用来说明 猎影插件接口 的定义. 
 
@@ -16,11 +16,11 @@ author: sceext <sceext@foxmail.com>
 
 + **[2. 猎影插件接口函数定义](#2-猎影插件接口函数定义)**
   
-  + **[2.1 `GetVersion()`](#21-GetVersion)**
-  + **[2.2 `Parse()`](#22-Parse)**
-  + **[2.3 `ParseURL()`](#23-ParseURL)**
-  + **[2.4 `ParseSomeURL()`](#24-ParseSomeURL)**
-  + **[2.5 `StartConfig()`](#25-StartConfig)**
+  + **[2.1 `GetVersion()`](#21-getversion)**
+  + **[2.2 `Parse()`](#22-parse)**
+  + **[2.3 `ParseURL()`](#23-parseurl)**
+  + **[2.4 `ParseSomeURL()`](#24-parsesomeurl)**
+  + **[2.5 `StartConfig()`](#25-startconfig)**
 
 + **[3. 示例](#3-示例)**
 
