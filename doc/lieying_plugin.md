@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-11 08:56 GMT+0800 CST`
+:: *last_update* `2015-07-11 09:32 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.2.0-test.1
 
@@ -26,10 +26,10 @@ author: `sceext <sceext@foxmail.com>`
 + **[2. 猎影插件接口函数定义](#2-猎影插件接口函数定义)**
   
   + **[2.1 `GetVersion()`](#21-getversion)**
-  + **[2.2 `Parse()`](#22-parse)**
-  + **[2.3 `ParseURL()`](#23-parseurl)**
-  + **[2.4 `ParseSomeURL()`](#24-parsesomeurl)**
-  + **[2.5 `StartConfig()`](#25-startconfig)**
+  + **[2.2 `StartConfig()`](#22-startconfig)**
+  + **[2.3 `Parse()`](#23-parse)**
+  + **[2.4 `ParseURL()`](#24-parseurl)**
+  + **[2.5 `ParseSomeURL()`](#25-parsesomeurl)**
 
 + **[3. 示例](#3-示例)**
 
@@ -121,10 +121,13 @@ author: `sceext <sceext@foxmail.com>`
 目前定义的 接口函数 有:
 
 + `GetVersion()`
++ `StartConfig()`
+
+> 
+
 + `Parse()`
 + `ParseURL()`
 + `ParseSomeURL()`
-+ `StartConfig()`
 
 具体的 函数定义, 包括 参数, 返回值, 功能说明, 请见下文. 
 
@@ -133,13 +136,14 @@ author: `sceext <sceext@foxmail.com>`
 
 ### 2.1 `GetVersion()`
 
-### 2.2 `Parse()`
+### 2.2 `StartConfig()`
 
-### 2.3 `ParseURL()`
+### 2.3 `Parse()`
 
-### 2.4 `ParseSomeURL()`
+### 2.4 `ParseURL()`
 
-### 2.5 `StartConfig()`
+### 2.5 `ParseSomeURL()`
+
 
 <!-- TODO -->
 
