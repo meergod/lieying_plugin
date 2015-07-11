@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-11 09:32 GMT+0800 CST`
+:: *last_update* `2015-07-11 18:53 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.2.0-test.1
 
@@ -29,7 +29,6 @@ author: `sceext <sceext@foxmail.com>`
   + **[2.2 `StartConfig()`](#22-startconfig)**
   + **[2.3 `Parse()`](#23-parse)**
   + **[2.4 `ParseURL()`](#24-parseurl)**
-  + **[2.5 `ParseSomeURL()`](#25-parsesomeurl)**
 
 + **[3. 示例](#3-示例)**
 
@@ -92,17 +91,16 @@ author: `sceext <sceext@foxmail.com>`
 + 压缩包 **根目录** 下 
 + 压缩包 根目录 下只有一个文件夹, 且 `run.py` 位于此 唯一 的文件夹下 
 
-**比如**:
+**比如**: 
+`run.py` 有如下 2 种位置:
 
-猎影插件压缩包 根目录 假设为 `root`, 那么 `run.py` 有如下 2 种位置:
-
-**1.**
+**1.** 假设 插件压缩包 根目录 为 `root`
 ```
  - root/
      run.py 
 ```
 
-**2.**
+**2.** 假设 根目录 下只有一个 `plugin` 文件夹
 ```
  - root/
      - plugin/
@@ -127,7 +125,6 @@ author: `sceext <sceext@foxmail.com>`
 
 + `Parse()`
 + `ParseURL()`
-+ `ParseSomeURL()`
 
 具体的 函数定义, 包括 参数, 返回值, 功能说明, 请见下文. 
 
@@ -141,8 +138,6 @@ author: `sceext <sceext@foxmail.com>`
 ### 2.3 `Parse()`
 
 ### 2.4 `ParseURL()`
-
-### 2.5 `ParseSomeURL()`
 
 
 <!-- TODO -->
@@ -189,6 +184,11 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> 
 
 ```
+
+### 3.3 测试 `Parse()`
+
+### 3.4 测试 `ParseURL()`
+
 
 <!-- TODO -->
 
