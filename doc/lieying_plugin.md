@@ -1,7 +1,7 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-12 21:24 GMT+0800 CST`
+:: *last_update* `2015-07-12 22:43 GMT+0800 CST`
 
-# 猎影插件接口定义 version 0.2.0-test.3
+# 猎影插件接口定义 version 0.2.0
 
 author: `sceext <sceext@foxmail.com>`
 
@@ -644,12 +644,12 @@ Type "help", "copyright", "credits" or "license" for more information.
     ],
     "home": "https://github.com/sceext2/parse_video/tree/output-easy",
     "license": "GNU GPLv3+",
-    "name": "parse_video_9lieying_plugin59 (plugin version 0.13.0, kernel version 0.3.5.1) license GNU GPLv3+ ",
+    "name": "parse_video_10lieying_plugin60 (plugin version 0.14.0, kernel version 0.3.5.1) license GNU GPLv3+ ",
     "note": "A parse plugin for lieying with parse support of parse_video. ",
-    "port_version": "0.2.0-test.3",
+    "port_version": "0.2.0",
     "type": "parse",
     "uuid": "ebd9ac19-dec6-49bb-b96f-9a127dc4d0c3",
-    "version": "0.13.0"
+    "version": "0.14.0"
 }
 >>> 
 ```
