@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-12 13:08 GMT+0800 CST`
+:: *last_update* `2015-07-12 14:06 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.2.0-test.1
 
@@ -516,10 +516,10 @@ raise Exception('can not load page: http 404')
 
 + **参数**
   
-  + **`url`** 类型: 字符串. 
+  + **`url`** 类型: 字符串 <br />
     此字符串与调用 `Parse()` 进行 *单视频解析* 时传入的 `input_text` 相同. 
   
-  + **`format`** 类型: 字符串. 
+  + **`format`** 类型: 字符串 <br />
     此字符串与调用 `Parse()` 进行 *单视频解析* 时返回结果中的一个 `label` *字符串* 相同. 
     表示需要解析此种格式视频的文件下载地址. 
   
@@ -554,7 +554,7 @@ raise Exception('can not load page: http 404')
   
   每个 `dict` 表示一个 **分段视频文件** 的*下载信息*. 
   
-  之所以这样设计, 是因为 有许多视频, 都是**分段视频*, 需要下载所有 *分段视频文件*, 
+  之所以这样设计, 是因为 有许多视频, 都是**分段视频**, 需要下载所有 *分段视频文件*, 
   并且 *合并* 之后, 才能得到完整的视频. 
   
   + **protocal** 类型: 字符串 <br />
