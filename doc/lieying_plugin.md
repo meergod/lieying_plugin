@@ -1,7 +1,7 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-12 15:21 GMT+0800 CST`
+:: *last_update* `2015-07-12 21:19 GMT+0800 CST`
 
-# 猎影插件接口定义 version 0.2.0-test.2
+# 猎影插件接口定义 version 0.2.0-test.3
 
 author: `sceext <sceext@foxmail.com>`
 
@@ -277,7 +277,7 @@ raise Exception('can not load page: http 404')
   ```
   def StartConfig()
   ```
-  **注意**: **所有类型**的插件都**必须**定义此接口函数. 
+  **注意**: **所有类型**的插件都**可以**定义此接口函数. 
 
 + **功能说明** <br />
   用于启动插件自带的配置程序. 
@@ -302,9 +302,9 @@ raise Exception('can not load page: http 404')
   + 建议使用 python3 自带的 [`tkinter`](https://docs.python.org/3/library/tk.html) 
     组件提供图形界面的配置程序. 
   
-  + 如果插件不支持配置, 或者没有自带的配置程序, 建议使用 `raise` 抛出错误. 
+  + 如果插件不支持配置, 或者没有自带的配置程序, 请不要定义 `StartConfig()` 函数. 
     
-    这样猎影将有机会提示用户插件不支持配置. 
+    这样猎影的插件管理界面, 就不会再显示 *配置插件* 按钮. 
   
   + 插件可以自行使用配置文件保存配置信息. 配置文件可以与插件的 python 代码放在一起. 
     
@@ -644,12 +644,12 @@ Type "help", "copyright", "credits" or "license" for more information.
     ],
     "home": "https://github.com/sceext2/parse_video/tree/output-easy",
     "license": "GNU GPLv3+",
-    "name": "parse_video_8lieying_plugin58 (plugin version 0.12.0, kernel version 0.3.5.1) license GNU GPLv3+ ",
+    "name": "parse_video_9lieying_plugin59 (plugin version 0.13.0, kernel version 0.3.5.1) license GNU GPLv3+ ",
     "note": "A parse plugin for lieying with parse support of parse_video. ",
-    "port_version": "0.2.0-test.2",
+    "port_version": "0.2.0-test.3",
     "type": "parse",
     "uuid": "ebd9ac19-dec6-49bb-b96f-9a127dc4d0c3",
-    "version": "0.12.0"
+    "version": "0.13.0"
 }
 >>> 
 ```
