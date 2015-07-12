@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-12 21:19 GMT+0800 CST`
+:: *last_update* `2015-07-12 21:24 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.2.0-test.3
 
@@ -302,7 +302,7 @@ raise Exception('can not load page: http 404')
   + 建议使用 python3 自带的 [`tkinter`](https://docs.python.org/3/library/tk.html) 
     组件提供图形界面的配置程序. 
   
-  + 如果插件不支持配置, 或者没有自带的配置程序, 请不要定义 `StartConfig()` 函数. 
+  + 如果插件**不支持配置**, 或者没有自带的配置程序, 请**不要定义** `StartConfig()` 函数. 
     
     这样猎影的插件管理界面, 就不会再显示 *配置插件* 按钮. 
   
