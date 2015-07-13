@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/you-get (parse)
 # plugin/main: plugin main file. 
-# version 0.0.3.0 test201507131141
+# version 0.0.4.0 test201507131221
 
 # import
 
@@ -34,8 +34,31 @@ def parse_more(url):
     # add title
     out['title'] = vlist['title'] + '_' + vlist['site_name']
     
-    # add data, video items
+    # add data, video items, add each item
     out['data'] = []
+    for i in range(len(vlist['list'])):
+        raw = vlist['list'][i]
+        one = {}
+        out['data'].append(one)
+        
+        one['url'] = raw['url']
+        one['no'] = raw['no']
+        one['subtitle'] = raw['subtitle']
+        
+        # make name
+        name = host_make_name.make_title(
+        			title=vlist['title'] + raw['no'], 
+        			title_sub=raw['subtitle'], 
+        			title_no=i, 
+        			title_short=vlist['title'], 
+        			site_name=vlist['site_name'])
+        # make name done
+        one['name'] = name
+    # add items done
+    
+    out['total'] = len(out['data'])
+    # done
+    return out
 
 # parse one video
 def parse_one(url):
