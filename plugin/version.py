@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/you-get (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.4.0 test201507131537
+# version 0.0.5.0 test201507131608
 
 # import
 from . import conf
@@ -23,7 +23,7 @@ THIS_HOME = 'https://github.com/sceext2/lieying_plugin/tree/plugin-you-get'
 THIS_NOTE = 'A lieying plugin (parse) with parse support of you-get <https://github.com/soimort/you-get>. '
 
 THIS_RAW_NAME = [
-    'lieying_plugin_you-get', 
+    'lieying_plugin_you-get ', 
     ' (plugin version ', 
     ', you-get version ', 
     ') ', 
