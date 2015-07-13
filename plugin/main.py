@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/you-get (parse)
 # plugin/main: plugin main file. 
-# version 0.0.6.0 test201507131454
+# version 0.0.7.0 test201507131529
 
 # import
 
@@ -68,7 +68,7 @@ def parse_one(url):
     
     # try to parse raw_text
     try:
-        raw_info = parse_you_get.parse_info(stdout)
+        raw_info = parse0.parse_info(stdout)
     except Exception as e:	# output error
         raise Exception('plugin.main: ERROR: [parse_you_get.parse_info()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
     
@@ -129,7 +129,7 @@ def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     
     # try to parse raw_text
     try:
-        raw_info = parse_you_get.parse_url(stdout)
+        raw_info = parse0.parse_url(stdout)
     except Exception as e:	# output error
         raise Exception('plugin.main: ERROR: [parse_you_get.parse_url()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
     
