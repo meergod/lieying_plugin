@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# main.py for lieying_plugin/you-get (parse)
+# main.py for lieying_plugin/flvgo (parse)
 # plugin/main: plugin main file. 
-# version 0.0.7.0 test201507131529
+# version 0.0.8.0 test201507132016
 
 # import
 
@@ -12,12 +12,12 @@ from . import filter as filter0
 
 from . import conf
 from . import tinfo
-from . import run_sub
+from . import http_request
 
 from .plist import entry as plist
 from .easy import host_make_name
 
-from . import parse_you_get as parse0
+from . import parse_flvgo as parse0
 
 # function
 
@@ -63,20 +63,24 @@ def parse_more(url):
 # parse one video
 def parse_one(url):
     
-    # run you-get with --info
-    stdout, stderr = run_sub.run_you_get(['--info', url])
-    
-    # try to parse raw_text
+    # download flvgo html text
+    flvgo_url = parse0.make_flvgo_url(url)
     try:
-        raw_info = parse0.parse_info(stdout)
+        html_text = http_request.http_get(flvgo_url)
+    except Exception as e:
+        raise Exception('plugin.main: ERROR: load flvgo html text failed. Please check the network. \"' + flvgo_url + '\"', e)
+    
+    # try to parse html_text
+    try:
+        raw_info = parse0.parse_html(html_text)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [parse_you_get.parse_info()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise Exception('plugin.main: ERROR: [parse_flvgo.parse_html()] flvgo may get errors, please see <' + flvgo_url + '>', e)
     
     # try to translate info
     try:
         out = tinfo.t_format(raw_info)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [tinfo.t_format()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise Exception('plugin.main: ERROR: [tinfo.t_format()] flvgo may get errors, please see <' + flvgo_url + '>', e)
     
     # done
     return out
@@ -108,7 +112,7 @@ def lieying_plugin_GetVersion():
     return text
 
 def lieying_plugin_StartConfig():
-    raise Exception('lieying_plugin/you-get: ERROR: [StartConfig()] not support config now. ')
+    raise Exception('lieying_plugin/flvgo: ERROR: [StartConfig()] not support config now. ')
 
 def lieying_plugin_Parse(input_text):
     # check is video list
@@ -122,22 +126,27 @@ def lieying_plugin_Parse(input_text):
 
 def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     
-    # NOTE now just ignore label, i_min, i_max TODO
+    # NOTE now just ignore i_min, i_max
+    # but NOT ignore label
     
-    # run you-get with --info
-    stdout, stderr = run_sub.run_you_get(['--url', url])
-    
-    # try to parse raw_text
+    # download flvgo html text
+    flvgo_url = parse0.make_flvgo_url(url)
     try:
-        raw_info = parse0.parse_url(stdout)
+        html_text = http_request.http_get(flvgo_url)
+    except Exception as e:
+        raise Exception('plugin.main: ERROR: load flvgo html text failed. Please check the network. \"' + flvgo_url + '\"', e)
+    
+    # try to parse html_text
+    try:
+        raw_info = parse0.parse_html(html_text)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [parse_you_get.parse_url()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise Exception('plugin.main: ERROR: [parse_flvgo.parse_html()] flvgo may get errors, please see <' + flvgo_url + '>', e)
     
     # try to translate info
     try:
         out = tinfo.t_url(raw_info)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [tinfo.t_url()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise Exception('plugin.main: ERROR: [tinfo.t_url()] flvgo may get errors, please see <' + flvgo_url + '>', e)
     
     # done
     text = json.dumps(out)

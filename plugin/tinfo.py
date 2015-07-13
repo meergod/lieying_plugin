@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
-# tinfo.py for lieying_plugin/you-get (parse)
+# tinfo.py for lieying_plugin/flvgo (parse)
 # plugin/tinfo: translate info to plugin output format. 
 # version 0.0.1.0 test201507131525
 
 # import
 
 # global vars
-TYPE_TO_EXT_LIST = {
-    'video/x-flv' : 'flv', 
-}
+DEFAULT_EXT = 'mp4'
 
 # base functions
 
-def get_you_get_ext(type_text):
+def get_flvgo_ext(raw_link):
+    # TODO
     
     # get MIME format text
     mime = type_text.split('(', 1)[1].split(')', 1)[0]
@@ -26,6 +25,7 @@ def get_you_get_ext(type_text):
 
 # translate for Parse() one video output
 def t_format(raw_info):
+    # TODO
     raw = raw_info
     out = {}	# output info
     
@@ -53,6 +53,7 @@ def t_format(raw_info):
 
 # translate for ParseURL() output
 def t_url(raw_info):
+    # TODO
     raw = raw_info
     
     out = []

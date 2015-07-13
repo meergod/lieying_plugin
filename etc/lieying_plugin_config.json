@@ -1,8 +1,7 @@
 {
-	"__note__" : "lieying_plugin/you-get config file", 
+	"__note__" : "lieying_plugin/flvgo config file", 
 	
-	"you_get_bin" : "you-get/you-get", 
-	"http_proxy" : "", 
+	"flvgo_url" : "http://flvgo.com/download?url=", 
 	
 	"__note__" : "end lieying_plugin_config.json"
 }

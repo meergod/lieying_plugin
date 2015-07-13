@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-# filter.py for lieying_plugin/you-get (parse)
+# filter.py for lieying_plugin/flvgo (parse)
 # plugin/filter: define filter for GetVersion()
-# version 0.0.2.0 test201507131538
+# version 0.0.3.0 test201507131952
 
 # global vars
 
 LIEYING_PLUGIN_FILTER = [
-    '^http://.+\.iqiyi\.com/.+', 
+    '^http://.+', 
 ]
 
 # function

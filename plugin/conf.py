@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# conf.py for lieying_plugin/you-get (parse)
+# conf.py for lieying_plugin/flvgo (parse)
 # plugin/conf: plugin config file support. 
-# version 0.0.2.0 test201507131356
+# version 0.0.3.0 test201507131951
 
 # import
 import json
@@ -13,8 +13,7 @@ CONFIG_FILE = '../etc/lieying_plugin_config.json'
 
 etc = {}	# config info
 
-etc['you_get_bin'] = ''
-etc['http_proxy'] = ''
+etc['flvgo_url'] = ''
 
 etc['flag_loaded'] = False
 
@@ -32,17 +31,9 @@ def load():
     
     # read and set etc
     try:	# config file content error
-        etc['you_get_bin'] = info['you_get_bin']
-        etc['http_proxy'] = info['http_proxy']
+        etc['flvgo_url'] = info['flvgo_url']
     except Exception as e:
         raise Exception('plugin.conf: ERROR: config file content error', e)
-    
-    # process you_get_bin
-    now_path = os.path.dirname(__file__)
-    base_path = os.path.join(now_path, '../')	# plugin root path
-    bin_path = os.path.join(base_path, etc['you_get_bin'])	# you_get_bin path is relative with plugin root path
-    # update bin_path
-    etc['you_get_bin'] = bin_path
     
     # done
     etc['flag_loaded'] = True
