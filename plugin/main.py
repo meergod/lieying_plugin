@@ -62,6 +62,11 @@ def parse_more(url):
 
 # parse one video
 def parse_one(url):
+    
+    # NOTE load config here
+    conf.load()
+    
+    # TODO
     pass
 
 # lieying_plugin functions
@@ -103,6 +108,11 @@ def lieying_plugin_Parse(input_text):
     return text
 
 def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
+    
+    # NOTE load config here
+    conf.load()
+    
+    # TODO
     pass
 
 # end main.py
