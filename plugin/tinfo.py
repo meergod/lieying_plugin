@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # tinfo.py for lieying_plugin/flvgo (parse)
 # plugin/tinfo: translate info to plugin output format. 
-# version 0.0.3.0 test201507132257
+# version 0.0.4.0 test201507132306
 
 # import
 
@@ -176,44 +176,53 @@ def pre_process(raw_info):
     # done
     return out
 
-# export functions TODO
+# export functions
 
 # translate for Parse() one video output
 def t_format(raw_info):
-    # TODO
-    raw = raw_info
+    
+    # use pre_process first
+    info = pre_process(raw_info)
+    
     out = {}	# output info
-    
     out['type'] = 'formats'
-    out['name'] = raw['title'] + '_' + raw['site']
+    out['name'] = info['name'] + '_' + info['site']
     
-    # only support one output format
-    one = {}
-    out['data'] = [one]
+    # process each format
+    out['data'] = []
     
-    # fix size string, MiB -> MB
-    size = raw['size'].replace('iB', 'B', 1)
-    one['size'] = size
+    for d in info['data']:
+        one = {}
+        one['size'] = d['size']
+        one['ext'] = d['ext']
+        one['label'] = d['label']
+        out['data'].append(one)
+    # add formats done
     
-    # get ext
-    ext = get_you_get_ext(raw['type'])
-    one['ext'] = ext
-    
-    # make label
-    label = 'default_' + raw['type']
-    one['label'] = label
-    
-    # done
     return out
 
 # translate for ParseURL() output
-def t_url(raw_info):
-    # TODO
-    raw = raw_info
+def t_url(raw_info, label):
     
-    out = []
+    # use pre_process first
+    info = pre_process(raw_info)
+    
+    # select one format by label
+    lbefore = label.split('_', 1)[0]
+    f = None
+    # just use first part to select
+    for d in info['data']:
+        l = d['label'].split('_', 1)[0]
+        if l == lbefore:	# select this
+            f = d
+            break
+    # check f
+    if f == None:
+        raise Exception('tinfo: ERROR: can not select this label \"' + label + '\", no such video info')
+    
+    out = []	# output info
     # process each url, just add it
-    for u in raw:
+    for u in f['url']:
         one = {}
         one['protocol'] = 'http'
         one['args'] = {}

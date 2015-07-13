@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/flvgo (parse)
 # plugin/main: plugin main file. 
-# version 0.0.8.0 test201507132016
+# version 0.0.9.0 test201507132302
 
 # import
 
@@ -144,7 +144,7 @@ def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     
     # try to translate info
     try:
-        out = tinfo.t_url(raw_info)
+        out = tinfo.t_url(raw_info, label)
     except Exception as e:	# output error
         raise Exception('plugin.main: ERROR: [tinfo.t_url()] flvgo may get errors, please see <' + flvgo_url + '>', e)
     
