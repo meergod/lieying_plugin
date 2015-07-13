@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/you-get (parse)
 # plugin/main: plugin main file. 
-# version 0.0.4.0 test201507131221
+# version 0.0.5.0 test201507131229
 
 # import
 
@@ -24,7 +24,7 @@ from . import parse_you_get as parse0
 # parse more video
 def parse_more(url):
     # parse video list
-    vlist = plist.parse_vidoe_list(url)
+    vlist = plist.parse_video_list(url)
     
     # make output info
     out = {}
@@ -49,7 +49,7 @@ def parse_more(url):
         name = host_make_name.make_title(
         			title=vlist['title'] + raw['no'], 
         			title_sub=raw['subtitle'], 
-        			title_no=i, 
+        			title_no=(i + 1), 
         			title_short=vlist['title'], 
         			site_name=vlist['site_name'])
         # make name done
