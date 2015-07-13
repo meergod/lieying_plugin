@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/you-get (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.2.0 test201507131133
+# version 0.0.3.0 test201507131422
 
 # import
 from . import conf
@@ -33,8 +33,18 @@ THIS_RAW_NAME = [
 
 # get you-get version
 def get_you_get_version():
-    # TODO not finished
-    return '[unknow]'
+    
+    try:	# run you-get may get errors
+        stdout, stderr = run_sub.run_you_get(['--version'])
+        
+        # parse returned text to get you-get version
+        raw = stdout.split(',', 1)[0]
+        ver = raw.split(' ', 1)[1]
+    except Exception:	# just use [unknow]
+        ver = '[unknow]'
+    
+    # done
+    return ver
 
 # make plugin name
 def make_plugin_name():
