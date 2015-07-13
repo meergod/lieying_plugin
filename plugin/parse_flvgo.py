@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # parse_flvgo.py for lieying_plugin/flvgo (parse)
 # plugin/parse_flvgo: parse html text of flvgo
-# version 0.0.3.0 test201507132127
+# version 0.0.4.0 test201507132216
 
 # import
 
@@ -58,15 +58,26 @@ def parse_html(html_text):
     flist = []
     out['data'] = flist
     
-    if len(vfname) != len(vurl):
-        raise Exception('parse_flvgo: ERROR: page struct error')
+    # NOTE fix vurl here
+    vurl = vurl[1::2]
     
-    for i in range(len(vurl)):
+    # check page struct
+    if vfname.len != vurl.len:
+        raise Exception('parse_flvgo: ERROR: page struct error, vfname.len ' + str(vfname.len) + ', vurl.len ' + str(vurl.len))
+    
+    # process each format
+    for i in range(vurl.len):
         now_name = vfname[i]
         now_url = vurl[i]
         
         one = {}
-        one['label'] = now_name.text()
+        
+        label = now_name.text()
+        # simple process label text
+        label = label.split('\n')[:2]
+        one['label'] = label
+        
+        # get files info
         one['file'] = []
         onef = one['file']
         
