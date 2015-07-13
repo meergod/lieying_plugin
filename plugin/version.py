@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/flvgo (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.6.0 test201507131956
+# version 0.0.7.0 test201507132315
 
 # import
 from . import conf
 
 # global vars
 
-THIS_PACK_VERSION = '1'
+THIS_PACK_VERSION = '2'
 
 LIEYING_PLUGIN_PORT_VERSION = '0.2.0'
 LIEYING_PLUGIN_TYPE = 'parse'
 
 LIEYING_PLUGIN_UUID = 'e536174b-7d87-4fa0-9d7e-f068fcab169e'
-LIEYING_PLUGIN_VERSION = '0.1.0'
+LIEYING_PLUGIN_VERSION = '0.2.0'
 
 THIS_AUTHOR = 'sceext <sceext@foxmail.com>'
 THIS_LICENSE = 'unlicense <http://unlicense.org> and FreeBSD License'
