@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/you-get (parse)
 # plugin/main: plugin main file. 
-# version 0.0.2.0 test201507131041
+# version 0.0.3.0 test201507131141
 
 # import
 
@@ -14,9 +14,19 @@ from . import conf
 from . import tinfo
 from . import run_sub
 
+from .plist import entry as plist
+
 from . import parse_you_get as parse0
 
 # function
+
+# parse one video
+def parse_one(url):
+    pass
+
+# parse more video
+def parse_more(url):
+    pass
 
 # lieying_plugin functions
 

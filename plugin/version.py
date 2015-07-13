@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/you-get (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.1.0 test201507131030
+# version 0.0.2.0 test201507131133
 
 # import
 from . import conf
@@ -18,7 +18,7 @@ LIEYING_PLUGIN_UUID = '588e29b8-cc31-4416-9ed7-80b48f7971a1'
 LIEYING_PLUGIN_VERSION = '0.0.1'
 
 THIS_AUTHOR = 'sceext <sceext@foxmail.com>'
-THIS_LICENSE = 'unlicense <http://unlicense.org>'
+THIS_LICENSE = 'unlicense <http://unlicense.org> and FreeBSD License'
 THIS_HOME = 'https://github.com/sceext2/lieying_plugin/tree/plugin-you-get'
 THIS_NOTE = 'A lieying plugin (parse) with parse support of you-get <https://github.com/soimort/you-get>. '
 
