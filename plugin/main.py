@@ -15,17 +15,30 @@ from . import tinfo
 from . import run_sub
 
 from .plist import entry as plist
+from .easy import host_make_name
 
 from . import parse_you_get as parse0
 
 # function
 
-# parse one video
-def parse_one(url):
-    pass
-
 # parse more video
 def parse_more(url):
+    # parse video list
+    vlist = plist.parse_vidoe_list(url)
+    
+    # make output info
+    out = {}
+    out['type'] = 'list'
+    out['more'] = False
+    
+    # add title
+    out['title'] = vlist['title'] + '_' + vlist['site_name']
+    
+    # add data, video items
+    out['data'] = []
+
+# parse one video
+def parse_one(url):
     pass
 
 # lieying_plugin functions
@@ -57,7 +70,14 @@ def lieying_plugin_StartConfig():
     raise Exception('lieying_plugin/you-get: ERROR: [StartConfig()] not support config now. ')
 
 def lieying_plugin_Parse(input_text):
-    pass
+    # check is video list
+    if plist.check_is_list_url(input_text):
+        info = parse_more(input_text)
+    else:	# should use parse_one
+        info = parse_one(input_text)
+    # done
+    text = json.dumps(info)
+    return text
 
 def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     pass

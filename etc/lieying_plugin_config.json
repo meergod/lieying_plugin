@@ -1,0 +1,10 @@
+{
+	"__note__" : "lieying_plugin/you-get config file", 
+	
+	"you_get_bin" : "o/you-get/you-get", 
+	"http_proxy" : "", 
+	
+	"__note__" : "end lieying_plugin_config.json"
+}
+
+
