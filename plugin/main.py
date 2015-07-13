@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/you-get (parse)
 # plugin/main: plugin main file. 
-# version 0.0.1.0 test201507131036
+# version 0.0.2.0 test201507131041
 
 # import
 
@@ -35,6 +35,9 @@ def lieying_plugin_GetVersion():
     out['license'] = version.THIS_LICENSE
     out['home'] = version.THIS_HOME
     out['note'] = version.THIS_NOTE
+    
+    # self define info
+    out['pack_version'] = version.THIS_PACK_VERSION
     
     # done
     text = json.dumps(out)
