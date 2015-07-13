@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # tinfo.py for lieying_plugin/flvgo (parse)
 # plugin/tinfo: translate info to plugin output format. 
-# version 0.0.2.0 test201507132250
+# version 0.0.3.0 test201507132257
 
 # import
 
@@ -117,6 +117,11 @@ def make_label(raw_info, time, split_char='：'):
     before = raw_info[0].split(split_char, 1)[1]
     after = clean_before(raw_info[1])
     
+    # NOTE fix after with ()
+    after = after.replace('（', '', 1).replace('）', '', 1)
+    # NOTE fix time
+    time = time.replace(' ', '', 1)
+    
     label = before + '_' + after + '_' + time
     return label
 
@@ -166,7 +171,7 @@ def pre_process(raw_info):
     # get formats info done
     
     # sort formats by size
-    dlist.sort(key=lambda x:x['size_byte'], reversed=False)
+    dlist.sort(key=lambda x:x['size_byte'], reverse=True)
     
     # done
     return out
