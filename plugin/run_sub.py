@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # run_sub.py for lieying_plugin/you-get (parse)
 # plugin/run_sub: run subprocess
-# version 0.0.6.0 test201507151829
+# version 0.0.6.1 test201507151839
 
 # import
 
@@ -59,9 +59,9 @@ def run_you_get(args):
     
     # NOTE fix \r\n here
     if '\r\n' in stdout:
-        stdout.replace('\r\n', '\n')
+        stdout = stdout.replace('\r\n', '\n')
     if '\r\n' in stderr:
-        stderr.replace('\r\n', '\n')
+        stderr = stderr.replace('\r\n', '\n')
     
     # done
     return stdout, stderr
