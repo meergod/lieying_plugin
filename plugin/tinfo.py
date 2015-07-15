@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # tinfo.py for lieying_plugin/flvgo (parse)
 # plugin/tinfo: translate info to plugin output format. 
-# version 0.0.4.0 test201507132306
+# version 0.0.6.0 test201507152259
 
 # import
 
@@ -9,15 +9,27 @@ import math
 
 # global vars
 DEFAULT_EXT = 'mp4'
+MAX_EXT_LEN = 6
 
 # base functions
 
 def get_flvgo_ext(raw_link):
     try:
         ext = raw_link.split('?', 1)[0].rsplit('.', 1)[1]
+        # check ext
+        if len(ext) > MAX_EXT_LEN:
+            # the ext should be error
+            raise Exception('ext len too big')
     except Exception:	# get ext from raw_link failed, use default ext
-        ext = DEFAULT_EXT
-    
+        # try to check m3u8, flv, mp4 format
+        if 'm3u8' in raw_link:
+            ext = 'm3u8'
+        elif 'mp4' in raw_link:
+            ext = 'mp4'
+        elif 'flv' in raw_link:
+            ext = 'flv'
+        else:	# just use default ext
+            ext = DEFAULT_EXT
     # done
     return ext
 
@@ -160,8 +172,13 @@ def pre_process(raw_info):
             one['url'].append(u['url'])
             size_list.append(u['size'])
         
-        # process size
-        size_byte, size_str = add_size(size_list)
+        # process size, NOTE convert size may failed
+        
+        try:
+            size_byte, size_str = add_size(size_list)
+        except Exception as e:
+            size_byte = -1
+            size_str = 'unknow'
         
         one['size_byte'] = size_byte
         one['size'] = size_str
