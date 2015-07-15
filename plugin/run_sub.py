@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # run_sub.py for lieying_plugin/you-get (parse)
 # plugin/run_sub: run subprocess
-# version 0.0.5.0 test201507151551
+# version 0.0.6.0 test201507151829
 
 # import
 
@@ -56,6 +56,13 @@ def run_you_get(args):
     encoding = conf.etc['encoding']
     stdout = stdout.decode(encoding['stdout'])
     stderr = stderr.decode(encoding['stderr'])
+    
+    # NOTE fix \r\n here
+    if '\r\n' in stdout:
+        stdout.replace('\r\n', '\n')
+    if '\r\n' in stderr:
+        stderr.replace('\r\n', '\n')
+    
     # done
     return stdout, stderr
 

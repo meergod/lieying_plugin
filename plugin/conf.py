@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # conf.py for lieying_plugin/you-get (parse)
 # plugin/conf: plugin config file support. 
-# version 0.0.4.0 test201507151551
+# version 0.0.4.1 test201507151827
 
 # import
 import json
@@ -56,7 +56,7 @@ def load():
     
     
     # process you_get_bin
-    bin_path = os.path.join(base_path, etc['you_get_bin'])	# you_get_bin path is relative with plugin root path
+    bin_path = os.path.join(root_path, etc['you_get_bin'])	# you_get_bin path is relative with plugin root path
     # update bin_path
     etc['you_get_bin'] = bin_path
     
