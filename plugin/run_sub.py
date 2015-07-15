@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # run_sub.py for lieying_plugin/you-get (parse)
 # plugin/run_sub: run subprocess
-# version 0.0.4.0 test201507151524
+# version 0.0.5.0 test201507151551
 
 # import
 
@@ -40,7 +40,7 @@ def run_you_get(args):
         raise Exception('plugin.run_sub: ERROR: you-get bin file not exist \"' + you_get_bin + '\" ')
     
     # get python bin
-    py_bin = sys.executable
+    py_bin = conf.etc['py_bin']
     
     arg = []
     # check and add http_proxy
@@ -53,8 +53,9 @@ def run_you_get(args):
     # just run you_get
     stdout, stderr = run(arg)
     # decode as text, NOTE fix encoding here
-    stdout = stdout.decode(sys.stdout.encoding)
-    stderr = stderr.decode(sys.stderr.encoding)
+    encoding = conf.etc['encoding']
+    stdout = stdout.decode(encoding['stdout'])
+    stderr = stderr.decode(encoding['stderr'])
     # done
     return stdout, stderr
 

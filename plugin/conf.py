@@ -1,20 +1,32 @@
 # -*- coding: utf-8 -*-
 # conf.py for lieying_plugin/you-get (parse)
 # plugin/conf: plugin config file support. 
-# version 0.0.2.0 test201507131356
+# version 0.0.4.0 test201507151551
 
 # import
 import json
+import sys
 import os
 
 # global vars
 
-CONFIG_FILE = '../etc/lieying_plugin_config.json'
+CONFIG_FILE = 'etc/lieying_plugin_config.json'
+GET_ENCODING_TOOL = 'o/get_encoding.py'
 
 etc = {}	# config info
 
 etc['you_get_bin'] = ''
 etc['http_proxy'] = ''
+
+etc['root_path'] = ''		# plugin root path
+etc['py_bin'] = ''		# python bin file
+etc['get_encoding_bin'] = ''	# get_encoding tool bin file
+
+etc['encoding'] = {}
+etc['encoding']['stdout'] = ''	# sys.stdout encoding
+etc['encoding']['stderr'] = ''	# sys.stderr encoding
+
+etc['flag_got_encoding'] = False
 
 etc['flag_loaded'] = False
 
@@ -27,7 +39,12 @@ def load():
     if etc['flag_loaded']:
         return True	# not load it again
     
-    conf_file = make_conf_file_path(CONFIG_FILE)
+    # add plugin root_path
+    now_path = os.path.dirname(__file__)
+    root_path = os.path.join(now_path, '../')	# plugin root path
+    etc['root_path'] = root_path
+    
+    conf_file = os.path.join(root_path, CONFIG_FILE)
     info = load_json_file(conf_file)
     
     # read and set etc
@@ -37,23 +54,22 @@ def load():
     except Exception as e:
         raise Exception('plugin.conf: ERROR: config file content error', e)
     
+    
     # process you_get_bin
-    now_path = os.path.dirname(__file__)
-    base_path = os.path.join(now_path, '../')	# plugin root path
     bin_path = os.path.join(base_path, etc['you_get_bin'])	# you_get_bin path is relative with plugin root path
     # update bin_path
     etc['you_get_bin'] = bin_path
+    
+    # add py_bin
+    etc['py_bin'] = sys.executable
+    # add get_encoding tool bin
+    etc['get_encoding_bin'] = os.path.join(root_path, GET_ENCODING_TOOL)
     
     # done
     etc['flag_loaded'] = True
     return False
 
 # base functions
-
-def make_conf_file_path(raw_path):
-    base_path = os.path.dirname(__file__)
-    file_path = os.path.join(base_path, raw_path)
-    return file_path
 
 def load_json_file(fpath):
     

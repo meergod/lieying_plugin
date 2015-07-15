@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/you-get (parse)
 # plugin/main: plugin main file. 
-# version 0.0.7.0 test201507131529
+# version 0.0.8.0 test201507151559
 
 # import
 
@@ -63,6 +63,9 @@ def parse_more(url):
 # parse one video
 def parse_one(url):
     
+    # get encoding first
+    get_encoding()
+    
     # run you-get with --info
     stdout, stderr = run_sub.run_you_get(['--info', url])
     
@@ -81,10 +84,40 @@ def parse_one(url):
     # done
     return out
 
+# get encoding
+def get_encoding():
+    
+    # load config first
+    conf.load()
+    
+    # check got_encoding
+    if conf.etc['flag_got_encoding']:
+        return True	# not get once again
+    
+    # run tool to get encoding
+    etc = conf.etc
+    arg = [etc['py_bin'], etc['get_encoding_bin']]
+    stdout, stderr = run_sub.run(arg)
+    
+    raw = stdout.decode('utf-8')
+    info = json.loads(raw)
+    
+    # update info
+    etc['encoding']['stdout'] = info['stdout']
+    etc['encoding']['stderr'] = info['stderr']
+    
+    # set flag
+    etc['flag_got_encoding'] = True
+    # done
+    return False
 
 # lieying_plugin functions
 
 def lieying_plugin_GetVersion():
+    
+    # NOTE get encoding first
+    get_encoding()
+    
     out = {}	# output info obj
     
     out['port_version'] = version.LIEYING_PLUGIN_PORT_VERSION
@@ -123,6 +156,9 @@ def lieying_plugin_Parse(input_text):
 def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     
     # NOTE now just ignore label, i_min, i_max TODO
+    
+    # NOTE get encoding first
+    get_encoding()
     
     # run you-get with --info
     stdout, stderr = run_sub.run_you_get(['--url', url])
