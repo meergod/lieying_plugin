@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/flvgo (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.8.0 test201507152239
+# version 0.0.9.0 test201507161233
 
 # import
 from . import conf
 
 # global vars
 
-THIS_PACK_VERSION = '3'
+THIS_PACK_VERSION = '4'
 
 LIEYING_PLUGIN_PORT_VERSION = '0.2.1'
 LIEYING_PLUGIN_TYPE = 'parse'
