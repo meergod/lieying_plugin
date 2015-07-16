@@ -1,7 +1,7 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-15 20:39 GMT+0800 CST`
+:: *last_update* `2015-07-16 12:08 GMT+0800 CST`
 
-# 猎影插件接口定义 version 0.2.1-test.1
+# 猎影插件接口定义 version 0.2.1
 
 author: `sceext <sceext@foxmail.com>`
 
@@ -135,7 +135,7 @@ author: `sceext <sceext@foxmail.com>`
 在此 **明确定义** *猎影插件接口* 有关 *文本格式* 使用的 
 2 个 概念, **单行文本** 和 **多行文本**. 
 
-+ **编码**
++ **编码** (`utf-8`)
   
   *猎影插件接口* 使用的 **文本** *(字符串)*, 全部使用 **`utf-8`** **编码**. 
 
