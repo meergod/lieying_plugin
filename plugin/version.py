@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/you-get (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.10.0 test201507161206
+# version 0.0.11.0 test201507161235
 
 # import
 from . import conf
@@ -9,7 +9,7 @@ from . import run_sub
 
 # global vars
 
-THIS_PACK_VERSION = '7'
+THIS_PACK_VERSION = '8'
 
 LIEYING_PLUGIN_PORT_VERSION = '0.2.1'
 LIEYING_PLUGIN_TYPE = 'parse'
