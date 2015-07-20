@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# version.py for lieying_plugin/you-get (parse)
+# version.py for lieying_plugin/youtube-dl (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.11.0 test201507161235
+# version 0.0.14.0 test201507201944
 
 # import
 from . import conf
@@ -9,37 +9,36 @@ from . import run_sub
 
 # global vars
 
-THIS_PACK_VERSION = '8'
+THIS_PACK_VERSION = '1'
 
 LIEYING_PLUGIN_PORT_VERSION = '0.2.1'
 LIEYING_PLUGIN_TYPE = 'parse'
 
-LIEYING_PLUGIN_UUID = '588e29b8-cc31-4416-9ed7-80b48f7971a1'
-LIEYING_PLUGIN_VERSION = '0.3.1'
+LIEYING_PLUGIN_UUID = '88e47809-089c-45a9-b097-5087c260588f'
+LIEYING_PLUGIN_VERSION = '0.0.1'
 
 THIS_AUTHOR = 'sceext <sceext@foxmail.com>'
 THIS_LICENSE = 'unlicense <http://unlicense.org> and FreeBSD License'
-THIS_HOME = 'https://github.com/sceext2/lieying_plugin/tree/plugin-you-get'
-THIS_NOTE = 'A lieying plugin (parse) with parse support of you-get <https://github.com/soimort/you-get>. '
+THIS_HOME = 'https://github.com/sceext2/lieying_plugin/tree/plugin-youtube-dl'
+THIS_NOTE = 'A lieying plugin (parse) with parse support of youtube-dl <https://github.com/rg3/youtube-dl>. '
 
 THIS_RAW_NAME = [
-    'lieying_plugin_you-get ', 
+    'lieying_plugin_youtube-dl ', 
     ' (plugin version ', 
-    ', you-get version ', 
+    ', youtube-dl version ', 
     ') ', 
 ]
 
 # function
 
-# get you-get version
-def get_you_get_version():
+# get youtube-dl version
+def get_youtube_dl_version():
     
-    try:	# run you-get may get errors
-        stdout, stderr = run_sub.run_you_get(['--version'])
+    try:	# run youtube-dl may get errors
+        stdout, stderr = run_sub.run_youtube_dl(['--version'])
         
-        # parse returned text to get you-get version
-        raw = stdout.split(',', 1)[0]
-        ver = raw.split(' ', 1)[1]
+        # parse returned text to get youtube-dl version
+        ver = stdout.split('\n', 1)[0]
     except Exception:	# just use [unknow]
         ver = '[unknow]'
     
@@ -53,7 +52,7 @@ def make_plugin_name():
     
     name += raw[0] + THIS_PACK_VERSION
     name += raw[1] + LIEYING_PLUGIN_VERSION
-    name += raw[2] + get_you_get_version() + raw[3]
+    name += raw[2] + get_youtube_dl_version() + raw[3]
     
     name += THIS_LICENSE
     

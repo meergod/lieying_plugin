@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # run_sub.py for lieying_plugin/you-get (parse)
 # plugin/run_sub: run subprocess
-# version 0.0.6.1 test201507151839
+# version 0.0.7.2 test201507201956
 
 # import
 
@@ -28,27 +28,33 @@ def check_file(fpath):
         return True
     return False
 
-# run you_get function
-def run_you_get(args):
+# run youtube_dl function
+def run_youtube_dl(args):
     
     # load config
     conf.load()
     # get you_get_bin
-    you_get_bin = conf.etc['you_get_bin']
+    youtube_dl_main = conf.etc['youtube_dl_main_bin']
     # check file
-    if not check_file(you_get_bin):
-        raise Exception('plugin.run_sub: ERROR: you-get bin file not exist \"' + you_get_bin + '\" ')
+    _init_file = os.path.join(youtube_dl_main, '__init__.py')
+    if not check_file(_init_file):
+        raise Exception('plugin.run_sub: ERROR: youtube_dl main __init__.py not exist \"' + _init_file + '\" ')
     
     # get python bin
     py_bin = conf.etc['py_bin']
     
     arg = []
-    # check and add http_proxy
-    if conf.etc['http_proxy'] != '':
-        arg += ['--extractor-proxy', conf.etc['http_proxy']]
+    # check and add http_proxy, TODO NOTE may be not stable
+    if conf.etc['http_proxy'] != None:
+        arg += ['--proxy', conf.etc['http_proxy']]
     
-    # make final args
-    arg = [py_bin, you_get_bin] + arg + args
+    # process youtube_dl_main
+    dir_host, dir_m = os.path.dirname(youtube_dl_main), os.path.basename(youtube_dl_main)
+    # change now dir
+    os.chdir(dir_host)
+    
+    # make final args, NOTE use python -m here
+    arg = [py_bin, '-m', dir_m] + arg + args
     
     # just run you_get
     stdout, stderr = run(arg)

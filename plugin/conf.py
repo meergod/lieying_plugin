@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # conf.py for lieying_plugin/you-get (parse)
 # plugin/conf: plugin config file support. 
-# version 0.0.4.1 test201507151827
+# version 0.0.6.0 test201507201926
 
 # import
 import json
@@ -15,8 +15,8 @@ GET_ENCODING_TOOL = 'o/get_encoding.py'
 
 etc = {}	# config info
 
-etc['you_get_bin'] = ''
-etc['http_proxy'] = ''
+etc['youtube_dl_main_bin'] = ''
+etc['http_proxy'] = None
 
 etc['root_path'] = ''		# plugin root path
 etc['py_bin'] = ''		# python bin file
@@ -29,6 +29,10 @@ etc['encoding']['stderr'] = ''	# sys.stderr encoding
 etc['flag_got_encoding'] = False
 
 etc['flag_loaded'] = False
+
+etc['youtube_dl_re_list_file'] = ''
+# youtube_dl re_list should be load from a json file
+etc['youtube_dl_re_list'] = []
 
 # function
 
@@ -49,21 +53,30 @@ def load():
     
     # read and set etc
     try:	# config file content error
-        etc['you_get_bin'] = info['you_get_bin']
+        etc['youtube_dl_main_bin'] = info['youtube_dl_main_bin']
         etc['http_proxy'] = info['http_proxy']
+        etc['youtube_dl_re_list_file'] = info['youtube_dl_re_list_file']
     except Exception as e:
         raise Exception('plugin.conf: ERROR: config file content error', e)
     
     
     # process you_get_bin
-    bin_path = os.path.join(root_path, etc['you_get_bin'])	# you_get_bin path is relative with plugin root path
+    bin_path = os.path.join(root_path, etc['youtube_dl_main_bin'])	# youtube_dl_main_bin path is relative with plugin root path
     # update bin_path
-    etc['you_get_bin'] = bin_path
+    etc['youtube_dl_main_bin'] = bin_path
     
     # add py_bin
     etc['py_bin'] = sys.executable
     # add get_encoding tool bin
     etc['get_encoding_bin'] = os.path.join(root_path, GET_ENCODING_TOOL)
+    
+    # load youtube_dl re_list file
+    re_file = os.path.join(root_path, etc['youtube_dl_re_list_file'])
+    with open(re_file) as f:
+        text = f.read()
+        re_list = json.loads(text)
+        
+        etc['youtube_dl_re_list'] = re_list
     
     # done
     etc['flag_loaded'] = True
