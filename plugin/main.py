@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# main.py for lieying_plugin/you-get (parse)
+# main.py for lieying_plugin/youtube-dl (parse)
 # plugin/main: plugin main file. 
 # version 0.0.8.0 test201507151559
 
@@ -17,7 +17,7 @@ from . import run_sub
 from .plist import entry as plist
 from .easy import host_make_name
 
-from . import parse_you_get as parse0
+from . import parse_youtube_dl as parse0
 
 # function
 

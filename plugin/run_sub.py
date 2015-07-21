@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# run_sub.py for lieying_plugin/you-get (parse)
+# run_sub.py for lieying_plugin/youtube-dl (parse)
 # plugin/run_sub: run subprocess
-# version 0.0.7.2 test201507201956
+# version 0.0.8.0 test201507211057
 
 # import
 
