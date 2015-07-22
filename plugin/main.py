@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/youtube-dl (parse)
 # plugin/main: plugin main file. 
-# version 0.0.10.0 test201507221201
+# version 0.0.10.2 test201507221218
 
 # import
 
@@ -69,14 +69,14 @@ def parse_one(url):
     # get encoding first
     get_encoding()
     
-    # run you-get with --info
-    stdout, stderr = run_sub.run_you_get(['--info', url])
+    # run youtube-dl with -J option, output single json text
+    stdout, stderr = run_sub.run_youtube_dl(['-J', url])
     
     # try to parse raw_text
     try:
-        raw_info = parse0.parse_info(stdout)
+        raw_info = parse0.parse_raw(stdout)
     except Exception as e:	# output error
-        raise make_error('parse_youtube_dl.parse_info()', stderr, stdout, e)
+        raise make_error('parse_youtube_dl.parse_raw()', stderr, stdout, e)
     
     # try to translate info
     try:
@@ -172,14 +172,14 @@ def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     get_encoding()
     
     url = check_force_url(url)
-    # run you-get with --info
-    stdout, stderr = run_sub.run_you_get(['--url', url])
+    # run youtube-dl with -J option, output single json text
+    stdout, stderr = run_sub.run_youtube_dl(['-J', url])
     
     # try to parse raw_text
     try:
-        raw_info = parse0.parse_url(stdout)
+        raw_info = parse0.parse_raw(stdout)
     except Exception as e:	# output error
-        raise make_error('parse_youtube_dl.parse_url()', stderr, stdout, e)
+        raise make_error('parse_youtube_dl.parse_raw()', stderr, stdout, e)
     
     # try to translate info
     try:
