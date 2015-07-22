@@ -11,7 +11,7 @@ A
 
 Some code included in `lieying_plugin_youtube-dl` is released under `FreeBSD License` <http://www.freebsd.org/copyright/freebsd-license.html>. 
 
-+ [`plugin/tool/htmldom`](https://github.com/sceext2/lieying_plugin/tree/plugin-you-get/plugin/tool/htmldom)
++ [`plugin/tool/htmldom`](https://github.com/sceext2/lieying_plugin/tree/plugin-youtube-dl/plugin/tool/htmldom)
   
   This code is from `htmldom` <https://pypi.python.org/pypi/htmldom>. 
 
