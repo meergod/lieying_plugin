@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # tinfo.py for lieying_plugin/youtube-dl (parse)
 # plugin/tinfo: translate info to plugin output format. 
-# version 0.0.3.2 test201507221222
+# version 0.0.4.0 test201507221715
 
 # import
 import math
@@ -69,7 +69,13 @@ def t_format(raw_info):
         # make this format info
         one = {}
         one['label'] = label
+        
+        # make size text
         one['size'] = byte2size(size)
+        # check and add Bytes
+        if size >= 1024:
+            one['size'] += ' (' + str(size) + ' Byte)'
+        # add ext
         one['ext'] = ext
         # add this format
         out['data'].append(one)
