@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/youtube-dl (parse)
 # plugin/main: plugin main file. 
-# version 0.0.9.0 test201507221135
+# version 0.0.10.0 test201507221201
 
 # import
 
@@ -76,13 +76,13 @@ def parse_one(url):
     try:
         raw_info = parse0.parse_info(stdout)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [parse_you_get.parse_info()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise make_error('parse_youtube_dl.parse_info()', stderr, stdout, e)
     
     # try to translate info
     try:
         out = tinfo.t_format(raw_info)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [tinfo.t_format()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise make_error('tinfo.t_format()', stderr, stdout, e)
     
     # done
     return out
@@ -151,7 +151,7 @@ def lieying_plugin_GetVersion():
     return text
 
 def lieying_plugin_StartConfig():
-    raise Exception('lieying_plugin/you-get: ERROR: [StartConfig()] not support config now. ')
+    raise Exception('lieying_plugin/youtube-dl: ERROR: [StartConfig()] not support config now. ')
 
 def lieying_plugin_Parse(input_text):
     input_text = check_force_url(input_text)
@@ -166,7 +166,7 @@ def lieying_plugin_Parse(input_text):
 
 def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     
-    # NOTE now just ignore label, i_min, i_max TODO
+    # NOTE now just ignore i_min, i_max TODO
     
     # NOTE get encoding first
     get_encoding()
@@ -179,17 +179,29 @@ def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     try:
         raw_info = parse0.parse_url(stdout)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [parse_you_get.parse_url()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise make_error('parse_youtube_dl.parse_url()', stderr, stdout, e)
     
     # try to translate info
     try:
-        out = tinfo.t_url(raw_info)
+        out = tinfo.t_url(raw_info, label)
     except Exception as e:	# output error
-        raise Exception('plugin.main: ERROR: [tinfo.t_url()] you-get may get errors \n' + str(e) + '\n you-get output \n' + stderr + '\n' + stdout + '\n', stderr, stdout, e)
+        raise make_error('tinfo.t_url()', stderr, stdout, e)
     
     # done
     text = json.dumps(out)
     return text
+
+# make error for youtube-dl error, for raise
+def make_error(fun_name='unknow', stderr='', stdout='', e=None):
+    # make err_text
+    err_text = 'plugin.main: ERROR: ['
+    err_text += fun_name
+    err_text += '] youtube-dl may get errors \n'
+    err_text += str(e) + '\n'
+    err_text += ' youtube-dl output \n' + stderr + '\n' + stdout + '\n'
+    # make Exception obj
+    err = Exception(err_text, stderr, stdout, e)
+    return err
 
 # end main.py
 
