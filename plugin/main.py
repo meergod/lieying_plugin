@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/youtube-dl (parse)
 # plugin/main: plugin main file. 
-# version 0.0.8.0 test201507151559
+# version 0.0.9.0 test201507221135
 
 # import
 
@@ -18,6 +18,9 @@ from .plist import entry as plist
 from .easy import host_make_name
 
 from . import parse_youtube_dl as parse0
+
+# global vars
+_PLUGIN_YOUTUBE_DL_FORCE_URL = 'youtube-dl::'
 
 # function
 
@@ -111,6 +114,13 @@ def get_encoding():
     # done
     return False
 
+# process youtube-dl force URL, youtube-dl::
+def check_force_url(input_text):
+    force = _PLUGIN_YOUTUBE_DL_FORCE_URL
+    if input_text.startswith(force):
+        return input_text.split(force, 1)[1]
+    return input_text
+
 # lieying_plugin functions
 
 def lieying_plugin_GetVersion():
@@ -144,6 +154,7 @@ def lieying_plugin_StartConfig():
     raise Exception('lieying_plugin/you-get: ERROR: [StartConfig()] not support config now. ')
 
 def lieying_plugin_Parse(input_text):
+    input_text = check_force_url(input_text)
     # check is video list
     if plist.check_is_list_url(input_text):
         info = parse_more(input_text)
@@ -160,6 +171,7 @@ def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     # NOTE get encoding first
     get_encoding()
     
+    url = check_force_url(url)
     # run you-get with --info
     stdout, stderr = run_sub.run_you_get(['--url', url])
     

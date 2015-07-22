@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # parse_youtube_dl.py for lieying_plugin/youtube-dl (parse)
 # plugin/parse_youtube_dl: parse output json info of youtube-dl
-# version 0.0.2.0 test201507211109
+# version 0.0.3.0 test201507211122
 
 # import
 import json
@@ -29,23 +29,32 @@ def parse_raw(raw_text):
             # make one item info
             one = {}
             
-            one['f'] = f['format_id']
-            one['format'] = f['format']
             one['ext'] = f['ext']
             one['size'] = f['filesize']
             one['url'] = f['url']
             one['http_headers'] = f['http_headers']
             
+            f_id = f['format_id']
+            f_format = f['format']
+            
             # add one item
-            if not one['f'] in flist:
-                flist[one['f']] = []
-            flist[one['f']].append(one)
+            if not f_id in flist:
+                # create one format video
+                v = {}
+                
+                v['f'] = f_id
+                v['format'] = f_format
+                v['file'] = []
+                
+                flist[f_id] = v
+            # just add this file
+            flist[f_id]['file'].append(one)
     # add formats and file info done
     
     # sort formats by h1, h2, ...
     flist2 = []
     for f in flist:
-        flist2.append(f)
+        flist2.append(flist[f])
     flist2.sort(key=lambda x: x['f'], reverse=False)
     
     out['video'] = flist2
