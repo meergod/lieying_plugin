@@ -1,7 +1,11 @@
 
 # lieying_plugin_you-get
 
-A lieying plugin (parse) with parse support of `you-get` <https://github.com/soimort/you-get>. 
+A 
+[lieying](http://lieying.ilewo.cn/) 
+[plugin](https://github.com/sceext2/lieying_plugin/blob/master/doc/lieying_plugin.md) 
+(parse) with parse support of
+`you-get` <https://github.com/soimort/you-get>. 
 
 ## LICENSE
 
