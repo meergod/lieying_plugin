@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # run_sub.py for lieying_plugin/youtube-dl (parse)
 # plugin/run_sub: run subprocess
-# version 0.0.8.0 test201507211057
+# version 0.0.9.0 test201507221617
 
 # import
 
@@ -50,6 +50,9 @@ def run_youtube_dl(args):
     
     # process youtube_dl_main
     dir_host, dir_m = os.path.dirname(youtube_dl_main), os.path.basename(youtube_dl_main)
+    
+    # before change it, save now dir
+    old_path = os.path.abspath(os.curdir)
     # change now dir
     os.chdir(dir_host)
     
@@ -58,6 +61,9 @@ def run_youtube_dl(args):
     
     # just run you_get
     stdout, stderr = run(arg)
+    # recovery old_path
+    os.chdir(old_path)
+    
     # decode as text, NOTE fix encoding here
     encoding = conf.etc['encoding']
     stdout = stdout.decode(encoding['stdout'])
