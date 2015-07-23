@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-23 23:49 GMT+0800 CST`
+:: *last_update* `2015-07-24 00:16 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.3.0-test.1
 
@@ -54,7 +54,7 @@ author: `sceext <sceext@foxmail.com>`
 
 + **解析插件** (*parse*)
   
-  *解析插件* **解析** *视频文件*的 **下载地址** *(URL)*. 
+  *解析插件* **解析** 出 *视频文件*的 **下载地址** *(URL)*. 
   
   + **输入** <br />
     **`URL`** 字符串
@@ -756,6 +756,7 @@ raise Exception('can not load page: http 404')
               
               "actors" : "", 
               "area" : "", 
+              "class" : "", 
               "last_update" : "", 
               "quality" : "", 
               "site" : "", 
@@ -766,7 +767,6 @@ raise Exception('can not load page: http 404')
               ], 
               "subtitle" : "", 
               "time_s" : 0, 
-              "type" : "", 
               "year" : ""
           }
       ]
@@ -774,8 +774,8 @@ raise Exception('can not load page: http 404')
   ```
   
   + **type** 类型: 字符串 *(单行文本)* <br />
-    返回结果的类型, 值 必须为 **`list`**, 
-    表示这是 列表形式 的搜索结果. 
+    返回结果的类型, 值 **必须** 为 `list`, 
+    表示这是 *列表形式* 的搜索结果. 
   
   + **total** 类型: 整数 <br />
     搜索结果 的 条目总数. 
@@ -812,6 +812,9 @@ raise Exception('can not load page: http 404')
     
     数组内容为若干 `dict` (`{}`, `Object`). 
     每个 `dict` 表示一个视频条目. 
+    
+    如果 没有返回 内容, 比如 没有搜索结果, 或者 分页显示参数 (`start`) 超出范围, 
+    应该返回 `[]` *(空 数组)*. 
   
   以下项目, 每个 *视频条目* 都 **必须**定义: 
   
@@ -856,8 +859,9 @@ raise Exception('can not load page: http 404')
     
     具体文本格式, 由插件自行处理, *猎影插件接口* 不做统一规定. 
   
-  + **last_update** 类型: 字符串 *(单行文本)* <br />
-    最后 更新时间. 比如 *3天前* 等. 
+  + **class** 类型: 字符串 *(单行文本)* <br />
+    视频类型. 
+    比如 *古装剧*, *电影*, *于正剧*, 等. 
     
     具体文本格式, 由插件自行处理, *猎影插件接口* 不做统一规定. 
   
@@ -890,12 +894,6 @@ raise Exception('can not load page: http 404')
   
   + **time_s** 类型: 整数 <br />
     视频 时长, 以 *秒* (`s`) 为 单位. 
-  
-  + **type** 类型: 字符串 *(单行文本)* <br />
-    视频类型. 
-    比如 *古装剧*, *电影*, *于正剧*, 等. 
-    
-    具体文本格式, 由插件自行处理, *猎影插件接口* 不做统一规定. 
   
   + **year** 类型: 字符串 *(单行文本)* <br />
     视频 年代 信息. 
