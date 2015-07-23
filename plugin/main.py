@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/youtube-dl (parse)
 # plugin/main: plugin main file. 
-# version 0.0.10.2 test201507221218
+# version 0.0.11.1 test201507231058
 
 # import
 
@@ -13,6 +13,7 @@ from . import filter as filter0
 from . import conf
 from . import tinfo
 from . import run_sub
+from . import cache
 
 from .plist import entry as plist
 from .easy import host_make_name
@@ -77,6 +78,9 @@ def parse_one(url):
         raw_info = parse0.parse_raw(stdout)
     except Exception as e:	# output error
         raise make_error('parse_youtube_dl.parse_raw()', stderr, stdout, e)
+    
+    # NOTE store raw_info in once cache
+    cache.set_cache(url, raw_info)
     
     # try to translate info
     try:
@@ -168,18 +172,28 @@ def lieying_plugin_ParseURL(url, label, i_min=None, i_max=None):
     
     # NOTE now just ignore i_min, i_max TODO
     
-    # NOTE get encoding first
-    get_encoding()
-    
+    # process force url youtube-dl::
     url = check_force_url(url)
-    # run youtube-dl with -J option, output single json text
-    stdout, stderr = run_sub.run_youtube_dl(['-J', url])
     
-    # try to parse raw_text
-    try:
-        raw_info = parse0.parse_raw(stdout)
-    except Exception as e:	# output error
-        raise make_error('parse_youtube_dl.parse_raw()', stderr, stdout, e)
+    # NOTE check if cached
+    if not cache.check_cached(url):
+        
+        # NOTE get encoding first
+        get_encoding()
+        
+        # run youtube-dl with -J option, output single json text
+        stdout, stderr = run_sub.run_youtube_dl(['-J', url])
+        
+        # try to parse raw_text
+        try:
+            raw_info = parse0.parse_raw(stdout)
+        except Exception as e:	# output error
+            raise make_error('parse_youtube_dl.parse_raw()', stderr, stdout, e)
+    else:	# NOTE just get raw_info from cache
+        raw_info = cache.get_cache(url)
+        # check failed
+        if raw_info == None:
+            raise Exception('plugin.main: ERROR: cache error, key [' + url + '], data ' + str(raw_info) + ' ', url, raw_info)
     
     # try to translate info
     try:
