@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-24 13:45 GMT+0800 CST`
+:: *last_update* `2015-07-24 14:01 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.3.0-test.2
 
@@ -511,8 +511,8 @@ raise Exception('can not load page: http 404')
        
        猎影 会 删除 `tmp_a` 目录, 及其中的 *全部文件*. 
        导入 [**完成**]. 
-    
-    *插件* **升级** *(替换)* 之后, *猎影* 会 
+  
+  + *插件* **升级** *(替换)* 之后, *猎影* 会 
     调用 `GetVersion()` 获取 并 更新 *插件*的 有关信息, 
     并且 重新 *导入* 新的 插件 (导入 *新插件* 的 `run.py`). 
   
