@@ -8,9 +8,12 @@
 		
 		"tmp_path" : "tmp", 
 		
-		"extra_path" : "tmp/lieying_plugin_youtube-dl", 
+		"extract_path" : "tmp/lieying_plugin_youtube-dl", 
 		
-		"youtube_dl_extra_path" : "youtube-dl", 
+		"youtube_dl_extract_path" : "youtube-dl", 
+		"youtube_dl_path" : "youtube-dl", 
+		
+		"re_pack_file" : "lieying_plugin_youtube-dl-AUTO-PACK-", 
 		
 		"__note__" : "local config"
 	}, 

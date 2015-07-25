@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin
 # o/update/main: plugin update function, main file
-# version 0.0.2.0 test201507251027
+# version 0.0.3.0 test201507251031
 
 # import
 
@@ -80,19 +80,21 @@ def load_config(fpath, force_reload=False):
     if etc['conf_loaded'] and (not force_reload):
         return True	# not reload by default
     
+    # add plugin root path
+    now_path = os.dirname(__file__)
+    root_path = os.path.join(now_path, PLUGIN_ROOT_PATH)
+    etc['root_path'] = root_path
+    
+    # fpath is from plugin root_path
+    conf_file = os.path.join(root_path, fpath)
     # read file
-    with open(fpath) as f:
+    with open(conf_file) as f:
         raw_text = f.read()
     
     # parse json
     info = json.loads(raw_text)
     # load config file done
     etc['conf'] = info
-    
-    # add plugin root path
-    now_path = os.dirname(__file__)
-    root_path = os.path.join(now_path, PLUGIN_ROOT_PATH)
-    etc['root_path'] = root_path
     
     # update loaded flag
     etc['conf_loaded'] = True
