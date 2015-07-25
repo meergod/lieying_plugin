@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # list271.py for lieying_plugin (parse) plist
 # plugin/plist/site/list271: parse video list of 271. 
-# version 0.0.9.0 test201507251804
+# version 0.0.10.0 test201507251808
 
 # import
 
@@ -29,7 +29,7 @@ def get_list_info(html_text, raw_url=None):
     vlist = []
     for i in info2:
         one = {}
-        one['no'] = i['no']
+        one['no'] = str(i['no'])
         one['subtitle'] = i['subtitle']
         one['url'] = i['url']
         vlist.append(one)
