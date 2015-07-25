@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin
 # o/update/main: plugin update function, main file
-# version 0.0.5.0 test201507251246
+# version 0.0.6.0 test201507251317
 
 # import
 
@@ -172,7 +172,12 @@ def rm_R(base_path):
             file_err_count += 1
             byte_err_count += f['size']
     # remove all dirs
-    for d in finfo['dir_list']:
+    # NOTE from last to first to delete
+    dir_count = len(finfo['dir_list'])
+    i = dir_count - 1
+    while i >= 0:
+        d = finfo['dir_list'][i]
+        i -= 1
         try:
             fpath = os.path.join(base_path, d['name'])
             os.rmdir(fpath)

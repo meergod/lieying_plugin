@@ -4,7 +4,7 @@
 # o/update_youtube_dl: plugin update function, 
 #     auto download youtube-dl from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.5.0 test201507251251
+# version 0.0.9.0 test201507251322
 
 # import
 
@@ -17,7 +17,7 @@ from update import make_zip
 # global vars
 CONFIG_FILE = 'etc/update_config.json'
 
-PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.1.0 test201507251250'
+PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.2.0 test201507251322'
 
 etc = {}	# global config info
 
@@ -31,7 +31,9 @@ def main():
     # load config file
     update.load_config(CONFIG_FILE)
     
-    print('update: [ OK ] load config file \"' + update.rel_path(CONFIG_FILE) + '\"')
+    root_path = update.etc['root_path']
+    conf_file = os.path.join(root_path, CONFIG_FILE)
+    print('update: [ OK ] load config file \"' + update.rel_path(conf_file) + '\"')
     
     # check latest commit
     if not check_latest_commit():
@@ -44,7 +46,6 @@ def main():
     zip_url = conf['remote']['youtube_dl_zip']
     print('update: INFO: download youtube-dl zip file from \"' + zip_url + '\" ')
     
-    root_path = update.etc['root_path']
     tmp_path = os.path.join(root_path, conf['local']['tmp_path'])
     etc['tmp_path'] = tmp_path
     
@@ -129,6 +130,8 @@ def clean_dir(base_path):
         t += str(cinfo['err']['dir']) + ' dirs, '
         t += update.byte2size(cinfo['err']['byte']) + ' '
         print(t)
+    else:
+        print('update: INFO: no need to clean \"' + update.rel_path(base_path) + '\"')
     # done
 
 # extract youtube-dl
@@ -171,7 +174,7 @@ def mv_file():
     
     # before move, delete exist files
     clean_dir(youtube_dl_path)
-    clean_dir(extract_path)	# NOTE clean 2 times, fix BUGs here
+    clean_dir(youtube_dl_path)	# NOTE clean 2 times, fix BUGs here
     # move files
     print('update: INFO: move files from \"' + update.rel_path(extracted_path) + '\" to \"' + update.rel_path(youtube_dl_path) + '\" ')
     update.mv_R(extracted_path, youtube_dl_path)
@@ -182,7 +185,7 @@ def re_pack():
     
     root_path = update.etc['root_path']
     conf = update.etc['conf']
-    tmp_path = etc['tmp_path']
+    tmp_path = conf['local']['tmp_path']
     
     # start re-pack
     print('update: INFO: start re-pack plugin zip bag file ')
@@ -195,7 +198,7 @@ def re_pack():
     ilist = []	# ignored file list
     for f in finfo['list']:
         # ignore .git
-        if '.git' in f['name']:
+        if f['name'].startswith('.git'):
             ilist.append(f)
         # ignore __pycache__
         elif '__pycache__' in f['name']:
@@ -218,9 +221,10 @@ def re_pack():
     t += 'ignored ' + str(len(ilist)) + ' files, ' + update.byte2size(isize) + '. '
     print(t)
     
+    tmp_path2 = etc['tmp_path']
     # create zip file
     zip_file = conf['local']['re_pack_file'] + make_re_pack_name() + '.zip'
-    zip_path = os.path.join(tmp_path, zip_file)
+    zip_path = os.path.join(tmp_path2, zip_file)
     print('update: INFO: create zip file \"' + update.rel_path(zip_path) + '\" ')
     
     import zipfile

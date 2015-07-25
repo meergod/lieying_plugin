@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # github.py for lieying_plugin
 # o/update/github: gihub.com operations
-# version 0.0.5.0 test201507251239
+# version 0.0.6.0 test201507251311
 
 # import
 
@@ -13,7 +13,7 @@ import urllib.request
 
 RE_LATEST_COMMIT = '>latest commit <span class="sha">([^<]+)</span>'
 
-DL_BUFFER_SIZE = 16384	# 16 KB buffer size
+DL_BUFFER_SIZE = 262144	# 256 KB buffer size
 
 # function
 
