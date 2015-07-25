@@ -4,7 +4,7 @@
 # o/update_youtube_dl: plugin update function, 
 #     auto download youtube-dl from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.2.0 test201507251153
+# version 0.0.3.0 test201507251239
 
 # import
 
@@ -66,8 +66,10 @@ def main():
     re_pack()
     
     latest_commit_file = conf['local']['youtube_dl_latest_commit']
+    latest_commit_file = os.path.join(root_path, latest_commit_file)
+    g_latest_commit = etc['g_latest_commit']
     # update latest commit
-    print('update: INFO: save latest commit [' + g_latest_commit + '] to \"' os.path.relpath(latest_commit_file, '.') + '\" ')
+    print('update: INFO: save latest commit [' + g_latest_commit + '] to \"' + os.path.relpath(latest_commit_file, '.') + '\" ')
     with open(latest_commit_file, 'w') as f:
         f.write(g_latest_commit)
     # done
@@ -91,7 +93,7 @@ def check_latest_commit():
     
     # get local latest commit
     l_latest_commit = ''
-    local_file = conf['local']['youtube_dl_lastest_commit']
+    local_file = conf['local']['youtube_dl_latest_commit']
     root_path = update.etc['root_path']
     fpath = os.path.join(root_path, local_file)
     try:
@@ -110,6 +112,22 @@ def check_latest_commit():
     # should update
     print('update: INFO: start real update')
     return True
+
+# clean dir path
+def clean_dir(base_path):
+    cinfo = update.rm_R(base_path)	# count info
+    cleaned_count = cinfo['ok']['file'] + cinfo['err']['file']
+    real_count = cleaned_count + cinfo['ok']['dir'] + cinfo['err']['dir']
+    if real_count > 0:
+        t = 'update: [ OK ] clean ' + str(cleaned_count) + ' exists files from \"' + base_path + '\" \n'
+        t += '      OK ' + str(cinfo['ok']['file']) + ' files, '
+        t += str(cinfo['ok']['dir']) + ' dirs, '
+        t += update.byte2size(cinfo['ok']['byte']) + ' \n'
+        t += '  FAILED ' + str(cinfo['err']['file']) + ' files, '
+        t += str(cinfo['err']['dir']) + ' dirs, '
+        t += update.byte2size(cinfo['err']['byte']) + ' '
+        print(t)
+    # done
 
 # extract youtube-dl
 def extract_pack():
@@ -131,17 +149,8 @@ def extract_pack():
     print(t)
     
     # delete exist files
-    cinfo = update.rm_R(extract_path)	# count info
-    cleaned_count = cinfo['ok']['file'] + cinfo['err']['file']
-    if cleaned_count > 0:
-        t = 'update: [ OK ] clean ' + str(cleaned_count) + ' exists files, \n'
-        t += '      OK ' + str(cinfo['ok']['file']) + ' files, '
-        t += str(cinfo['ok']['dir']) + ' dirs, '
-        t += update.byte2size(cinfo['ok']['byte']) + ' \n'
-        t += '  FAILED ' + str(cinfo['err']['file']) + ' files, '
-        t += str(cinfo['err']['dir']) + ' dirs, '
-        t += update.byte2size(cinfo['err']['byte']) + ' '
-        print(t)
+    clean_dir(extract_path)
+    clean_dir(extract_path)	# NOTE clean 2 times, fix BUGs here
     
     # do extract zip file
     make_zip.extract_zip_file(zip_file, finfo['list'], extract_path)
@@ -157,6 +166,10 @@ def mv_file():
     youtube_dl_path = os.path.join(root_path, conf['local']['youtube_dl_path'])
     # got extracted youtube-dl path
     extracted_path = update.find_first_dir(extract_path)
+    
+    # before move, delete exist files
+    clean_dir(youtube_dl_path)
+    clean_dir(extract_path)	# NOTE clean 2 times, fix BUGs here
     # move files
     print('update: INFO: move files from \"' + os.path.relpath(extracted_path, '.') + '\" to \"' + os.path.relpath(youtube_dl_path, '.') + '\" ')
     update.mv_R(extracted_path, youtube_dl_path)
@@ -206,7 +219,7 @@ def re_pack():
     # create zip file
     zip_file = conf['local']['re_pack_file'] + make_re_pack_name() + '.zip'
     zip_path = os.path.join(tmp_path, zip_file)
-    print('update: INFO: create zip file \"' + os.path.relpath(zip_path, '.') + '\" '
+    print('update: INFO: create zip file \"' + os.path.relpath(zip_path, '.') + '\" ')
     
     import zipfile
     make_zip.make_zip_file(zip_path, flist, root_path, compress=zipfile.ZIP_DEFLATED)

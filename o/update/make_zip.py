@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # make_zip.py for lieying_plugin
 # o/update/make_zip: read and write zip files. 
-# version 0.0.6.1 test201507251001
+# version 0.0.7.0 test201507251240
 
 # import
 import os
@@ -38,7 +38,6 @@ def gen_file_list_base(base_path):
     out = []
     dir_list = []
     if not os.path.isdir(base_path):
-        dir_list.append(base_path)
         return out, dir_list
     # list sub
     sub_list = os.listdir(base_path)

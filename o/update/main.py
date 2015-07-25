@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin
 # o/update/main: plugin update function, main file
-# version 0.0.3.0 test201507251031
+# version 0.0.4.0 test201507251239
 
 # import
 
+import os
+import math
 import json
 
 from . import make_zip
@@ -81,7 +83,7 @@ def load_config(fpath, force_reload=False):
         return True	# not reload by default
     
     # add plugin root path
-    now_path = os.dirname(__file__)
+    now_path = os.path.dirname(__file__)
     root_path = os.path.join(now_path, PLUGIN_ROOT_PATH)
     etc['root_path'] = root_path
     
@@ -122,15 +124,15 @@ def dl_file(url, fpath):
 
 # mv -R, move dir
 def mv_R(old, new):
-    os.renames(old_new)
+    os.renames(old, new)
 
 # find first dir
 def find_first_dir(base_path):
     
     sub_list = os.listdir(base_path)
     for s in sub_list:
-        if os.isdir(s):
-            fpath = os.path.join(base_path, s)
+        fpath = os.path.join(base_path, s)
+        if os.path.isdir(fpath):
             return fpath
     return None
 

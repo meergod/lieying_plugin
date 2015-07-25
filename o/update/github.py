@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 # github.py for lieying_plugin
 # o/update/github: gihub.com operations
-# version 0.0.4.0 test201507251027
+# version 0.0.5.0 test201507251239
 
 # import
 
 import re
+import os
 import urllib.request
 
 # global vars
 
-RE_LATEST_COMMIT = '\>latest commit \<span class\=\"sha\"\>([^\<]+)\</span>'
+RE_LATEST_COMMIT = '>latest commit <span class="sha">([^<]+)</span>'
 
 DL_BUFFER_SIZE = 16384	# 16 KB buffer size
 
@@ -40,6 +41,12 @@ def file_dl(url, fpath, buffer_size=DL_BUFFER_SIZE):
     r = urllib.request.urlopen(url)
     # count size
     count_byte = 0
+    # before open, create dir first
+    dir_path = os.path.dirname(fpath)
+    try:
+        os.mkdir(dir_path)
+    except FileExistsError:
+        pass
     # open file and write content
     with open(fpath, 'wb') as f:
         while True:
