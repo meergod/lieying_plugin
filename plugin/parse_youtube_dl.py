@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # parse_youtube_dl.py for lieying_plugin/youtube-dl (parse)
 # plugin/parse_youtube_dl: parse output json info of youtube-dl
-# version 0.0.3.0 test201507211122
+# version 0.0.3.1 test201507252051
 
 # import
 import json
@@ -22,8 +22,15 @@ def parse_raw(raw_text):
     out['raw_url'] = raw['webpage_url']	# NOTE for DEBUG
     
     flist = {}	# formats list
+    
+    # NOTE check for single file video or mutile file video, FIX BUG here
+    if 'entries' in raw:
+        es = raw['entries']
+    else:	# NOTE single file video
+        es = [raw]
+    
     # add video formats, process entries
-    for e in raw['entries']:
+    for e in es:
         # process formats
         for f in e['formats']:
             # make one item info
