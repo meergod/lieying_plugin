@@ -59,4 +59,5 @@ target/
 # ignore tmp files
 /tmp
 /youtube-dl
+youtube_dl_latest_commit
 
