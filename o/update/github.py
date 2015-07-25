@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # github.py for lieying_plugin
 # o/update/github: gihub.com operations
-# version 0.0.2.0 test201507242033
+# version 0.0.4.0 test201507251027
 
 # import
 
@@ -38,6 +38,8 @@ def file_dl(url, fpath, buffer_size=DL_BUFFER_SIZE):
     
     # request http res
     r = urllib.request.urlopen(url)
+    # count size
+    count_byte = 0
     # open file and write content
     with open(fpath, 'wb') as f:
         while True:
@@ -45,7 +47,10 @@ def file_dl(url, fpath, buffer_size=DL_BUFFER_SIZE):
             if not data:
                 break
             f.write(data)
+            # count byte
+            count_byte += len(data)
     # save file done
+    return count_byte
 
 # end github.py
 

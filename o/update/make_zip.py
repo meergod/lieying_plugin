@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # make_zip.py for lieying_plugin
 # o/update/make_zip: read and write zip files. 
-# version 0.0.5.0 test201507241859
+# version 0.0.6.1 test201507251001
 
 # import
 import os
@@ -13,7 +13,7 @@ import zipfile
 def gen_file_list(base_path):
     
     # get raw_list
-    raw_list = gen_file_list_base(base_path)
+    raw_list, dir_list = gen_file_list_base(base_path)
     # count something
     
     count_size = 0
@@ -26,13 +26,20 @@ def gen_file_list(base_path):
     out['list'] = raw_list
     out['count'] = len(raw_list)
     out['size'] = count_size
+    # remove dir_list base_path like raw_list
+    for d in dir_list:
+        d['name'] = os.path.relpath(d['name'], base_path)
+    out['dir_list'] = dir_list
+    out['dir_count'] = len(dir_list)
     # done
     return out
 
 def gen_file_list_base(base_path):
     out = []
+    dir_list = []
     if not os.path.isdir(base_path):
-        return out
+        dir_list.append(base_path)
+        return out, dir_list
     # list sub
     sub_list = os.listdir(base_path)
     for s in sub_list:
@@ -49,11 +56,18 @@ def gen_file_list_base(base_path):
             
             out.append(one)
         elif os.path.isdir(fpath):
+            # add it to dir_list
+            one = {}
+            one['name'] = fpath
+            
+            dir_list.append(one)
+            
             # re-call gen_file_list_base to get sub info
-            sub_info = gen_file_list_base(fpath)
+            sub_info, sub_dir = gen_file_list_base(fpath)
             out += sub_info
+            dir_list += sub_dir
     # process get list all sub info done
-    return out
+    return out, dir_list
 
 # add files of a list to a zip file
 def make_zip_file(output_file, file_list=[], base_path='.', compress=zipfile.ZIP_DEFLATED):
