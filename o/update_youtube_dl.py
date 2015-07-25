@@ -4,7 +4,7 @@
 # o/update_youtube_dl: plugin update function, 
 #     auto download youtube-dl from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.3.0 test201507251239
+# version 0.0.5.0 test201507251251
 
 # import
 
@@ -16,6 +16,8 @@ from update import make_zip
 
 # global vars
 CONFIG_FILE = 'etc/update_config.json'
+
+PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.1.0 test201507251250'
 
 etc = {}	# global config info
 
@@ -29,7 +31,7 @@ def main():
     # load config file
     update.load_config(CONFIG_FILE)
     
-    print('update: [ OK ] load config file \"' + os.path.relpath(CONFIG_FILE, '.') + '\"')
+    print('update: [ OK ] load config file \"' + update.rel_path(CONFIG_FILE) + '\"')
     
     # check latest commit
     if not check_latest_commit():
@@ -53,7 +55,7 @@ def main():
     # do download
     ed_byte = update.dl_file(zip_url, zip_file)
     # download info
-    print('update: [ OK ] saved ' + update.byte2size(ed_byte, True) + ' to \"' + zip_file + '\"')
+    print('update: [ OK ] saved ' + update.byte2size(ed_byte, True) + ' to \"' + update.rel_path(zip_file) + '\"')
     
     etc['zip_file'] = zip_file
     
@@ -69,7 +71,7 @@ def main():
     latest_commit_file = os.path.join(root_path, latest_commit_file)
     g_latest_commit = etc['g_latest_commit']
     # update latest commit
-    print('update: INFO: save latest commit [' + g_latest_commit + '] to \"' + os.path.relpath(latest_commit_file, '.') + '\" ')
+    print('update: INFO: save latest commit [' + g_latest_commit + '] to \"' + update.rel_path(latest_commit_file) + '\" ')
     with open(latest_commit_file, 'w') as f:
         f.write(g_latest_commit)
     # done
@@ -100,7 +102,7 @@ def check_latest_commit():
         with open(fpath) as f:
             l_latest_commit = f.read().split('\n')[0].split('\r')[0]
     except OSError:
-        print('update: ERROR: can not open local commit info file \"' + os.path.relpath(fpath, '.') + '\" ')
+        print('update: ERROR: can not open local commit info file \"' + update.rel_path(fpath) + '\" ')
         return True
     # got local latest commit
     print('update: [ OK ] local commit [' + l_latest_commit + ']')
@@ -119,7 +121,7 @@ def clean_dir(base_path):
     cleaned_count = cinfo['ok']['file'] + cinfo['err']['file']
     real_count = cleaned_count + cinfo['ok']['dir'] + cinfo['err']['dir']
     if real_count > 0:
-        t = 'update: [ OK ] clean ' + str(cleaned_count) + ' exists files from \"' + base_path + '\" \n'
+        t = 'update: [ OK ] clean ' + str(cleaned_count) + ' exists files from \"' + update.rel_path(base_path) + '\" \n'
         t += '      OK ' + str(cinfo['ok']['file']) + ' files, '
         t += str(cinfo['ok']['dir']) + ' dirs, '
         t += update.byte2size(cinfo['ok']['byte']) + ' \n'
@@ -139,7 +141,7 @@ def extract_pack():
     # extract file
     extract_path = os.path.join(tmp_path, conf['local']['youtube_dl_extract_path'])
     etc['extract_path'] = extract_path
-    print('update: INFO: extract youtube-dl to \"' + extract_path + '\" ')
+    print('update: INFO: extract youtube-dl to \"' + update.rel_path(extract_path) + '\" ')
     # get file list
     finfo = make_zip.get_file_list(zip_file)
     t = 'update: [ OK ] got file list, '
@@ -171,7 +173,7 @@ def mv_file():
     clean_dir(youtube_dl_path)
     clean_dir(extract_path)	# NOTE clean 2 times, fix BUGs here
     # move files
-    print('update: INFO: move files from \"' + os.path.relpath(extracted_path, '.') + '\" to \"' + os.path.relpath(youtube_dl_path, '.') + '\" ')
+    print('update: INFO: move files from \"' + update.rel_path(extracted_path) + '\" to \"' + update.rel_path(youtube_dl_path) + '\" ')
     update.mv_R(extracted_path, youtube_dl_path)
     # done
 
@@ -219,7 +221,7 @@ def re_pack():
     # create zip file
     zip_file = conf['local']['re_pack_file'] + make_re_pack_name() + '.zip'
     zip_path = os.path.join(tmp_path, zip_file)
-    print('update: INFO: create zip file \"' + os.path.relpath(zip_path, '.') + '\" ')
+    print('update: INFO: create zip file \"' + update.rel_path(zip_path) + '\" ')
     
     import zipfile
     make_zip.make_zip_file(zip_path, flist, root_path, compress=zipfile.ZIP_DEFLATED)

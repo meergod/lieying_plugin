@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin
 # o/update/main: plugin update function, main file
-# version 0.0.4.0 test201507251239
+# version 0.0.5.0 test201507251246
 
 # import
 
@@ -103,6 +103,14 @@ def load_config(fpath, force_reload=False):
     # done
     return False
 
+# path function
+
+# get rel_path from now by default
+def rel_path(base_path, start='.'):
+    now_path = os.path.abspath(start)
+    b_path = os.path.abspath(base_path)
+    r_path = os.path.normpath(os.path.relpath(b_path, start=now_path))
+    return r_path
 
 # network function
 
