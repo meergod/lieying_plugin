@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/you-get (parse)
 # plugin/version: define info for GetVersion()
-# version 0.0.11.0 test201507161235
+# version 0.0.12.0 test201507270049
 
 # import
 from . import conf
@@ -9,13 +9,13 @@ from . import run_sub
 
 # global vars
 
-THIS_PACK_VERSION = '8'
+THIS_PACK_VERSION = '9'
 
 LIEYING_PLUGIN_PORT_VERSION = '0.2.1'
 LIEYING_PLUGIN_TYPE = 'parse'
 
 LIEYING_PLUGIN_UUID = '588e29b8-cc31-4416-9ed7-80b48f7971a1'
-LIEYING_PLUGIN_VERSION = '0.3.1'
+LIEYING_PLUGIN_VERSION = '0.4.0'
 
 THIS_AUTHOR = 'sceext <sceext@foxmail.com>'
 THIS_LICENSE = 'unlicense <http://unlicense.org> and FreeBSD License'
