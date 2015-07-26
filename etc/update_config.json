@@ -2,17 +2,15 @@
 	"__note__" : "lieying_plugin update config file", 
 	
 	"local" : {
-		"update_version" : "o/update_version", 
-		
-		"youtube_dl_latest_commit" : "etc/youtube_dl_latest_commit", 
-		
 		"tmp_path" : "tmp", 
 		
+		"update_version" : "o/update_version", 
 		"extract_path" : "tmp/lieying_plugin_youtube-dl", 
 		
-		"youtube_dl_extract_path" : "youtube-dl", 
 		"youtube_dl_path" : "youtube-dl", 
 		
+		"youtube_dl_latest_commit" : "etc/youtube_dl_latest_commit", 
+		"youtube_dl_extract_path" : "youtube-dl", 
 		"re_pack_file" : "lieying_plugin_youtube-dl-AUTO-PACK-", 
 		
 		"__note__" : "local config"

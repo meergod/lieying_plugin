@@ -4,11 +4,20 @@
 # o/update_youtube_dl: plugin update function, 
 #     auto download youtube-dl from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.11.0 test201507262313
+# version 0.0.14.0 test201507262344
+
+# NOTE supported command line args
+#	--no-pack	not pack a AUTO-PACK zip file in tmp/
+#	--pack-only	not check latest commit on github and 
+#			not download zip file from github
+#			just pack a AUTO-PACK zip file in tmp/
+#	--force		force download zip file from github
+#			even if latest commit is same
 
 # import
 
 import os
+import sys
 import datetime
 
 from update import main as update
@@ -17,9 +26,14 @@ from update import make_zip
 # global vars
 CONFIG_FILE = 'etc/update_config.json'
 
-PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.3.0 test201507262313'
+PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.4.0 test201507262343'
 
 etc = {}	# global config info
+
+# flags to support command line args
+etc['flag_dl_github'] = True
+etc['flag_pack_zip'] = True
+etc['flag_force'] = False	# NOTE default value should be False
 
 # function
 
@@ -28,55 +42,94 @@ def main():
     # init info
     print('update: INFO: start update youtube-dl ')
     
+    # get and process command line args
+    get_args()
+    
     # load config file
     update.load_config(CONFIG_FILE)
-    
+    # process config content
     root_path = update.etc['root_path']
-    conf_file = os.path.join(root_path, CONFIG_FILE)
-    print('update: [ OK ] load config file \"' + update.rel_path(conf_file) + '\"')
-    
-    # check latest commit
-    if not check_latest_commit():
-        # no need to update
-        print('update: done')
-        return
-    
     conf = update.etc['conf']
-    # start real update
-    zip_url = etc['g_zip_url']
-    print('update: INFO: download youtube-dl zip file from \"' + zip_url + '\" ')
     
     tmp_path = os.path.join(root_path, conf['local']['tmp_path'])
     etc['tmp_path'] = tmp_path
     
-    # make zip file path
-    zip_file = os.path.join(tmp_path, os.path.basename(zip_url))
-    if not (zip_file.endswith('.zip')):
-        zip_file += '.zip'
-    # do download
-    ed_byte = update.dl_file(zip_url, zip_file)
-    # download info
-    print('update: [ OK ] saved ' + update.byte2size(ed_byte, True) + ' to \"' + update.rel_path(zip_file) + '\"')
+    conf_file = os.path.join(root_path, CONFIG_FILE)
+    print('update: [ OK ] load config file \"' + update.rel_path(conf_file) + '\"')
     
-    etc['zip_file'] = zip_file
+    # check flags
+    if etc['flag_dl_github']:
+        # check latest commit
+        if not check_latest_commit():
+            # no need to update
+            print('update: done')
+            return
+        
+        # start real update
+        zip_url = etc['g_zip_url']
+        print('update: INFO: download youtube-dl zip file from \"' + zip_url + '\" ')
+        
+        # make zip file path
+        zip_file = os.path.join(tmp_path, os.path.basename(zip_url))
+        if not (zip_file.endswith('.zip')):
+            zip_file += '.zip'
+        # do download
+        ed_byte = update.dl_file(zip_url, zip_file)
+        # download info
+        print('update: [ OK ] saved ' + update.byte2size(ed_byte, True) + ' to \"' + update.rel_path(zip_file) + '\"')
+        
+        etc['zip_file'] = zip_file
+        
+        # extract zip file
+        extract_pack()
+        # move files
+        mv_file()
+    # check and download from github, done
     
-    # extract zip file
-    extract_pack()
-    # move files
-    mv_file()
+    # check flag
+    if etc['flag_pack_zip']:
+        # re-pack
+        re_pack()
     
-    # re-pack
-    re_pack()
-    
-    latest_commit_file = conf['local']['youtube_dl_latest_commit']
-    latest_commit_file = os.path.join(root_path, latest_commit_file)
-    g_latest_commit = etc['g_latest_commit']
-    # update latest commit
-    print('update: INFO: save latest commit [' + g_latest_commit + '] to \"' + update.rel_path(latest_commit_file) + '\" ')
-    with open(latest_commit_file, 'w') as f:
-        f.write(g_latest_commit)
+    # check flag
+    if etc['flag_dl_github']:
+        latest_commit_file = conf['local']['youtube_dl_latest_commit']
+        latest_commit_file = os.path.join(root_path, latest_commit_file)
+        g_latest_commit = etc['g_latest_commit']
+        # update latest commit
+        print('update: INFO: save latest commit [' + g_latest_commit + '] to \"' + update.rel_path(latest_commit_file) + '\" ')
+        with open(latest_commit_file, 'w') as f:
+            f.write(g_latest_commit)
     # done
     print('update: [ OK ] done. All works finished. ')
+
+# process command line args
+def get_args():
+    args = sys.argv
+    arg = args[1:]
+    # process each arg
+    rest = arg
+    while len(rest) > 0:
+        one = rest[0]
+        rest = rest[1:]
+        # check this arg
+        if one == '--no-pack':
+            # set global flag
+            etc['flag_pack_zip'] = False
+            # info
+            print('update: INFO: got [' + one + '], not pack zip file. ')
+        elif one == '--pack-only':
+            # set flag
+            etc['flag_dl_github'] = False
+            # info
+            print('update: INFO: got [' + one + '], not check and download from github. ')
+        elif one == '--force':
+            etc['flag_force'] = True
+            
+            print('update: INFO: got [' + one + '], ignore latest commit check result. ')
+        else:	# unknow option
+            print('update: WARNING: unknow option [' + one + '] ')
+    # process args done
 
 
 # check lastest commit
@@ -113,10 +166,14 @@ def check_latest_commit():
     
     # check match
     if l_latest_commit == g_latest_commit:
-        print('update: INFO: no need to update. ')
-        return False
-    # should update
-    print('update: INFO: start real update')
+        # check force flag
+        if etc['flag_force']:
+            print('update: INFO: ignore latest commit check result. ')
+        else:
+            print('update: INFO: no need to update. ')
+            return False
+    else:	# should update
+        print('update: INFO: start real update')
     return True
 
 # clean dir path
