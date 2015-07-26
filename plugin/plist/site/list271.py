@@ -1,19 +1,118 @@
 # -*- coding: utf-8 -*-
-# list271.py for lieying_plugin/you-get (parse)
+# list271.py for lieying_plugin (parse) plist
 # plugin/plist/site/list271: parse video list of 271. 
-# version 0.0.8.0 test201507131137
+# version 0.0.10.0 test201507251808
 
 # import
 
-# NOTE should be set
-htmldom = None	# python htmldom parse html module
+import re
+import json
+
+from .. import base
+
+# global vars
+
+RE_GET_AID = ' albumId: ([0-9]+),'	# albumId: 202340701,
+# http://cache.video.qiyi.com/jp/avlist/202340701/2/
+URL_JS_API_PORT = 'http://cache.video.qiyi.com/jp/avlist/'
 
 # function
 
-def get_list_info(html_text):
+# plist entry function
+def get_list_info(html_text, raw_url=None):
+    # get info from web page html
+    info = get_info_from_html(html_text)
+    # get info from js API port
+    info2 = get_info_from_js_port(html_text)
+    
+    # replace vlist with js port data
+    vlist = []
+    for i in info2:
+        one = {}
+        one['no'] = str(i['no'])
+        one['subtitle'] = i['subtitle']
+        one['url'] = i['url']
+        vlist.append(one)
+    # done
+    info['list'] = vlist
+    return info
+
+# get info from 271 javascript API port
+def get_info_from_js_port(html_text):
+    # get album id
+    aid = get_aid(html_text)
+    # get info list
+    vlist = get_vinfo_list(aid)
+    # done
+    return vlist
+
+# get album id
+def get_aid(html_text):
+    m = re.findall(RE_GET_AID, html_text)
+    return m[0]
+
+# make js API port URL
+def make_port_url(aid, page_n):
+    url = URL_JS_API_PORT + str(aid) + '/' + str(page_n) + '/'
+    return url
+
+# get vinfo list, get full list from js API port
+def get_vinfo_list(aid):
+    vlist = []
+    # request each page
+    page_n = 0
+    while True:
+        # make request url
+        page_n += 1
+        url = make_port_url(aid, page_n)
+        # get text
+        raw_text = base.http_get(url)
+        # get list
+        sub_list = parse_one_page(raw_text)
+        if len(sub_list) > 0:
+            vlist += sub_list
+        else:	# no more data
+            break
+    # get full vinfo list done
+    return vlist
+
+# parse one page info, parse raw info
+def parse_one_page(raw_text):
+    # remove 'var tvInfoJs={' before json text, and json just ended with '}'
+    json_text = '{' + raw_text.split('{', 1)[1]
+    # load as json text
+    info = json.loads(json_text)
+    
+    # check code, '"code":"A00000"' is OK, and '"code":"A00004"' is out of index
+    if info['code'] == 'A00004':
+        return []	# just return null result
+    
+    # get and parse video info items
+    vlist = info['data']['vlist']
+    out = []	# output info
+    for v in vlist:
+        one = {}
+        
+        one['no'] = v['pd']
+        one['title'] = v['vn']
+        one['subtitle'] = v['vt']
+        one['url'] = v['vurl']
+        
+        # get more info
+        one['vid'] = v['vid']
+        one['time_s'] = v['timeLength']
+        one['tvid'] = v['id']
+        
+        out.append(one)
+    # get video info done
+    return out
+
+
+# NOTE a old and bad method, just reserved
+# get info from page html
+def get_info_from_html(html_text):
     # parse html_text with htmldom
-    dom = htmldom.HtmlDom()
-    root = dom.createDom(html_text)
+    root = base.create_dom(html_text)
     
     # get block
     blocks = root.find('ul.site-piclist[data-albumlist-elem=cont]')
