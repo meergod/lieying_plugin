@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # github.py for lieying_plugin
 # o/update/github: gihub.com operations
-# version 0.0.6.0 test201507251311
+# version 0.0.8.0 test201507262303
 
 # import
 
@@ -9,9 +9,13 @@ import re
 import os
 import urllib.request
 
+from . import base
+
 # global vars
 
 RE_LATEST_COMMIT = '>latest commit <span class="sha">([^<]+)</span>'
+# css selector to get zip download url from github home page
+SS_GET_ZIP_URL = 'div.repository-sidebar div.only-with-full-nav>a.btn'
 
 DL_BUFFER_SIZE = 262144	# 256 KB buffer size
 
@@ -24,6 +28,21 @@ def get_latest_commit(html_text):
         return m[0]
     except IndexError:
         return None	# get latest commit info failed
+
+# get zip url
+def get_zip_url(html_text, base_url='https://github.com/'):
+    # get raw zip url from html text
+    root = base.create_dom(html_text)
+    a = root.find(SS_GET_ZIP_URL)
+    raw_url = a.attr('href')
+    
+    # add base_url
+    bs = base_url.split('://', 1)
+    b_url = bs[0] + '://' + bs[1].split('/', 1)[0]
+    
+    zip_url = b_url + raw_url
+    # done
+    return zip_url
 
 # https download for github
 

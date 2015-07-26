@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin
 # o/update/main: plugin update function, main file
-# version 0.0.6.0 test201507251317
+# version 0.0.7.0 test201507262310
 
 # import
 
@@ -120,8 +120,12 @@ def check_github_latest_commit(github_page_url):
     html_text = github.easy_dl(github_page_url)
     # get latest commit str
     latest_commit = github.get_latest_commit(html_text)
+    
+    # get archive zip url from github page html
+    zip_url = github.get_zip_url(html_text, github_page_url)
+    
     # done
-    return latest_commit
+    return latest_commit, zip_url
 
 # dl file
 def dl_file(url, fpath):

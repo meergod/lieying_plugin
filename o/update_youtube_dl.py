@@ -4,7 +4,7 @@
 # o/update_youtube_dl: plugin update function, 
 #     auto download youtube-dl from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.9.0 test201507251322
+# version 0.0.11.0 test201507262313
 
 # import
 
@@ -17,7 +17,7 @@ from update import make_zip
 # global vars
 CONFIG_FILE = 'etc/update_config.json'
 
-PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.2.0 test201507251322'
+PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.3.0 test201507262313'
 
 etc = {}	# global config info
 
@@ -43,7 +43,7 @@ def main():
     
     conf = update.etc['conf']
     # start real update
-    zip_url = conf['remote']['youtube_dl_zip']
+    zip_url = etc['g_zip_url']
     print('update: INFO: download youtube-dl zip file from \"' + zip_url + '\" ')
     
     tmp_path = os.path.join(root_path, conf['local']['tmp_path'])
@@ -88,8 +88,11 @@ def check_latest_commit():
     page_url = conf['remote']['youtube_dl_home']
     
     print('update: INFO: load github page \"' + page_url + '\" ')
-    g_latest_commit = update.check_github_latest_commit(page_url)
+    g_latest_commit, g_zip_url = update.check_github_latest_commit(page_url)
     print('update: [ OK ] got latest commit [' + g_latest_commit + ']')
+    
+    # save g_zip_url
+    etc['g_zip_url'] = g_zip_url
     
     # save latest_commit
     etc['g_latest_commit'] = g_latest_commit

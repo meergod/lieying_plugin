@@ -23,8 +23,7 @@
 		"plugin_zip" : "https://github.com/sceext2/lieying_plugin/archive/plugin-youtube-dl.zip", 
 		"update_version" : "https://raw.githubusercontent.com/sceext2/lieying_plugin/plugin-youtube-dl/o/update_version", 
 		
-		"youtube_dl_zip" : "https://github.com/rg3/youtube-dl/archive/master.zip", 
-		"youtube_dl_home" : "https://github.com/rg3/youtube-dl/tree/master", 
+		"youtube_dl_home" : "https://github.com/sceext2/youtube_dl", 
 		
 		"__note__" : "remote config"
 	}, 
