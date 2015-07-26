@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # conf.py for lieying_plugin/you-get (parse)
 # plugin/conf: plugin config file support. 
-# version 0.0.4.1 test201507151827
+# version 0.0.5.0 test201507270702
 
 # import
 import json
@@ -11,7 +11,7 @@ import os
 # global vars
 
 CONFIG_FILE = 'etc/lieying_plugin_config.json'
-GET_ENCODING_TOOL = 'o/get_encoding.py'
+GET_ENCODING_TOOL = 'o/tool/get_encoding.py'
 
 etc = {}	# config info
 
