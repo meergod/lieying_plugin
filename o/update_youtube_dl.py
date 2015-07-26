@@ -4,7 +4,7 @@
 # o/update_youtube_dl: plugin update function, 
 #     auto download youtube-dl from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.14.0 test201507262344
+# version 0.0.15.0 test201507270012
 
 # NOTE supported command line args
 #	--no-pack	not pack a AUTO-PACK zip file in tmp/
@@ -26,7 +26,7 @@ from update import make_zip
 # global vars
 CONFIG_FILE = 'etc/update_config.json'
 
-PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.4.0 test201507262343'
+PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.4.1 test201507270012'
 
 etc = {}	# global config info
 
@@ -235,6 +235,13 @@ def mv_file():
     # before move, delete exist files
     clean_dir(youtube_dl_path)
     clean_dir(youtube_dl_path)	# NOTE clean 2 times, fix BUGs here
+    
+    # NOTE before move files, delete to dir, FIX BUG on windows
+    try:
+        os.rmdir(youtube_dl_path)
+    except OSError:
+        print('update: WARNING: delete dir failed \"' + youtube_dl_path + '\" ')
+    
     # move files
     print('update: INFO: move files from \"' + update.rel_path(extracted_path) + '\" to \"' + update.rel_path(youtube_dl_path) + '\" ')
     update.mv_R(extracted_path, youtube_dl_path)
