@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/youtube-dl (parse)
 # plugin/version: define info for GetVersion()
-# version 0.1.6.0 test201507252053
+# version 0.1.7.0 test201507262351
 
 # import
 from . import conf
@@ -9,7 +9,7 @@ from . import run_sub
 
 # global vars
 
-THIS_PACK_VERSION = '9'
+THIS_PACK_VERSION = '10'
 
 LIEYING_PLUGIN_PORT_VERSION = '0.2.1'
 LIEYING_PLUGIN_TYPE = 'parse'
