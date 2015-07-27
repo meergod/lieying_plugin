@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin
 # o/update/main: plugin update function, main file
-# version 0.0.9.0 test201507271520
+# version 0.0.10.0 test201507271525
 
 # import
 
@@ -10,6 +10,7 @@ import json
 
 from . import base
 from . import github
+from . import make_zip
 
 # global vars
 etc = {}	# global config info
@@ -125,7 +126,7 @@ def mv_file(path_from, path_to):
     
     # move files
     print('update: INFO: move files from \"' + base.rel_path(path_from) + '\" to \"' + base.rel_path(path_to) + '\" ')
-    update.mv_R(path_from, path_to)
+    base.mv_R(path_from, path_to)
     # done
 
 

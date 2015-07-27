@@ -4,7 +4,7 @@
 # o/update_youtube_dl: plugin update function, 
 #     auto download youtube-dl from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.16.0 test201507271520
+# version 0.0.17.0 test201507271525
 
 # NOTE supported command line args
 #	--no-pack	not pack a AUTO-PACK zip file in tmp/
@@ -27,7 +27,7 @@ from update import base
 # global vars
 CONFIG_FILE = 'etc/update_config.json'
 
-PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.4.1 test201507270012'
+PLUGIN_UPDATE_TOOL_VERSION = 'lieying_plugin update_tool version 0.0.5.0 test201507271525'
 
 etc = {}	# global config info
 
@@ -190,7 +190,7 @@ def extract_pack():
     etc['extract_path'] = extract_path
     
     # use common extract pack function
-    base.extract_pack(zip_file, extract_path, msg='youtube-dl')
+    update.extract_pack(zip_file, extract_path, msg='youtube-dl')
 
 # moving files
 def mv_file():
