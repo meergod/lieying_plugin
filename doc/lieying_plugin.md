@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-27 12:18 GMT+0800 CST`
+:: *last_update* `2015-07-27 12:24 GMT+0800 CST`
 
 # 猎影插件接口定义 version 0.3.0-test.3
 
@@ -1042,16 +1042,16 @@ raise Exception('can not load page: http 404')
 
 **内容目录**
 
-+ **0. 导入插件 其他初始化工作**
++ 0. 导入插件 其他初始化工作
 
-+ **1. 测试 `GetVersion()`**
++ 1. 测试 `GetVersion()`
 
-+ **2. 测试 `Parse()`**
++ 2. 测试 `Parse()`
   
-  + **2.1 *多视频解析* 测试**
-  + **2.2 *单视频解析* 测试**
+  + 2.1 *多视频解析* 测试
+  + 2.2 *单视频解析* 测试
 
-+ **3. 测试 `ParseURL()`**
++ 3. 测试 `ParseURL()`
 
 
 :: end lieying_plugin.md, <https://github.com/sceext2/lieying_plugin>
