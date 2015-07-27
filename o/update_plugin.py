@@ -4,11 +4,12 @@
 # o/update_plugin: plugin update function, 
 #     auto download lieying_plugin from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.2.0 test201507272238
+# version 0.0.3.0 test201507272310
 
 # import
 
 import os
+import sys
 
 from update import main as update
 from update import make_zip
@@ -50,7 +51,7 @@ def main():
     
     # do not check, just download and pack
     zip_url = conf['remote']['plugin_zip']
-    print('update: INFO: download lieying_plugin zip file from \"' + zip_url + '\" ')
+    print('\nupdate: INFO: download lieying_plugin zip file from \"' + zip_url + '\" ')
     
     # make zip file path
     zip_file = os.path.join(tmp_path, os.path.basename(zip_url))
@@ -64,28 +65,29 @@ def main():
     etc['zip_file'] = zip_file
     
     # extract pack
+    print('')
     extract_pack()
     # make plugin zip bag
     # TODO should auto-gen file name here
     pack_zip('lieying_plugin_youtube-dl-AUTO_PACK--.zip')
     
     # done
-    print('update: [ OK ] done. ')
+    print('\nupdate: done')
 
 
 # run o/update_youtube_dl.py to update sub
 def update_sub(bin_sub=BIN_UPDATE_SUB):
-    py_bin = os.executable
+    py_bin = sys.executable
     root_path = update.etc['root_path']
     sub_bin = os.path.join(root_path, bin_sub)
     # make subprocess arg
     arg = [py_bin, sub_bin, '--no-pack']
     # info
-    print('update: INFO: [update-sub] run ' + str(arg) + ' ')
+    print('\nupdate: ---> update-sub :: run ' + str(arg) + ' \n')
     # get exit_code
     exit_code = base.easy_run(arg)
     # done
-    print('update: INFO: [update-sub] exit_code ' + str(exit_code) + ' ')
+    print('update: ---> update-sub :: exit_code ' + str(exit_code) + ' ')
     return exit_code
 
 # extract lieying_plugin zip file
@@ -116,14 +118,11 @@ def pack_zip(zip_file_name):
     # make zip name
     zip_file = os.path.join(tmp_path, zip_file_name)
     
-    print('update: INFO: start pack plugin zip file \"' + base.rel_path(zip_file) + '\" ')
+    print('\nupdate: INFO: start pack plugin zip file \"' + base.rel_path(zip_file) + '\" ')
     
     # add lieying_plugin files
-    print('update: INFO: add plugin files from \"' + base.rel_path(extracted_path) + '\" ')
-    add_files_to_zip(zip_file, extrcated_path)
-    
+    add_files_to_zip(zip_file, extracted_path)
     # add sub files
-    print('update: INFO: add youtube-dl files from \"' + base.rel_path(sub_path) + '\" ')
     add_files_to_zip(zip_file, sub_path, path_before=sub_path0, mode='a')
     
     # done
@@ -135,21 +134,18 @@ def add_files_to_zip(zip_file, base_path, path_before=None, mode='w'):
     # get file list
     finfo = make_zip.gen_file_list(base_path)
     
+    flist = finfo['list']
     # count something
     fsize = 0
     for f in flist:
         fsize += f['size']
     # print info
-    t = 'update: [ OK ] make file list done, ' + str(len(flist)) + ' files, '
-    t += base.byte2size(fsize, True) + ' '
-    print(t)
+    print('update: add ' + str(len(flist)) + ' files, ' + base.byte2size(fsize, True) + ' from \"' + base.rel_path(base_path) + '\" ')
     
     # do create zip file
     import zipfile
-    make_zip.make_zip_file(zip_file, flist, base_path, compress=zipfile.ZIP_STORE, path_before=path_before, mode=mode)
-    
+    make_zip.make_zip_file(zip_file, flist, base_path, compress=zipfile.ZIP_STORED, path_before=path_before, mode=mode)
     # add files done
-    print('update: [ OK ] compress files done. ')
 
 
 # start from main

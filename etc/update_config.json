@@ -5,7 +5,7 @@
 		"tmp_path" : "tmp", 
 		
 		"update_version" : "o/update_version", 
-		"extract_path" : "tmp/lieying_plugin_youtube-dl", 
+		"extract_path" : "lieying_plugin_youtube-dl", 
 		
 		"youtube_dl_path" : "youtube-dl", 
 		
