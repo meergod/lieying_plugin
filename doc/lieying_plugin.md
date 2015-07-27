@@ -1,7 +1,7 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-27 12:27 GMT+0800 CST`
+:: *last_update* `2015-07-27 18:21 GMT+0800 CST`
 
-# 猎影插件接口定义 version 0.3.0-test.3
+# 猎影插件接口定义 version 0.3.0-test.4
 
 author: `sceext <sceext@foxmail.com>`
 
@@ -367,14 +367,14 @@ raise Exception('can not load page: http 404')
   
   + 如果插件**不支持配置**, 或者没有自带的配置程序, 请**不要定义** `StartConfig()` 函数. 
     
-    这样猎影的插件管理界面, 就不会再显示 *配置插件* 按钮. 
+    这样猎影的*插件管理*界面, 就不会再显示 *配置插件* 按钮. 
   
   + 建议使用 python3 自带的 [`tkinter`](https://docs.python.org/3/library/tk.html) 
     组件提供图形界面的配置程序. 
   
-  + 插件可以自行使用配置文件保存配置信息. 配置文件可以与插件的 python 代码放在一起. 
+  + *插件* 可以自行使用 *配置文件* 保存 配置信息. 配置文件 可以与插件的 python 代码放在一起. 
     
-    猎影不会处理插件配置信息的保存, 插件需要自行处理. 
+    *猎影* 不会处理 插件 配置信息的 保存, *插件* 需要 自行处理. 
 
 ### 2.3 `Update()`
 
@@ -516,6 +516,27 @@ raise Exception('can not load page: http 404')
   
   + *插件* 可以使用 `python` 的 `zipfile` <https://docs.python.org/3/library/zipfile.html> 
     模块, **读写** `zip` 文件. 
+  
+  + **升级 过程中 输出信息 (文本)**
+    
+    在 `Update()` 函数 执行过程中, 
+    *插件* 可以使用 `python` 的 `print()` 函数 
+    输出 一些信息 (文本). 
+    
+    *猎影* 会显示 这些 文本. 
+    
+    *插件* 可以 这样 让用户 看到 升级的过程. 
+    也可以 方便 *调试* 和 *除错*. 
+  
+  + **升级 错误**
+    
+    *插件* 的 升级过程, 比较 复杂, 容易 发生各种 错误. 
+    
+    在 执行 `Update()` 函数 过程中, 
+    如果 发生错误, 请按照 [1.6 错误处理](#16-错误处理) 定义 的方式, 
+    用 `raise` 抛出 错误 及 相关 错误信息. 
+    
+    *猎影* 会进行 适当的 处理. 
 
 ### 2.4 `Parse()`
 
