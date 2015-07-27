@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin
 # o/update/main: plugin update function, main file
-# version 0.0.10.0 test201507271525
+# version 0.0.11.0 test201507272237
 
 # import
 
@@ -19,13 +19,15 @@ etc['conf'] = {}	# loaded from config file
 etc['conf_loaded'] = False	# prevent reload flag
 etc['root_path'] = ''	# plugin root path
 
+CONFIG_FILE = 'etc/update_config.json'
+
 PLUGIN_ROOT_PATH = '../../'
 PLUGIN_UPDATE_PATH = 'o/update'
 
 # function
 
 # read given config file (json) and put info in etc
-def load_config(fpath, force_reload=False):
+def load_config(fpath=CONFIG_FILE, force_reload=False):
     # check loaded flag
     if etc['conf_loaded'] and (not force_reload):
         return True	# not reload by default

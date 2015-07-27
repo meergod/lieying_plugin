@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # make_zip.py for lieying_plugin
 # o/update/make_zip: read and write zip files. 
-# version 0.0.8.0 test201507271333
+# version 0.0.9.0 test201507272237
 
 # import
 import os
@@ -69,12 +69,16 @@ def gen_file_list_base(base_path):
     return out, dir_list
 
 # add files of a list to a zip file
-def make_zip_file(output_file, file_list=[], base_path='.', compress=zipfile.ZIP_DEFLATED, mode='w'):
+def make_zip_file(output_file, file_list=[], base_path='.', compress=zipfile.ZIP_DEFLATED, mode='w', path_before=None):
     
     with zipfile.ZipFile(output_file, mode=mode, compression=compress, allowZip64=True) as z:
         for f in file_list:
             fpath = os.path.join(base_path, f['name'])
-            z.write(fpath, arcname=f['name'])
+            # check and add path_before
+            to_path = f['name']
+            if path_before and (path_before != None) and (path_before != ''):
+                to_path = os.path.join(path_before, to_path)
+            z.write(fpath, arcname=to_path)
     # create zip file done
 
 # get file list in a zip file

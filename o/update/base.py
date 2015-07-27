@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 # base.py for lieying_plugin update
 # o/update/base: update base utils
-# version 0.0.3.0 test201507271519
+# version 0.0.4.0 test201507272237
 
 # import
 
 import os
 import sys
 import math
+import subprocess
 
 from . import make_zip
 
@@ -162,6 +163,13 @@ def rm_R(base_path):
     count['err']['byte'] = byte_err_count
     return count
     # done
+
+# subprocess function
+
+def easy_run(args, shell=False):
+    p = subprocess.Popen(args)
+    exit_code = p.wait()
+    return exit_code
 
 
 # import TOO
