@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # run_sub.py for lieying_plugin/youtube-dl (parse)
 # plugin/run_sub: run subprocess
-# version 0.0.9.0 test201507221617
+# version 0.0.10.0 test201507281405
 
 # import
 
@@ -12,6 +12,11 @@ import subprocess
 from . import conf
 
 # function
+
+def easy_run(arg, shell=False):
+    p = subprocess.Popen(arg, shell=shell)
+    exit_code = p.wait()
+    return exit_code
 
 def run(args, shell=False):
     

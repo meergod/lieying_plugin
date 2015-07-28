@@ -4,7 +4,7 @@
 # o/update_plugin: plugin update function, 
 #     auto download lieying_plugin from github and 
 #     auto re-pack plugin zip bag
-# version 0.0.3.0 test201507272310
+# version 0.0.4.0 test201507281357
 
 # import
 
@@ -68,8 +68,10 @@ def main():
     print('')
     extract_pack()
     # make plugin zip bag
-    # TODO should auto-gen file name here
-    pack_zip('lieying_plugin_youtube-dl-AUTO_PACK--.zip')
+    zip_bag = conf['local']['plugin_zip_file']
+    zip_bag = os.path.join(root_path, zip_bag)
+    # TODO should auto-gen file name here TODO
+    pack_zip(zip_bag)
     
     # done
     print('\nupdate: done')
@@ -104,7 +106,7 @@ def extract_pack():
     update.extract_pack(zip_file, extract_path, msg='lieying_plugin')
 
 # make plugin zip bag
-def pack_zip(zip_file_name):
+def pack_zip(zip_file):
     root_path = update.etc['root_path']
     conf = update.etc['conf']
     tmp_path = etc['tmp_path']
@@ -114,9 +116,6 @@ def pack_zip(zip_file_name):
     extracted_path = base.find_first_dir(extract_path)
     sub_path0 = conf['local']['youtube_dl_path']
     sub_path = os.path.join(root_path, sub_path0)
-    
-    # make zip name
-    zip_file = os.path.join(tmp_path, zip_file_name)
     
     print('\nupdate: INFO: start pack plugin zip file \"' + base.rel_path(zip_file) + '\" ')
     
