@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # update.py for lieying_plugin/youtube-dl (parse)
 # plugin/update: plugin update function. 
-# version 0.0.2.0 test201507281421
+# version 0.0.3.0 test201507281430
 
 # import
 
@@ -167,11 +167,14 @@ def network_check_update_version():
     print('update.update_network: [ OK ] got local update_version [' + l_update_ver_str + '] from \"' + rel_path(local_update_version) + '\"')
     
     # check and cmp update_version str
-    flag_should_update, flag_support_auto_replace = check_version(l_update_ver_str, r_update_ver_str)
-    if flag_should_update:
-        return True
-    else:
-        return False
+    try:
+        flag_should_update, flag_support_auto_replace = check_version(l_update_ver_str, r_update_ver_str)
+        if flag_should_update:
+            return True
+        else:
+            return False
+    except NewVersionTooLowError as e:
+        raise Exception('update.update_network: ERROR: [REFUSE update] remote version is older than local version ! ', e)
     # check update_version from network, done
 
 # update from network

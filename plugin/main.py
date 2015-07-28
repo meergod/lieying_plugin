@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/youtube-dl (parse)
 # plugin/main: plugin main file. 
-# version 0.0.12.0 test201507281258
+# version 0.0.13.0 test201507281432
 
 # import
 
@@ -34,7 +34,6 @@ def parse_more(url):
     # make output info
     out = {}
     out['type'] = 'list'
-    out['more'] = False
     
     # add title
     out['title'] = vlist['title'] + '_' + vlist['site_name']
@@ -61,7 +60,6 @@ def parse_more(url):
         one['name'] = name
     # add items done
     
-    out['total'] = len(out['data'])
     # done
     return out
 
@@ -157,6 +155,15 @@ def lieying_plugin_GetVersion():
 
 def lieying_plugin_StartConfig():
     raise Exception('lieying_plugin/youtube-dl: ERROR: [StartConfig()] not support config now. ')
+
+def lieying_plugin_Update(local_path=''):
+    # check local_path for network update or local update
+    if local_path == '':
+        zip_file = update.update_network()
+        return zip_file
+    else:	# should update from local
+        return update.update_local(local_path)
+    # update done
 
 def lieying_plugin_Parse(input_text):
     input_text = check_force_url(input_text)
