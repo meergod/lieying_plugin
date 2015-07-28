@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/youtube-dl (parse)
 # plugin/main: plugin main file. 
-# version 0.0.11.1 test201507231058
+# version 0.0.12.0 test201507281258
 
 # import
 
@@ -14,6 +14,7 @@ from . import conf
 from . import tinfo
 from . import run_sub
 from . import cache
+from . import update
 
 from .plist import entry as plist
 from .easy import host_make_name

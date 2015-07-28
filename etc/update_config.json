@@ -4,9 +4,9 @@
 	"local" : {
 		"tmp_path" : "tmp", 
 		
-		"update_version" : "o/update_version", 
-		"extract_path" : "lieying_plugin_youtube-dl", 
+		"update_version" : "etc/update_version", 
 		
+		"extract_path" : "lieying_plugin_youtube-dl", 
 		"youtube_dl_path" : "youtube-dl", 
 		
 		"youtube_dl_latest_commit" : "etc/youtube_dl_latest_commit", 
@@ -18,8 +18,8 @@
 	
 	"remote" : {
 		
+		"update_version" : "https://raw.githubusercontent.com/sceext2/lieying_plugin/plugin-youtube-dl/etc/update_version", 
 		"plugin_zip" : "https://github.com/sceext2/lieying_plugin/archive/plugin-youtube-dl.zip", 
-		"update_version" : "https://raw.githubusercontent.com/sceext2/lieying_plugin/plugin-youtube-dl/o/update_version", 
 		
 		"youtube_dl_home" : "https://github.com/sceext2/youtube_dl", 
 		
