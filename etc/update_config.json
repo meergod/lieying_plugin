@@ -5,6 +5,7 @@
 		"tmp_path" : "tmp", 
 		
 		"update_version" : "etc/update_version", 
+		"plugin_zip_file" : "tmp/lieying_plugin_youtube-dl-AUTO_PACK--.zip", 
 		
 		"extract_path" : "lieying_plugin_youtube-dl", 
 		"youtube_dl_path" : "youtube-dl", 

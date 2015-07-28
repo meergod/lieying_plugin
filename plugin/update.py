@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 # update.py for lieying_plugin/youtube-dl (parse)
 # plugin/update: plugin update function. 
-# version 0.0.1.0 test201507281257
+# version 0.0.2.0 test201507281421
 
 # import
 
 import os
+import sys
+import json
 
 from . import run_sub
+from .plist import base
 
 # global vars
 etc = {}	# global config info obj
@@ -26,6 +29,40 @@ class NewVersionTooLowError(UpdateError):
     pass
 
 # function
+
+# load config file
+def load_conf():
+    # make root_path
+    now_dir = os.path.dirname(__file__)
+    root_path = os.path.join(now_dir, etc['to_root_path'])
+    etc['root_path'] = root_path
+    
+    # make conf file path
+    conf_path = os.path.join(root_path, etc['update_conf'])
+    
+    # read file
+    with open(conf_path) as f:
+        raw_text = f.read()
+    # parse as json
+    conf = json.loads(raw_text)
+    etc['raw_conf'] = conf
+    
+    # read config item and set etc
+    plugin_zip_file = conf['local']['plugin_zip_file']
+    plugin_zip_file = os.path.join(root_path, plugin_zip_file)
+    etc['plugin_zip_file'] = plugin_zip_file
+    
+    # process update_version path
+    local_update_version = conf['local']['update_version']
+    local_update_version = os.path.join(root_path, local_update_version)
+    etc['local_update_version'] = local_update_version
+    
+    etc['remote_update_version'] = conf['remote']['update_version']
+    
+    # add py_bin
+    etc['py_bin'] = sys.executable
+    
+    # process conf done
 
 # parse update_version str
 def parse_update_version(ver):
@@ -107,6 +144,92 @@ def check_version(old_ver, new_ver):
     else:	# all ver should be same
         return False, False	# no need to update
     # done
+
+# rel_path
+def rel_path(to_path, start='.'):
+    from_path = os.path.abspath(start)
+    to_path = os.path.abspath(to_path)
+    r_path = os.path.relpath(to_path, start)
+    return r_path
+
+# network check update version
+def network_check_update_version():
+    local_update_version = etc['local_update_version']
+    remote_update_version = etc['remote_update_version']
+    
+    # check remote_update_version
+    r_update_ver_str = base.http_get(remote_update_version)
+    print('update.update_network: [ OK ] got remote update_version [' + r_update_ver_str + '] from \"' + remote_update_version + '\"')
+    
+    # read local update_version
+    with open(local_update_version) as f:
+        l_update_ver_str = f.read()
+    print('update.update_network: [ OK ] got local update_version [' + l_update_ver_str + '] from \"' + rel_path(local_update_version) + '\"')
+    
+    # check and cmp update_version str
+    flag_should_update, flag_support_auto_replace = check_version(l_update_ver_str, r_update_ver_str)
+    if flag_should_update:
+        return True
+    else:
+        return False
+    # check update_version from network, done
+
+# update from network
+def update_network():
+    # load config file
+    load_conf()
+    
+    # check update_version
+    if network_check_update_version():
+        # update plugin and return local plugin zip bag file path
+        exit_code = update_plugin()
+        # check update result
+        if exit_code != 0:
+            raise Exception('update.update_network: ERROR: update plugin failed. ')
+        # else:	# update OK
+        # make local_zip file path
+        local_zip = etc['plugin_zip_file']
+        return local_zip
+    else:	# only update sub
+        exit_code = update_sub()
+        # check update result
+        if exit_code != 0:
+            raise Exception('update.update_network: ERROR: update sub failed. ')
+        # update OK
+        return ''
+    # done
+
+# call sub update tools
+def update_plugin():
+    root_path = etc['root_path']
+    py_bin = etc['py_bin']
+    bin_update_plugin = etc['bin_update_plugin']
+    bin_up = os.path.join(root_path, bin_update_plugin)
+    
+    arg = [py_bin, bin_up]
+    print('\nupdate: ---> update-plugin :: run ' + str(arg) + ' \n')
+    
+    exit_code = run_sub.easy_run(arg)
+    print('update: ---> update-plugin :: exit_code ' + str(exit_code) + ' ')
+    return exit_code
+
+def update_sub():
+    root_path = etc['root_path']
+    py_bin = etc['py_bin']
+    bin_update_sub = etc['bin_update_sub']
+    bin_us = os.path.join(root_path, bin_update_sub)
+    
+    arg = [py_bin, bin_us, '--no-pack']
+    print('\nupdate: ---> update-sub :: run ' + str(arg) + ' \n')
+    
+    exit_code = run_sub.easy_run(arg)
+    print('update: ---> update-sub :: exit_code ' + str(exit_code) + ' ')
+    return exit_code
+
+# update from local
+def update_local(local_path):
+    # NOTE not support local update now
+    raise Exception('ERROR: not support local_update now (local path \"' + local_path + '\" ')
 
 # end update.py
 
