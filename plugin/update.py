@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # update.py for lieying_plugin/youtube-dl (parse)
 # plugin/update: plugin update function. 
-# version 0.0.3.0 test201507281430
+# version 0.0.4.0 test201507281456
 
 # import
 
@@ -61,6 +61,9 @@ def load_conf():
     
     # add py_bin
     etc['py_bin'] = sys.executable
+    
+    # print info
+    print('update_network :: [ OK ] load config file \"' + rel_path(conf_path) + '\"')
     
     # process conf done
 
@@ -159,12 +162,14 @@ def network_check_update_version():
     
     # check remote_update_version
     r_update_ver_str = base.http_get(remote_update_version)
-    print('update.update_network: [ OK ] got remote update_version [' + r_update_ver_str + '] from \"' + remote_update_version + '\"')
+    ver_str = r_update_ver_str.split('\r', 1)[0].split('\n', 1)[0]
+    print('update_network :: [ OK ] got remote update_version [' + ver_str + '] from \"' + remote_update_version + '\"')
     
     # read local update_version
     with open(local_update_version) as f:
         l_update_ver_str = f.read()
-    print('update.update_network: [ OK ] got local update_version [' + l_update_ver_str + '] from \"' + rel_path(local_update_version) + '\"')
+    ver_str = l_update_ver_str.split('\r', 1)[0].split('\n', 1)[0]
+    print('update_network :: [ OK ] got local update_version [' + ver_str + '] from \"' + rel_path(local_update_version) + '\"')
     
     # check and cmp update_version str
     try:
@@ -179,6 +184,10 @@ def network_check_update_version():
 
 # update from network
 def update_network():
+    
+    # print info
+    print('update_network :: INFO: start update from network ')
+    
     # load config file
     load_conf()
     
@@ -189,7 +198,8 @@ def update_network():
         # check update result
         if exit_code != 0:
             raise Exception('update.update_network: ERROR: update plugin failed. ')
-        # else:	# update OK
+        else:	# update OK
+            print('update_network :: [ OK ] update plugin done. \n')
         # make local_zip file path
         local_zip = etc['plugin_zip_file']
         return local_zip
@@ -198,7 +208,8 @@ def update_network():
         # check update result
         if exit_code != 0:
             raise Exception('update.update_network: ERROR: update sub failed. ')
-        # update OK
+        else:	# update OK
+            print('update_network :: [ OK ] update sub done. ')
         return ''
     # done
 
@@ -210,10 +221,10 @@ def update_plugin():
     bin_up = os.path.join(root_path, bin_update_plugin)
     
     arg = [py_bin, bin_up]
-    print('\nupdate: ---> update-plugin :: run ' + str(arg) + ' \n')
+    print('\nupdate_network :: ---> update-plugin :: run ' + str(arg) + ' \n')
     
     exit_code = run_sub.easy_run(arg)
-    print('update: ---> update-plugin :: exit_code ' + str(exit_code) + ' ')
+    print('update_network :: ---> update-plugin :: exit_code ' + str(exit_code) + ' ')
     return exit_code
 
 def update_sub():
@@ -223,10 +234,10 @@ def update_sub():
     bin_us = os.path.join(root_path, bin_update_sub)
     
     arg = [py_bin, bin_us, '--no-pack']
-    print('\nupdate: ---> update-sub :: run ' + str(arg) + ' \n')
+    print('\nupdate_network :: ---> update-sub :: run ' + str(arg) + ' \n')
     
     exit_code = run_sub.easy_run(arg)
-    print('update: ---> update-sub :: exit_code ' + str(exit_code) + ' ')
+    print('update_network :: ---> update-sub :: exit_code ' + str(exit_code) + ' ')
     return exit_code
 
 # update from local
