@@ -24,7 +24,7 @@ def make_root_path():
 
 # function
 def create_dom(html_text):
-    return base0.create_dom(html_text)
+    return sub.create_dom(html_text)
 
 # text function
 def byte2size(size_byte, flag_add_bytes=False):
@@ -178,7 +178,7 @@ def easy_run(args, shell=False):
 root_path = make_root_path()
 sys.path.append(root_path)
 
-from plugin.plist import base as base0
+from plugin import base as base0
 
 # end base.py
 
