@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/module-py-htmldom (plugin)
 # plugin/version: define info for GetVersion()
-# version 0.0.1.0 test201507291812
+# version 0.1.0.0 test201507291815
 
 # global vars
 
-THIS_PACK_VERSION = '1'
+THIS_PACK_VERSION = '2'
 HTMLDOM_VERSION = '2.0'
 
 LIEYING_PLUGIN_PORT_VERSION = '0.3.0-test.5'
