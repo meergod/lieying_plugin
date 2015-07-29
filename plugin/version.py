@@ -1,49 +1,31 @@
 # -*- coding: utf-8 -*-
-# version.py for lieying_plugin/youtube-dl (parse)
+# version.py for lieying_plugin/module-py-htmldom (plugin)
 # plugin/version: define info for GetVersion()
-# version 0.1.10.0 test201507281510
-
-# import
-from . import conf
-from . import run_sub
+# version 0.0.1.0 test201507291812
 
 # global vars
 
-THIS_PACK_VERSION = '12'
+THIS_PACK_VERSION = '1'
+HTMLDOM_VERSION = '2.0'
 
-LIEYING_PLUGIN_PORT_VERSION = '0.3.0-test.4'
-LIEYING_PLUGIN_TYPE = 'parse'
+LIEYING_PLUGIN_PORT_VERSION = '0.3.0-test.5'
+LIEYING_PLUGIN_TYPE = 'plugin'
 
-LIEYING_PLUGIN_UUID = '88e47809-089c-45a9-b097-5087c260588f'
-LIEYING_PLUGIN_VERSION = '0.5.0'
+LIEYING_PLUGIN_UUID = '9c446d5b-7e55-479a-9afa-a53d251c3f7f'
+LIEYING_PLUGIN_VERSION = '0.1.0'
 
 THIS_AUTHOR = 'sceext <sceext@foxmail.com>'
 THIS_LICENSE = 'unlicense <http://unlicense.org> and FreeBSD License'
-THIS_HOME = 'https://github.com/sceext2/lieying_plugin/tree/plugin-youtube-dl'
-THIS_NOTE = 'A lieying plugin (parse) with parse support of youtube-dl <https://github.com/rg3/youtube-dl>. '
+THIS_HOME = 'https://github.com/sceext2/lieying_plugin/tree/module-py-htmldom'
+THIS_NOTE = 'A lieying plugin (plugin) to support py-htmldom functions to other plugins. '
 
 THIS_RAW_NAME = [
-    'lieying_plugin_youtube-dl ', 
+    'plugin/module-py-htmldom [sceext] ', 
     ' (plugin version ', 
-    ', youtube-dl version ', 
     ') ', 
 ]
 
 # function
-
-# get youtube-dl version
-def get_youtube_dl_version():
-    
-    try:	# run youtube-dl may get errors
-        stdout, stderr = run_sub.run_youtube_dl(['--version'])
-        
-        # parse returned text to get youtube-dl version
-        ver = stdout.split('\n', 1)[0]
-    except Exception:	# just use [unknow]
-        ver = '[unknow]'
-    
-    # done
-    return ver
 
 # make plugin name
 def make_plugin_name():
@@ -52,7 +34,7 @@ def make_plugin_name():
     
     name += raw[0] + THIS_PACK_VERSION
     name += raw[1] + LIEYING_PLUGIN_VERSION
-    name += raw[2] + get_youtube_dl_version() + raw[3]
+    name += raw[2]
     
     name += THIS_LICENSE
     
