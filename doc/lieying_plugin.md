@@ -1,5 +1,5 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-29 16:08 GMT+0800 CST`
+:: *last_update* `2015-07-29 16:30 GMT+0800 CST`
 
 # 猎影 python 插件接口定义 version 0.3.0-test.5
 
@@ -296,7 +296,7 @@ raise Exception('can not load page: http 404')
 
 + **首次导入 立即升级** 特性
   
-  当 **首次 导入** *(安装)* 某个 *插件* 时, 
+  当 **首次 导入** *(安装)* 某个 *插件* (的 `zip` 压缩包) 时, 
   *猎影* 会在 *插件* 导入后 立即 尝试 *升级* 操作. 
   即 调用 `Update()` 函数. 
   
@@ -545,7 +545,7 @@ raise Exception('can not load page: http 404')
       
       表示 希望 *插件* 进行 *本地升级*. 
       
-      *本地升级* 的 更多说明, 请见 下方 *更多说明*. 
+      *本地升级* 的 更多说明, 请见 [1.7 插件升级](#17-插件升级). 
 
 + **返回值**
   
