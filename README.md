@@ -17,6 +17,15 @@ Some code included in `lieying_plugin/module-py-htmldom` is released under `Free
 
 Other code in `lieying_plugin/module-py-htmldom` is released under `unlicense` <http://unlicense.org/>. 
 
+
+## uuid
+
+`uuid` for `lieying_plugin/module-py-htmldom` is
+
+```
+9c446d5b-7e55-479a-9afa-a53d251c3f7f
+```
+
 :: end README.md
 
 
