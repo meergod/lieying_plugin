@@ -1,21 +1,23 @@
 
-# lieying_plugin_youtube-dl
+# lieying_plugin/module-update
 
 A 
 [lieying](http://lieying.ilewo.cn/) 
-[plugin](https://github.com/sceext2/lieying_plugin/blob/master/doc/lieying_plugin.md) 
-(parse) with parse support of 
-`youtube-dl` <https://github.com/rg3/youtube-dl>. 
+[plugin](https://github.com/sceext2/lieying_plugin/blob/port_version-0.3/doc/lieying_plugin.md) 
+(plugin) to support update function for other plugins. 
+
 
 ## LICENSE
 
-Some code included in `lieying_plugin_youtube-dl` is released under `FreeBSD License` <http://www.freebsd.org/copyright/freebsd-license.html>. 
+`lieying_plugin/module-update` is released under `unlicense` <http://unlicense.org/>. 
 
-+ [`plugin/tool/htmldom`](https://github.com/sceext2/lieying_plugin/tree/plugin-youtube-dl/plugin/tool/htmldom)
-  
-  This code is from `htmldom` <https://pypi.python.org/pypi/htmldom>. 
+## uuid
 
-Other code in `lieying_plugin_youtube-dl` is released under `unlicense` <http://unlicense.org/>. 
+`uuid` for `lieying_plugin/module-update` is
+
+```
+eb3c4bab-5360-4c55-b915-31d8a4e4690f
+```
 
 :: end README.md
 
