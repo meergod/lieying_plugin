@@ -9,7 +9,7 @@ import os
 import sys
 import subprocess
 
-from . import conf
+# from . import conf
 
 # function
 
