@@ -1,7 +1,7 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-29 16:30 GMT+0800 CST`
+:: *last_update* `2015-07-31 16:08 GMT+0800 CST`
 
-# 猎影 python 插件接口定义 version 0.3.0-test.5
+# 猎影 python 插件接口定义 version 0.3.0-test.6
 
 author: `sceext <sceext@foxmail.com>`
 
@@ -641,7 +641,9 @@ raise Exception('can not load page: http 404')
   用户输入的文本, 是一个 URL, 但可能是 `http`, `https`, `ftp`, 等 不同的*协议*. 
   这取决于 `GetVersion()` 返回信息中 `filter` *正则表达式* 的定义. 
   
-  根据不同的 用户输入, 插件可自行选择一种 解析模式. 
+  根据不同的 用户输入, 插件可自行选择 *解析模式*. 
+  返回 *若干*个 解析*结果*. 
+  
   目前支持的 **解析模式** 有:
   
   + **单视频解析** <br />
@@ -667,6 +669,11 @@ raise Exception('can not load page: http 404')
   
   类型: **`json` 字符串**
   
+  `Parse()` 返回的 *json 信息结构* 整体上是一个 数组 (`list`, `[]`, `Array`). 
+  数组 的 项目 是 `dict` (`{}`, `Object`). 
+  
+  每个 项目 是一个 解析结果, 由 插件 决定 选用 何种类型. 
+  
   *单视频解析*模式, 和 *多视频解析*模式, 返回结果是不一样的. 
   
   **单视频解析**
@@ -674,17 +681,19 @@ raise Exception('can not load page: http 404')
   json 信息结构: 
   
   ```
-  {
-      "type" : "formats", 
-      "name" : "", 
-      "data" : [
-          {
-              "label" : "", 
-              "ext" : "", 
-              "size" : ""
-          }
-      ]
-  }
+  [
+      {
+          "type" : "formats", 
+          "name" : "", 
+          "data" : [
+              {
+                  "label" : "", 
+                  "ext" : "", 
+                  "size" : ""
+              }
+          ]
+      }
+  ]
   ```
   
   + **`type`** 类型: 字符串 *(单行文本)* <br />
@@ -724,18 +733,20 @@ raise Exception('can not load page: http 404')
   json 信息结构:
   
   ```
-  {
-      "type" : "list", 
-      "title" : "", 
-      "data" : [
-          {
-              "no" : "", 
-              "subtitle" : "", 
-              "name" : "", 
-              "url" : ""
-          }
-      ]
-  }
+  [
+      {
+          "type" : "list", 
+          "title" : "", 
+          "data" : [
+              {
+                  "no" : "", 
+                  "subtitle" : "", 
+                  "name" : "", 
+                  "url" : ""
+              }
+          ]
+      }
+  ]
   ```
   
   + **`type`** 类型: 字符串 *(单行文本)* <br />
@@ -789,6 +800,8 @@ raise Exception('can not load page: http 404')
   
   + 所以, *多视频解析* 返回的 `url` *字符串*, 不一定必须是 URL. 也可以是其它格式. 
     只要插件 在进一步的 *单视频解析* 中能够识别处理 即可. 
+  
+  + 插件 可以 同时 返回 多个 *单视频解析*结果 以及 *多视频解析*结果. 
 
 ### 2.5 `ParseURL()`
 
@@ -969,7 +982,7 @@ raise Exception('can not load page: http 404')
   
   ```
   {
-      "type" : "list", 
+      "type" : "search", 
       
       "total" : -1, 
       "more" : false, 
@@ -1007,8 +1020,10 @@ raise Exception('can not load page: http 404')
   ```
   
   + **`type`** 类型: 字符串 *(单行文本)* <br />
-    返回结果的类型, 值 **必须** 为 `list`, 
-    表示这是 *列表形式* 的搜索结果. 
+    返回结果的类型, 值 **必须** 为 `search`, 
+    表示这是 普通列表形式 的搜索结果. 
+    
+    以后 可能会支持 其它类型的 搜索结果. 
   
   + **`total`** 类型: 整数 <br />
     搜索结果 的 条目总数. 
