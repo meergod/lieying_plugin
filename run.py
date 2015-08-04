@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # run.py for lieying_plugin/module-update (plugin)
 # run: lieying_plugin entry file. 
-# version 0.0.1.0 test201507301823
+# version 0.0.2.0 test201508041714
 
 # import
 
@@ -27,7 +27,10 @@ Update = main.lieying_plugin_Update			# Update(local_path='')
 
 
 # exports functions for other plugins to use
-# TODO
+easy_update = main.easy_update		# easy_update(local_path='', plugin_uuid=None, conf=None)
+update_local = main.update_local	# update_local(local_path='', plugin_uuid=None, conf=None)
+update_network = main.update_network	# update_network(plugin_uuid=None, conf=None)
+
 
 # NOTE add p() function for DEBUG
 def p(o):

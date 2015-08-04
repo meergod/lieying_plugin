@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # version.py for lieying_plugin/module-update (plugin)
 # plugin/version: define info for GetVersion()
-# version 0.0.1.0 test201507301756
+# version 0.0.2.0 test201508041606
 
 # global vars
 
@@ -40,6 +40,10 @@ def make_plugin_name():
     
     # done
     return name
+
+# get uuid
+def get_uuid():
+    return LIEYING_PLUGIN_UUID
 
 # end version.py
 
