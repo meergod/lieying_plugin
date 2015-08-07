@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# github.py for lieying_plugin
-# o/update/github: gihub.com operations
-# version 0.0.8.0 test201507262303
+# github.py for lieying_plugin/module-update (plugin)
+# plugin/update/github: gihub.com operations
+# version 0.0.9.0 test201508071440
 
 # import
 
@@ -9,7 +9,7 @@ import re
 import os
 import urllib.request
 
-from . import base
+from . import u_base
 
 # global vars
 
@@ -32,7 +32,7 @@ def get_latest_commit(html_text):
 # get zip url
 def get_zip_url(html_text, base_url='https://github.com/'):
     # get raw zip url from html text
-    root = base.create_dom(html_text)
+    root = u_base.create_dom(html_text)
     a = root.find(SS_GET_ZIP_URL)
     raw_url = a.attr('href')
     
@@ -45,13 +45,6 @@ def get_zip_url(html_text, base_url='https://github.com/'):
     return zip_url
 
 # https download for github
-
-# simple download method, just return the content as text
-def easy_dl(url):
-    r = urllib.request.urlopen(url)
-    raw = r.read()
-    text = raw.decode('utf-8', 'ignore')
-    return text
 
 # save a large file to disk
 def file_dl(url, fpath, buffer_size=DL_BUFFER_SIZE):

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# update.py for lieying_plugin/youtube-dl (parse)
-# plugin/update: plugin update function. 
-# version 0.0.4.0 test201507281456
+# update.py for lieying_plugin/module-update (plugin)
+# plugin/update/update: plugin update function. 
+# version 0.0.5.0 test201508071522
 
 # import
 
@@ -9,17 +9,15 @@ import os
 import sys
 import json
 
-from . import run_sub
-from .plist import base
+from ..tool import base
 
 # global vars
 etc = {}	# global config info obj
 
-etc['to_root_path'] = '../'
-etc['update_conf'] = 'etc/update_config.json'
-etc['bin_update_plugin'] = 'o/update_plugin.py'
-etc['bin_update_sub'] = 'o/update_youtube_dl.py'
-etc['bin_update_freplace'] = 'o/tool/update_freplace.py'
+etc['update_conf'] = ''	# update config file
+etc['bin_update_plugin'] = 'update_plugin.py'
+etc['bin_update_sub'] = 'update_sub.py'
+etc['bin_update_freplace'] = 'file_replace.py'
 
 # def Error
 class UpdateError(Exception):
@@ -31,40 +29,57 @@ class NewVersionTooLowError(UpdateError):
 # function
 
 # load config file
-def load_conf():
-    # make root_path
-    now_dir = os.path.dirname(__file__)
-    root_path = os.path.join(now_dir, etc['to_root_path'])
+def load_conf(flag_skip_read_conf_file=False):
+    # get root_path
+    root_path = base.make_root_path()
     etc['root_path'] = root_path
     
-    # make conf file path
-    conf_path = os.path.join(root_path, etc['update_conf'])
+    # check skip_read_conf_file
+    if flag_skip_read_conf_file:
+        conf = etc['raw_conf']
+    else:
+        # check conf_file
+        if etc['update_conf'] == '-':
+            # NOTE should read from stdin
+            conf_text = input()
+            # NOTE now just read one line json text
+        else:	# read from local conf_file
+            # make conf file path
+            conf_path = os.path.join(root_path, etc['update_conf'])
+            
+            # read file
+            with open(conf_path) as f:
+                conf_text = f.read()
+        # parse as json
+        conf = json.loads(conf_text)
+        etc['raw_conf'] = conf
     
-    # read file
-    with open(conf_path) as f:
-        raw_text = f.read()
-    # parse as json
-    conf = json.loads(raw_text)
-    etc['raw_conf'] = conf
+    # read config item and process it
+    raw_tmp_path = conf['local']['tmp_path']
+    tmp_path = os.path.join(root_path, raw_tmp_path)
+    etc['tmp_path'] = tmp_path
     
-    # read config item and set etc
-    plugin_zip_file = conf['local']['plugin_zip_file']
-    plugin_zip_file = os.path.join(root_path, plugin_zip_file)
+    raw_plugin_zip_file = conf['local']['plugin_zip_file']
+    plugin_zip_file = os.path.join(root_path, raw_plugin_zip_file)
     etc['plugin_zip_file'] = plugin_zip_file
     
-    # process update_version path
-    local_update_version = conf['local']['update_version']
-    local_update_version = os.path.join(root_path, local_update_version)
+    raw_local_update_version = conf['local']['update_version']
+    local_update_version = os.path.join(root_path, raw_local_update_version)
     etc['local_update_version'] = local_update_version
     
+    # add other useful items
     etc['remote_update_version'] = conf['remote']['update_version']
+    etc['sub_list'] = conf['sub']
+    etc['remote_plugin_zip'] = conf['remote']['plugin_zip']
     
     # add py_bin
     etc['py_bin'] = sys.executable
     
     # print info
-    print('update_network :: [ OK ] load config file \"' + rel_path(conf_path) + '\"')
-    
+    conf_file_str = etc['update_conf']
+    if conf_file_str != '-':
+        conf_file_str = '\"' + base.rel_path(conf_path) + '\"'
+    print('update :: [ OK ] load config file ' + conf_file_str + '')
     # process conf done
 
 # parse update_version str
@@ -148,20 +163,13 @@ def check_version(old_ver, new_ver):
         return False, False	# no need to update
     # done
 
-# rel_path
-def rel_path(to_path, start='.'):
-    from_path = os.path.abspath(start)
-    to_path = os.path.abspath(to_path)
-    r_path = os.path.relpath(to_path, start)
-    return r_path
-
 # network check update version
 def network_check_update_version():
     local_update_version = etc['local_update_version']
     remote_update_version = etc['remote_update_version']
     
     # check remote_update_version
-    r_update_ver_str = base.http_get(remote_update_version)
+    r_update_ver_str = base.easy_dl(remote_update_version)
     ver_str = r_update_ver_str.split('\r', 1)[0].split('\n', 1)[0]
     print('update_network :: [ OK ] got remote update_version [' + ver_str + '] from \"' + remote_update_version + '\"')
     
@@ -169,7 +177,7 @@ def network_check_update_version():
     with open(local_update_version) as f:
         l_update_ver_str = f.read()
     ver_str = l_update_ver_str.split('\r', 1)[0].split('\n', 1)[0]
-    print('update_network :: [ OK ] got local update_version [' + ver_str + '] from \"' + rel_path(local_update_version) + '\"')
+    print('update_network :: [ OK ] got local update_version [' + ver_str + '] from \"' + base.rel_path(local_update_version) + '\"')
     
     # check and cmp update_version str
     try:
@@ -193,6 +201,16 @@ def update_network():
     
     # check update_version
     if network_check_update_version():
+        # check sub
+        sub_list = etc['sub_list']
+        if len(sub_list) < 1:	# no sub
+            # no need to re-pack, just return URL
+            plugin_zip = etc['remote_plugin_zip']
+            # DEBUG
+            print('update_network :: INFO: just update from \"' + plugin_zip + '\" ')
+            # done
+            return plugin_zip
+        
         # update plugin and return local plugin zip bag file path
         exit_code = update_plugin()
         # check update result
@@ -204,6 +222,14 @@ def update_network():
         local_zip = etc['plugin_zip_file']
         return local_zip
     else:	# only update sub
+        # check sub
+        sub_list = etc['sub_list']
+        if len(sub_list) < 1:	# no need to update sub
+            # DEBUG
+            print('update_network :: INFO: no need to update. ')
+            # done
+            return ''
+        # start update sub
         exit_code = update_sub()
         # check update result
         if exit_code != 0:
@@ -220,10 +246,13 @@ def update_plugin():
     bin_update_plugin = etc['bin_update_plugin']
     bin_up = os.path.join(root_path, bin_update_plugin)
     
-    arg = [py_bin, bin_up]
+    arg = [py_bin, bin_up, '--config-file', '-']
     print('\nupdate_network :: ---> update-plugin :: run ' + str(arg) + ' \n')
     
-    exit_code = run_sub.easy_run(arg)
+    # make config text
+    conf_text = json.dumps(etc['raw_conf']) + '\n\n'
+    exit_code = base.run_write(arg, data=conf_text.encode('utf-8'))
+    
     print('update_network :: ---> update-plugin :: exit_code ' + str(exit_code) + ' ')
     return exit_code
 
@@ -233,10 +262,13 @@ def update_sub():
     bin_update_sub = etc['bin_update_sub']
     bin_us = os.path.join(root_path, bin_update_sub)
     
-    arg = [py_bin, bin_us, '--no-pack']
+    arg = [py_bin, bin_us, '--no-pack', '--config-file', '-']
     print('\nupdate_network :: ---> update-sub :: run ' + str(arg) + ' \n')
     
-    exit_code = run_sub.easy_run(arg)
+    # make config text
+    conf_text = json.dumps(etc['raw_conf']) + '\n\n'
+    exit_code = base.run_write(arg, data=conf_text.encode('utf-8'))
+    
     print('update_network :: ---> update-sub :: exit_code ' + str(exit_code) + ' ')
     return exit_code
 
