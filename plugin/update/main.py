@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # main.py for lieying_plugin/module-update (plugin)
 # plugin/update/main: plugin update function, main file
-# version 0.0.12.0 test201508071529
+# version 0.0.13.0 test201508071702
 
 # import
 
@@ -113,6 +113,9 @@ def mv_file(path_from, path_to):
     base.mv_R(path_from, path_to)
     # done
 
+# set root_path
+def set_root_path(root_path):
+    etc['root_path'] = root_path
 
 # end main.py
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # update.py for lieying_plugin/module-update (plugin)
 # plugin/update/update: plugin update function. 
-# version 0.0.5.0 test201508071522
+# version 0.0.6.0 test201508071704
 
 # import
 
@@ -14,6 +14,7 @@ from ..tool import base
 # global vars
 etc = {}	# global config info obj
 
+etc['root_path'] = ''
 etc['update_conf'] = ''	# update config file
 etc['bin_update_plugin'] = 'update_plugin.py'
 etc['bin_update_sub'] = 'update_sub.py'
@@ -30,9 +31,10 @@ class NewVersionTooLowError(UpdateError):
 
 # load config file
 def load_conf(flag_skip_read_conf_file=False):
-    # get root_path
-    root_path = base.make_root_path()
-    etc['root_path'] = root_path
+    # check and get root_path
+    if etc['root_path'] == '':
+        root_path = base.make_root_path()
+        etc['root_path'] = root_path
     
     # check skip_read_conf_file
     if flag_skip_read_conf_file:
