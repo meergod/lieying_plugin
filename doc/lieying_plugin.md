@@ -1,7 +1,7 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-07-31 16:08 GMT+0800 CST`
+:: *last_update* `2015-08-14 22:52 GMT+0800 CST`
 
-# 猎影 python 插件接口定义 version 0.3.0-test.6
+# 猎影 python 插件接口定义 version 0.3.0-test.7
 
 author: `sceext <sceext@foxmail.com>`
 
@@ -31,7 +31,7 @@ author: `sceext <sceext@foxmail.com>`
 + **[2. 猎影插件接口函数定义](#2-猎影插件接口函数定义)**
   
   + **[2.1 `GetVersion()`](#21-getversion)**
-  + **[2.2 `StartConfig()`](#22-startconfig)**
+  + **[2.2 `Config()`](#22-config)**
   + **[2.3 `Update()`](#23-update)**
   + **[2.4 `Parse()`](#24-parse)**
   + **[2.5 `ParseURL()`](#25-parseurl)**
@@ -162,7 +162,7 @@ author: `sceext <sceext@foxmail.com>`
 目前定义的 *接口函数* 有:
 
 + `GetVersion()`
-+ `StartConfig()`
++ `Config()`
 + `Update()`
 
 > 
@@ -464,19 +464,19 @@ raise Exception('can not load page: http 404')
     
     但是, 已经被 *猎影插件接口* 定义的项目, **必须**按照 *猎影插件接口* 定义的方式使用. 
 
-### 2.2 `StartConfig()`
+### 2.2 `Config()`
 
-(`StartConfig()` 没有示例)
+(`Config()` 没有示例)
 
 + **函数定义**
   
   ```
-  def StartConfig()
+  def Config(show_window=False)
   ```
   **注意**: **所有类型**的插件都**可以**定义此接口函数. 
 
 + **功能说明** <br />
-  用于启动插件自带的配置程序. 
+  用于 插件 的 配置. 
   
   猎影插件管理界面, 会提供 *配置插件* 按钮. 
   用户点击此按钮之后, 猎影会调用此函数, 通知插件用户想要启动配置程序. 
@@ -485,8 +485,14 @@ raise Exception('can not load page: http 404')
 
 + **参数**
   
-  **无** <br />
-  此函数没有定义参数. 
+  + **`show_window`** 类型: `bool` (`boolean`) <br />
+    是否显示 配置界面 (插件 自己实现的 图形配置界面). 
+    
+    为 `True` 时表示插件可以启动 配置界面, 
+    为 `False` 时表示插件 **不能** 启动 配置界面. 
+    
+    *猎影* 会 2次 调用 `Config()`. 
+    更多信息 请见 下方. 
 
 + **返回值**
   
@@ -505,6 +511,22 @@ raise Exception('can not load page: http 404')
   + *插件* 可以自行使用 *配置文件* 保存 配置信息. 配置文件 可以与插件的 python 代码放在一起. 
     
     *猎影* 不会处理 插件 配置信息的 保存, *插件* 需要 自行处理. 
+  
+  + *猎影插件* 运行在一个 **后台** 进程 中. *(windows 平台)* <br />
+    *后台进程* **无法显示** 窗口 *(图形界面)*. 
+    
+    所以, *猎影* 需要在 另外一个 *前台* 进程中调用 *插件* 的 `Config()` 函数, 
+    让 *插件* 有机会 显示 自己实现的 图形窗口 配置界面. 
+    
+    + *猎影* 会在 另一个进程中 `import` 插件, 然后调用 `Config()` 
+      并且 `show_window` 参数为 `True`. 
+      
+      此时插件 应该 显示 图形配置界面. 
+    
+    + 第 1 次 调用的 `Config()` 返回后, *猎影* 会在 *后台进程* 中, 
+      第 2 次 调用 `Config()` 并且 `show_window` 参数为 `False`. 
+      
+      此时插件 应该 重新加载 配置, 并且 应用新的配置. 
 
 ### 2.3 `Update()`
 
