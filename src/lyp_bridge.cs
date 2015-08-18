@@ -1,5 +1,5 @@
 /* lyp_bridge.cs for lyp_bridge, lieying_plugin .net C# to python3 bridge, sceext <sceext@foxmail.com> 
- * version 0.1.1.0 test201508180126
+ * version 0.1.2.0 test201508181740
  *
  * use io_one_line_only.dll	// class IOOneLineOnly
  * use Run.dll from lieying .net C# plugin	// namespace PluginFace
@@ -9,6 +9,7 @@
  *	GetVersion	// get plugin's Version info
  *
  *	Config		// call plugin's method: void Config()
+ *	ApplyConfig	// call plugin's method: void ApplyConfig()
  *	Update, path	// call plugin's method: string Update(string path)
  *	Parse, url	// call plugin's method: string Parse(string url)
  *	ParseURL, url, label, min, max
@@ -20,15 +21,15 @@
  * TODO not support get lieying_plugin .net port, PluginFace.PluginAttribute.Function info
  *
  * compile with
- *	csc -R:io_one_line_only.dll,Run.dll -optimize -out:lyp_bridge.exe lyp_bridge.cs
+ *	csc -R:io_one_line_only.dll,PluginFace.dll -o -out:lyp_bridge.exe lyp_bridge.cs
  */
 
 using System;
 using System.Reflection;
 
 // add version info
-[assembly: AssemblyVersion("0.1.1.0")]
-[assembly: AssemblyFileVersion("0.1.1.0")]
+[assembly: AssemblyVersion("0.1.2.0")]
+[assembly: AssemblyFileVersion("0.1.2.0")]
 
 namespace lyp_bridge {
 	
@@ -158,6 +159,43 @@ namespace lyp_bridge {
 		}
 	}
 	
+	// class to support lieying_plugin's INotify
+	public class MyNotify : PluginFace.INotify {
+		
+		// flag to enable output
+		public static bool enable_output = false;
+		
+		// real output function
+		private static void real_output(string text) {
+			// check flag
+			if (enable_output) {
+				// do output, just write with IOb
+				string[] o = new string[2];
+				o[0] = "print";
+				o[1] = text;
+				IOb.o(o);
+			}
+		}
+		
+		// methods support the INotify
+		public void Information(string str) {
+			// add something before string
+			string output = "INFO: " + str;
+			// just output
+			real_output(output);
+		}
+		
+		public void Warning(string str) {
+			string output = "WARNING: " + str;
+			real_output(output);
+		}
+		
+		public void Error(string str) {
+			string output = "ERROR: " + str;
+			real_output(output);
+		}
+	}
+	
 	// plugin class, to call plugin's Run.dll, the actually bridge
 	public class Bridge {
 		
@@ -180,6 +218,11 @@ namespace lyp_bridge {
 			main_attr = Rb.get_attr_by_name(c, attr_name);
 			// create an instance of main class
 			main_c = Rb.create_instance(c);
+			
+			// set INotify to main class
+			MyNotify notify = new MyNotify();
+			Rb.call(main_c, "SetNotifySink", new object[]{notify});
+			
 			// init done
 		}
 		
@@ -193,13 +236,23 @@ namespace lyp_bridge {
 		
 		// call plugin's method: void Config()
 		public static void Config() {
+			MyNotify.enable_output = true;
 			// just call main_c
 			Rb.call(main_c, "Config", null);
 		}
 		
+		// call plugin's method: void ApplyConfig()
+		public static void ApplyConfig() {
+			MyNotify.enable_output = true;
+			Rb.call(main_c, "ApplyConfig", null);
+		}
+		
 		// call plugin's method: string Update(string path)
 		public static string Update(string path) {
+			// enable output
+			MyNotify.enable_output = true;
 			object raw = Rb.call(main_c, "Update", new object[]{path});
+			
 			string ret = (string)raw;
 			// check ret to FIX BUG
 			if (ret == null) {
@@ -210,6 +263,8 @@ namespace lyp_bridge {
 		
 		// call plugin's method: string Parse(string url)
 		public static string Parse(string url) {
+			// enable output
+			MyNotify.enable_output = true;
 			object raw = Rb.call(main_c, "Parse", new object[]{url});
 			string ret = (string)raw;
 			return ret;
@@ -217,6 +272,7 @@ namespace lyp_bridge {
 		
 		// call plugin's method: string ParseURL(string url, string label, int min, int max)
 		public static string ParseURL(string url, string label, int min, int max) {
+			MyNotify.enable_output = true;
 			// just call main_c, NOTE the method name is "ParseUrl"
 			object raw = Rb.call(main_c, "ParseUrl", new object[]{url, label, min, max});
 			string ret = (string)raw;
@@ -225,6 +281,8 @@ namespace lyp_bridge {
 		
 		// call plugin's method: string Search(string text, int start, int page_size, string sort_by, bool reverse)
 		public static string Search(string text, int start, int page_size, string sort_by, bool reverse) {
+			MyNotify.enable_output = true;
+			
 			object raw = Rb.call(main_c, "Search", new object[]{text, start, page_size, sort_by, reverse});
 			string ret = (string)raw;
 			// check ret to FIX BUG
@@ -243,6 +301,9 @@ namespace lyp_bridge {
 		
 		// output ERROR
 		private static void print_err(Exception e, string name) {
+			// disable output
+			MyNotify.enable_output = false;
+			
 			string[] o = new string[3];
 			o[0] = "ERROR";
 			o[1] = "sub plugin " + name + " failed ";
@@ -278,6 +339,8 @@ namespace lyp_bridge {
 						print_err(e, "GetVersion()");
 						break;
 					}
+					// disable output
+					MyNotify.enable_output = false;
 					// output result
 					string[] o = new string[2];
 					o[0] = "";
@@ -293,6 +356,22 @@ namespace lyp_bridge {
 						print_err(e, "Config()");
 						break;
 					}
+					MyNotify.enable_output = false;
+					// output result
+					string[] o = new string[1];
+					o[0] = "";
+					IOb.o(o);
+				}
+				break;
+			case "ApplyConfig":	// void ApplyConfig()
+				{
+					try {
+						Bridge.ApplyConfig();
+					} catch (Exception e) {
+						print_err(e, "ApplyConfig()");
+						break;
+					}
+					MyNotify.enable_output = false;
 					// output result
 					string[] o = new string[1];
 					o[0] = "";
@@ -310,6 +389,7 @@ namespace lyp_bridge {
 						print_err(e, "Update(\"" + path + "\")");
 						break;
 					}
+					MyNotify.enable_output = false;
 					// output result
 					string[] o = new string[2];
 					o[0] = "";
@@ -327,6 +407,7 @@ namespace lyp_bridge {
 						print_err(e, "Parse(\"" + url + "\")");
 						break;
 					}
+					MyNotify.enable_output = false;
 					// output result
 					string[] o = new string[2];
 					o[0] = "";
@@ -349,6 +430,7 @@ namespace lyp_bridge {
 						print_err(e, "ParseURL(\"" + url + "\", \"" + label + "\", " + min.ToString() + ", " + max.ToString() + ")");
 						break;
 					}
+					MyNotify.enable_output = false;
 					// output result
 					string[] o = new string[2];
 					o[0] = "";
@@ -358,6 +440,8 @@ namespace lyp_bridge {
 				break;
 			case "Search":	// string Search(string text, int start, int page_size, string sort_by, bool reverse)
 				{	// TODO NOTE not support Search() now
+					MyNotify.enable_output = false;
+					
 					string[] o = new string[2];
 					o[0] = "ERROR";
 					o[1] = "not support Search() now ";
