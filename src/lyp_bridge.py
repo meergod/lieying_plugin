@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # lyp_bridge.py, a bridge from python3 to .net C# lieying_plugin .dll, sceext <sceext@foxmail.com>
-# version 0.1.1.0 test201508180130
+# version 0.1.2.0 test201508181749
 
 # import
 
@@ -97,13 +97,16 @@ def send_to_sub(c, line_end=LINE_END):
 def sub_do(c):
     # send command to sub
     send_to_sub(c)
-    # get result
-    result = get_sub_out()
-    # check ERROR
-    if result[0] != '':
-        raise Exception('ERROR: sub return error', result[0], result[1])
-    else:	# sub OK
-        return result[1:]	# remove first args
+    while True:	# support many print
+        # get result
+        result = get_sub_out()
+        # check sub 'print' request and support it
+        if result[0] == 'print':
+            print(result[1])	# just print it
+        elif result[0] != '':	# check ERROR
+            raise Exception('ERROR: sub return error', result[0], result[1])
+        else:	# sub OK
+            return result[1:]	# remove first args
     # done
 
 # really start sub
@@ -161,11 +164,10 @@ def GetVersion():
 # Config(show_window=False)
 def Config(show_window=False):
     # check args
-    if show_window:
-        # should call sub's Config()
+    if show_window:	# should call sub's Config()
         sub_do(['Config'])
     else:	# should call sub's ApplyConfig()
-        pass	# TODO NOTE not support ApplyConfig() now
+        sub_do(['ApplyConfig'])
     # process done
 
 # Update(local_path='')
