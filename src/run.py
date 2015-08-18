@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # run.py for lyp_bridge, lieying_plugin python3 to C# .net bridge, sceext <sceext@foxmail.com> 
-# version 0.0.4.0 test201508181912
+# version 0.0.5.0 test201508182253
 
 # import
 
+import os
 import json
 
 # NOTE try to fix import
@@ -19,7 +20,18 @@ FILTER_DEFAULT = [	# default filter info for lieying_plugin
     '^http://.+', 
 ]
 
+ly_root_path = ''	# lieying root path, used to fix sub_domain_base_path
+
 # functions
+
+# make root path
+def make_root_path():
+    # from C:\Program Files (x86)\LieYing\Data\Plugins\_EA078240_D566_42BC_A9FD_2F5B5FBBCD8B
+    # to C:\Program Files (x86)\LieYing
+    rel_path = '../../../'
+    plugin_dir = os.path.normpath(os.path.dirname(__file__))
+    r_path = os.path.normpath(os.path.join(plugin_dir, rel_path))
+    return r_path	# done
 
 # custom version info
 def make_version(raw_info):
@@ -79,7 +91,7 @@ def make_version(raw_info):
 # exports functions
 
 def GetVersion(*k, **kw):
-    b.start()
+    b.start(ly_root_path)
     raw = b.GetVersion(*k, **kw)
     b.exit()	# NOTE exit after GetVersion(), FIX a BUG here
     
@@ -88,22 +100,26 @@ def GetVersion(*k, **kw):
     return r
 
 def Config(*k, **kw):
-    b.start()
+    b.start(ly_root_path)
     return b.Config(*k, **kw)
 
 def Update(*k, **kw):
-    b.start()
+    b.start(ly_root_path)
     return b.Update(*k, **kw)
 
 def Parse(*k, **kw):
-    b.start()
+    b.start(ly_root_path)
     return b.Parse(*k, **kw)
 
 def ParseURL(*k, **kw):
-    b.start()
+    b.start(ly_root_path)
     return b.ParseURL(*k, **kw)
 
+# export for DEBUG
 p = b.p
+
+# set ly_root_path at init
+ly_root_path = make_root_path()
 
 # end run.py
 
