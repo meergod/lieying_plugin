@@ -1,25 +1,21 @@
 # -*- coding: utf-8 -*-
 # lyp_bridge.py, a bridge from python3 to .net C# lieying_plugin .dll, sceext <sceext@foxmail.com>
-# version 0.1.3.0 test201508182247
+# version 0.1.4.0 test201508190018
 
 # import
 
 import os, sys, json
 import subprocess
 
-# NOTE try to fix from . import
-try:
-    from . import io_one_line_only as ioo
-except Exception:
-    import io_one_line_only as ioo
+from . import io_one_line_only as ioo
 
 # global vars
 
 etc = {}	# global conf info
-etc['bin_exe'] = 'lyp_bridge.exe'
+etc['bin_exe'] = '../lyp_bridge.exe'
 etc['p'] = None	# subprocess.Popen() object
 
-etc['dll_name'] = 'Run2.dll'
+etc['dll_name'] = '../Run2.dll'
 
 # to fix sub pass args
 etc['fix_parse_url_i_min'] = 0
@@ -29,7 +25,7 @@ etc['fix_parse_url_i_max'] = 1048576
 LINE_END = '\r\n'
 # NOTE fix sub-encoding
 #SUB_ENCODING = ['utf-8', 'utf-8']	# fix for stdin and stdout
-# NOTE fix on windows
+# FIXME tmp fix, NOTE fix on windows
 SUB_ENCODING = ['cp936', 'cp936']
 
 # functions

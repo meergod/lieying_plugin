@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # io_one_line_only.py, pass many text in only one line text, sceext <sceext@foxmail.com> 
-# version 0.0.4.0 test201508160535
+# version 0.1.0.0 test201508190016
 
 # import
 
