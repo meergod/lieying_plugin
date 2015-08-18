@@ -1,5 +1,5 @@
 /* lyp_bridge.cs for lyp_bridge, lieying_plugin .net C# to python3 bridge, sceext <sceext@foxmail.com> 
- * version 0.1.2.0 test201508181740
+ * version 0.1.3.0 test201508182052
  *
  * use io_one_line_only.dll	// class IOOneLineOnly
  * use Run.dll from lieying .net C# plugin	// namespace PluginFace
@@ -202,28 +202,61 @@ namespace lyp_bridge {
 		// global config
 		public static string dll_name = "Run.dll";
 		public static string attr_name = "PluginFace.PluginAttribute";
+		// used to CreateDomain()
+		public static string domain_base_dir = "";
 		
 		// instance of plugin's main class, and main attribute
 		private static object main_attr = null;
 		private static object main_c = null;
+		private static string main_c_name = "";
+		
+		// create instance in domain
+		public static object[] create_instance_in_domain(string to_load_dll_name, string main_class_name, string base_dir) {
+			// set domain setup info
+			AppDomainSetup s = new AppDomainSetup();
+			s.ApplicationBase = base_dir;
+			// create domain
+			AppDomain d = AppDomain.CreateDomain("lyp_bridge.host_sub_domain", null, s);
+			// create instance in this domain
+			Runtime.Remoting.ObjectHandle h = d.CreateInstanceFrom(to_load_dll_name, main_class_name);
+			// get the instance object
+			object i = h.Unwrap();
+			// done, ready to return info
+			string sub_domain_base_dir = d.BaseDirectory;
+			object[] r = new object[]{i, sub_domain_base_dir};
+			return r;
+		}
 		
 		// plugin init function
-		public static void init() {
+		public static string init() {
 			// load dll
 			Assembly a = Rb.load_dll(dll_name);
 			Type[] aa = Rb.get_types(a);	// get types
 			// find main class
 			Type c = Rb.get_class_by_attr(aa, attr_name);
+			// save main_c_name
+			main_c_name = c.FullName;
 			// get the main attribute
 			main_attr = Rb.get_attr_by_name(c, attr_name);
-			// create an instance of main class
-			main_c = Rb.create_instance(c);
+			
+			string init_info = "";
+			// check args to create instance of main class
+			if (domain_base_dir == "") {
+				// create an instance of main class
+				main_c = Rb.create_instance(c);
+			} else {
+				// create instance in domain
+				object[] r = create_instance_in_domain(dll_name, main_c_name, domain_base_dir);
+				main_c = r[0];
+				init_info = (string)r[1];
+			}
 			
 			// set INotify to main class
 			MyNotify notify = new MyNotify();
 			Rb.call(main_c, "SetNotifySink", new object[]{notify});
 			
 			// init done
+			return init_info;
 		}
 		
 		// get plugin's Version info
@@ -466,8 +499,9 @@ namespace lyp_bridge {
 			// init plugin first, and process ERROR
 			bool flag_err = false;
 			string err_str = "";
+			string init_info = "";
 			try {
-				Bridge.init();
+				init_info = Bridge.init();
 			} catch (Exception e) {
 				// save ERROR msg
 				flag_err = true;
@@ -486,6 +520,10 @@ namespace lyp_bridge {
 				string[] o = new string[2];
 				o[0] = "";
 				o[1] = "[ OK ] lyp_bridge started. ";
+				// add init_info
+				if ((init_info != null) && (init_info != "")) {
+					o[1] += "\n" + init_info;
+				}
 				IOb.o(o);
 			}
 			// do works until exit
@@ -507,6 +545,11 @@ namespace lyp_bridge {
 				// get first arg as Bridge.dll_name
 				string dll_name = a[0];
 				Bridge.dll_name = dll_name;
+			}
+			if (a.Length > 1) {
+				// get second arg as Bridge.domain_base_dir
+				string domain_base_dir = a[1];
+				Bridge.domain_base_dir = domain_base_dir;
 			}
 			
 			// just start mainloop
