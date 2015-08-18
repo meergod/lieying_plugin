@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # get_nosalt.py for lyp_bridge, lib/nosalt/get_nosalt, sceext <sceext@foxmail.com> 
-# version 0.0.1.0 test201508190102
+# version 0.0.2.0 test201508190108
 
 # import 
 
 import os, json
 import subprocess
 
-from . import conf
+from .. import conf
 
 # global vars
 
@@ -30,7 +30,7 @@ etc['open_page_bin'] = ''
 # get info from nosalt slimerjs open_page.js
 def get_info(url):
     # gen paths
-    get_paths()
+    gen_paths()
     # call sub and get info
     info = run_sub(url)
     # done
