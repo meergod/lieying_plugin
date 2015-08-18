@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # main.py for lyp_bridge, lib/main, sceext <sceext@foxmail.com> 
-# version 0.0.1.0 test201508190015
+# version 0.0.2.0 test201508190114
 
 # import
 
@@ -12,7 +12,7 @@ from . import conf, cache
 from .nosalt import get_nosalt
 
 # global vars
-PACK_VERSION = 2
+PACK_VERSION = 3
 
 FILTER_DEFAULT = [	# default filter info for lieying_plugin
     '^http://.+', 
@@ -46,7 +46,7 @@ def make_version(raw_info):
     ver = {
         'port_version' : '0.3.0-test.7', 
         'uuid' : '2280f81b-7447-47e2-b7a8-3f760f8fa62b', 
-        'version' : '0.2.0', 
+        'version' : '0.3.0', 
         
         'author' : 'sceext <sceext@foxmail.com>', 
         'license' : 'unlicense <http://unlicense.org/>', 
@@ -93,6 +93,15 @@ def make_version(raw_info):
     text = json.dumps(out)
     return text
 
+# use get_nosalt before call sub to parse
+def make_nosalt(url):
+    raw = get_nosalt.get_info(url)
+    # get info from raw
+    info = raw['url']
+    # write info with cache
+    cache.update(url, info)
+    # done
+
 # exports functions
 
 def GetVersion(*k, **kw):
@@ -113,10 +122,20 @@ def Update(*k, **kw):
     return b.Update(*k, **kw)
 
 def Parse(*k, **kw):
+    # check config flag
+    if conf.enable_nosalt:
+        url = k[0]	# get args
+        make_nosalt(url)
+    # use sub to really parse
     b.start(ly_root_path)
     return b.Parse(*k, **kw)
 
 def ParseURL(*k, **kw):
+    if conf.enable_nosalt:
+        url = k[0]
+        # FIXME the first URL may be never out-of-data now, so no need to make again
+        #make_nosalt(url)
+    # use sub to really parse
     b.start(ly_root_path)
     return b.ParseURL(*k, **kw)
 
