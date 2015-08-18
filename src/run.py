@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # run.py for lyp_bridge, lieying_plugin python3 to C# .net bridge, sceext <sceext@foxmail.com> 
-# version 0.0.5.0 test201508182253
+# version 0.0.6.0 test201508182333
 
 # import
 
@@ -14,7 +14,7 @@ except Exception:
     import lyp_bridge as b
 
 # global vars
-PACK_VERSION = 1
+PACK_VERSION = 2
 
 FILTER_DEFAULT = [	# default filter info for lieying_plugin
     '^http://.+', 
@@ -31,6 +31,10 @@ def make_root_path():
     rel_path = '../../../'
     plugin_dir = os.path.normpath(os.path.dirname(__file__))
     r_path = os.path.normpath(os.path.join(plugin_dir, rel_path))
+    # FIXME tmp fix here
+    # NOTE fix bug here, add '\\' after r_path
+    if not r_path.endswith('\\'):
+        r_path += '\\'
     return r_path	# done
 
 # custom version info
@@ -41,7 +45,7 @@ def make_version(raw_info):
     ver = {
         'port_version' : '0.3.0-test.7', 
         'uuid' : '2280f81b-7447-47e2-b7a8-3f760f8fa62b', 
-        'version' : '0.1.0', 
+        'version' : '0.2.0', 
         
         'author' : 'sceext <sceext@foxmail.com>', 
         'license' : 'unlicense <http://unlicense.org/>', 
