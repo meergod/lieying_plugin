@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # main.py for lyp_bridge, lib/main, sceext <sceext@foxmail.com> 
-# version 0.0.3.0 test201508190257
+# version 0.0.4.0 test201508190301
 
 # import
 
@@ -60,7 +60,7 @@ def make_version(raw_info):
     
     # update args from raw
     out = raw.copy()
-    out['uuid'] = raw['uuid']	# replace uuid from raw
+    out['uuid'] = ver['uuid']	# replace uuid to this plugin
     out['version'] = ver['version'] + '_' + raw['version']	# mix version str
     out['pack_version'] = ver['pack_version']	# add more info
     
