@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # cache.py for lyp_bridge, lib/cache, sceext <sceext@foxmail.com> 
-# version 0.0.3.0 test201508190240
+# version 0.1.0.0 test201508190323
 
 # import
 

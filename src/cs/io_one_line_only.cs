@@ -1,8 +1,12 @@
 /* io_one_line_only.cs, io_one_line_only for C#, sceext <sceext@foxmail.com> 
- * version 0.0.4.1 test201508160737
+ * version 0.1.0.0 test201508190323
  */
 
 using System;
+
+// add version info
+[assembly: AssemblyVersion("0.1.0.0")]
+[assembly: AssemblyFileVersion("0.1.0.0")]
 
 // #define FLAG_DEBUG
 

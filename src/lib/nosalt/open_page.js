@@ -1,5 +1,5 @@
 /* open_page.js for nosalt_271; open web page in slimerjs, and show loaded resources
- * version 0.0.7.0 test201508150442
+ * version 0.1.0.0 test201508190326
  */
 
 // use strict mode for ECMAScript6

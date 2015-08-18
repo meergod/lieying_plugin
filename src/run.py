@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # run.py for lyp_bridge, lieying_plugin python3 to C# .net bridge, sceext <sceext@foxmail.com> 
-# version 0.0.7.0 test201508190012
+# version 0.1.0.0 test201508190321
 
 # import
 

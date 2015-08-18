@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # main.py for lyp_bridge, lib/main, sceext <sceext@foxmail.com> 
-# version 0.0.4.0 test201508190301
+# version 0.1.0.0 test201508190329
 
 # import
 
@@ -15,7 +15,7 @@ from .plist import entry as plist
 from .plist import output as plisto
 
 # global vars
-PACK_VERSION = 3
+PACK_VERSION = 4
 
 FILTER_DEFAULT = [	# default filter info for lieying_plugin
     '^http://.+', 
@@ -49,7 +49,7 @@ def make_version(raw_info):
     ver = {
         'port_version' : '0.3.0-test.7', 
         'uuid' : '2280f81b-7447-47e2-b7a8-3f760f8fa62b', 
-        'version' : '0.3.0', 
+        'version' : '0.4.0', 
         
         'author' : 'sceext <sceext@foxmail.com>', 
         'license' : 'unlicense <http://unlicense.org/>', 
@@ -63,6 +63,10 @@ def make_version(raw_info):
     out['uuid'] = ver['uuid']	# replace uuid to this plugin
     out['version'] = ver['version'] + '_' + raw['version']	# mix version str
     out['pack_version'] = ver['pack_version']	# add more info
+    out['port_version'] = ver['port_version']	# reset port_version
+    # remove copyright
+    if 'copyright' in out:
+        out.pop('copyright')
     
     # update each multi-line values
     update_list = [

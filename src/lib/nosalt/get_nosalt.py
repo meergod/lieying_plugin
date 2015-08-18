@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # get_nosalt.py for lyp_bridge, lib/nosalt/get_nosalt, sceext <sceext@foxmail.com> 
-# version 0.0.4.0 test201508190138
+# version 0.1.0.0 test201508190326
 
 # import 
 
@@ -78,6 +78,10 @@ def try_decode_json(raw):
 def run_sub(url):
     s_bin = etc['slimerjs_bin']
     op_bin = etc['open_page_bin']
+    
+    # check slimerjs_bin
+    if not os.path.isfile(s_bin):
+        raise Exception('get_nosalt :: ERROR: slimerjs not installed. File not exist \"' + s_bin + '\" ')
     
     # make args
     arg = [s_bin, op_bin, url]
