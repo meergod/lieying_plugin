@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # main.py for lyp_bridge, lib/main, sceext <sceext@foxmail.com> 
-# version 0.0.2.0 test201508190114
+# version 0.0.3.0 test201508190257
 
 # import
 
@@ -10,6 +10,9 @@ from . import lyp_bridge as b
 from . import conf, cache
 
 from .nosalt import get_nosalt
+
+from .plist import entry as plist
+from .plist import output as plisto
 
 # global vars
 PACK_VERSION = 3
@@ -122,13 +125,25 @@ def Update(*k, **kw):
     return b.Update(*k, **kw)
 
 def Parse(*k, **kw):
-    # check config flag
-    if conf.enable_nosalt:
-        url = k[0]	# get args
-        make_nosalt(url)
-    # use sub to really parse
-    b.start(ly_root_path)
-    return b.Parse(*k, **kw)
+    url = k[0]	# get args
+    
+    # check to parse plist
+    if plist.check_is_list_url(url):
+        # parse plist
+        raw_info = plist.parse_video_list(url)
+        # translate it to lieying_plugin output format
+        out = plisto.translate(raw_info)
+        # parse plist done
+        text = json.dumps(out)
+        return text
+    else:	# use normal parse
+        # check config flag
+        if conf.enable_nosalt:
+            make_nosalt(url)
+        # use sub to really parse
+        b.start(ly_root_path)
+        return b.Parse(*k, **kw)
+    # parse function done
 
 def ParseURL(*k, **kw):
     if conf.enable_nosalt:
