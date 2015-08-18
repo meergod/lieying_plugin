@@ -1,10 +1,4 @@
-
-//
-using System;
-using System.Reflection;
-
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+﻿using System;
 
 // 本文件主要定义基于 .Net 实现猎影插件，对于一个插件类，需要
 //  1、实现接口 IPlugin
@@ -48,9 +42,23 @@ namespace PluginFace {
     }
 
     /// <summary>
+    /// 该接口由猎影实现，用于插件显示一些信息
+    /// </summary>
+    public interface INotify {
+        void Information( string str);
+        void Warning(string str);
+        void Error(string str);
+    }
+
+    /// <summary>
     /// Python 插件接口定义见 https://github.com/sceext2/lieying_plugin/blob/port_version-0.3/doc/lieying_plugin.md
     /// </summary>
     public interface IPlugin {
+        /// <summary>
+        /// 设置信息输出接口
+        /// </summary>
+        /// <param name="notify"></param>
+        void SetNotifySink(INotify notify);
         /// <summary>
         /// 进行配置，参见 Python 插件中的 Config 中 参数 true 的情况
         /// </summary>
@@ -58,7 +66,7 @@ namespace PluginFace {
         /// <summary>
         /// 进行配置，参见 Python 插件中的 Config 中 参数 false 的情况
         /// </summary>
-        //void ApplyConfig();
+        void ApplyConfig();
 
         /// <summary>
         /// 对插件进行升级，参见 Python 插件中的 Update 
