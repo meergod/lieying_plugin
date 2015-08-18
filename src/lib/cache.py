@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # cache.py for lyp_bridge, lib/cache, sceext <sceext@foxmail.com> 
-# version 0.0.1.0 test201508190039
+# version 0.0.2.0 test201508190043
 
 # import
 import os
@@ -36,6 +36,8 @@ def make_file_name(url):
     t = url.split('://', 1)[1]
     # remove ?
     t = t.split('?', 1)[0]
+    # remove site name until /
+    t = t.split('/', 1)[1]
     # remove .html
     t = t.rsplit('.', 1)[0]
     # now t is the raw name
@@ -51,6 +53,9 @@ def make_cache_dir():
     # get now dir
     now_dir = os.path.normpath(os.path.dirname(__file__))
     cache_dir = os.path.normpath(os.path.join(now_dir, CACHE_DIR))
+    # try to create dir
+    if not os.path.isdir(cache_dir):
+        os.mkdir(cache_dir)
     # save it
     etc['cache_path'] = cache_dir
     # done
