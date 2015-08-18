@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # lyp_bridge.py, a bridge from python3 to .net C# lieying_plugin .dll, sceext <sceext@foxmail.com>
-# version 0.1.4.0 test201508190018
+# version 0.1.5.0 test201508190241
 
 # import
 
@@ -8,6 +8,7 @@ import os, sys, json
 import subprocess
 
 from . import io_one_line_only as ioo
+from . import conf
 
 # global vars
 
@@ -16,7 +17,7 @@ etc['bin_exe'] = '../lyp_bridge.exe'	# path from now_dir
 etc['p'] = None	# subprocess.Popen() object
 
 # path from now_dir
-etc['dll_name'] = '../../_EA078240_D566_42BC_A9FD_2F5B5FBBCD8B/Run.dll'
+etc['dll_name'] = '../../' + conf.pp_uuid_path + '/Run.dll'
 
 # to fix sub pass args
 etc['fix_parse_url_i_min'] = 0

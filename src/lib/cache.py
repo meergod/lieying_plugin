@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 # cache.py for lyp_bridge, lib/cache, sceext <sceext@foxmail.com> 
-# version 0.0.2.0 test201508190043
+# version 0.0.3.0 test201508190240
 
 # import
+
 import os
 
+from . import conf
+
 # global vars
-CACHE_DIR = '../cache'	# from now_dir
+CACHE_DIR = '../../' + conf.pp_uuid_path + '/cache'	# from now_dir
 CACHE_ITEM_AFTER = 'jsonaddr'	# NOTE cache file sample 'v_19rro7ou14jsonaddr'
 
 etc = {}
