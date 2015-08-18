@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 # entry.py for lieying_plugin (parse) plist
 # plugin/plist/entry: parse video plist entry file. 
-# version 0.0.4.0 test201507251728
+# version 0.0.5.0 test201508190243
 
 # import
 
 import re
 
 from . import base
-
 from .site import list271
 
 # global vars

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # base.py for lieying_plugin (parse) plist
 # plugin/plist/base: parse video plist base utils
-# version 0.0.1.0 test201507251729
+# version 0.0.2.0 test201508190244
 
 # import
 
 import urllib.request
 
-from ..tool.htmldom import htmldom
+from ..tool import htmldom
 
 # function
 

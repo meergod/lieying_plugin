@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # list271.py for lieying_plugin (parse) plist
 # plugin/plist/site/list271: parse video list of 271. 
-# version 0.0.10.0 test201507251808
+# version 0.0.11.0 test201508190243
 
 # import
 
-import re
-import json
+import re, json
 
 from .. import base
 
