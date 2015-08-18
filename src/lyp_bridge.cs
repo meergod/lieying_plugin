@@ -1,5 +1,5 @@
 /* lyp_bridge.cs for lyp_bridge, lieying_plugin .net C# to python3 bridge, sceext <sceext@foxmail.com> 
- * version 0.1.3.0 test201508182052
+ * version 0.1.4.0 test201508182214
  *
  * use io_one_line_only.dll	// class IOOneLineOnly
  * use Run.dll from lieying .net C# plugin	// namespace PluginFace
@@ -304,33 +304,6 @@ namespace lyp_bridge {
 		// exit code
 		public static int exit_code = 0;
 		
-		// exe this in new domain
-		private static int exe_in_new_domain(string sub_domain_name, string exe_name, string[] args) {
-		
-		// TODO start
-		// create instance in domain
-		public static object[] create_instance_in_domain(string to_load_dll_name, string main_class_name, string base_dir) {
-			// set domain setup info
-			AppDomainSetup s = new AppDomainSetup();
-			s.ApplicationBase = base_dir;
-			// create domain
-			AppDomain d = AppDomain.CreateDomain("lyp_bridge.host_sub_domain", null, s);
-			// create instance in this domain
-			object h = d.CreateInstanceFromAndUnwrap(to_load_dll_name, main_class_name);
-			// get the instance object
-			// FIXME debug here
-			object i = null;
-			/*
-			object i = h.Unwrap();
-			*/
-			// done, ready to return info
-			string sub_domain_base_dir = d.BaseDirectory;
-			object[] r = new object[]{i, sub_domain_base_dir};
-			return r;
-		}
-		// TODO end
-		}
-		
 		// output ERROR
 		private static void print_err(Exception e, string name) {
 			// disable output
@@ -537,6 +510,17 @@ namespace lyp_bridge {
 			}
 		}
 		
+		// exe this in new domain
+		private static int exe_in_new_domain(string sub_domain_base_dir, string exe_name, string[] args) {
+			// set domain setup info
+			AppDomainSetup s = new AppDomainSetup();
+			s.ApplicationBase = sub_domain_base_dir;
+			// create domain
+			AppDomain d = AppDomain.CreateDomain("lyp_bridge.host_sub_domain", null, s);
+			// just exe in sub domain
+			return d.ExecuteAssembly(exe_name, null, args);	// done
+		}
+		
 		// main function, entry point of this program
 		public static int Main(string[] a) {
 			// check args
@@ -545,10 +529,12 @@ namespace lyp_bridge {
 				string dll_name = a[0];
 				Bridge.dll_name = dll_name;
 			}
-			if (a.Length > 1) {
+			if (a.Length > 2) {
 				// get second arg as Bridge.domain_base_dir
 				string domain_base_dir = a[1];
-				Bridge.domain_base_dir = domain_base_dir;
+				string exe_self_name = a[2];
+				// just execute exe in sub domain, only pass first arg
+				return exe_in_new_domain(domain_base_dir, exe_self_name, new string[]{a[0]});
 			}
 			
 			// just start mainloop
