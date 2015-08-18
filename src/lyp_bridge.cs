@@ -1,5 +1,5 @@
 /* lyp_bridge.cs for lyp_bridge, lieying_plugin .net C# to python3 bridge, sceext <sceext@foxmail.com> 
- * version 0.1.4.0 test201508182214
+ * version 0.1.5.0 test201508182222
  *
  * use io_one_line_only.dll	// class IOOneLineOnly
  * use Run.dll from lieying .net C# plugin	// namespace PluginFace
@@ -30,8 +30,8 @@ using System.Reflection;
 using System.Runtime.Remoting;
 
 // add version info
-[assembly: AssemblyVersion("0.1.2.0")]
-[assembly: AssemblyFileVersion("0.1.2.0")]
+[assembly: AssemblyVersion("0.1.5.0")]
+[assembly: AssemblyFileVersion("0.1.5.0")]
 
 namespace lyp_bridge {
 	
