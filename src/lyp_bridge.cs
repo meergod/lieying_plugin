@@ -1,5 +1,5 @@
 /* lyp_bridge.cs for lyp_bridge, lieying_plugin .net C# to python3 bridge, sceext <sceext@foxmail.com> 
- * version 0.1.2.0 test201508181740
+ * version 0.1.5.0 test201508182222
  *
  * use io_one_line_only.dll	// class IOOneLineOnly
  * use Run.dll from lieying .net C# plugin	// namespace PluginFace
@@ -26,10 +26,12 @@
 
 using System;
 using System.Reflection;
+// used for create domain
+using System.Runtime.Remoting;
 
 // add version info
-[assembly: AssemblyVersion("0.1.2.0")]
-[assembly: AssemblyFileVersion("0.1.2.0")]
+[assembly: AssemblyVersion("0.1.5.0")]
+[assembly: AssemblyFileVersion("0.1.5.0")]
 
 namespace lyp_bridge {
 	
@@ -208,7 +210,7 @@ namespace lyp_bridge {
 		private static object main_c = null;
 		
 		// plugin init function
-		public static void init() {
+		public static string init() {
 			// load dll
 			Assembly a = Rb.load_dll(dll_name);
 			Type[] aa = Rb.get_types(a);	// get types
@@ -216,14 +218,15 @@ namespace lyp_bridge {
 			Type c = Rb.get_class_by_attr(aa, attr_name);
 			// get the main attribute
 			main_attr = Rb.get_attr_by_name(c, attr_name);
+			
 			// create an instance of main class
 			main_c = Rb.create_instance(c);
-			
 			// set INotify to main class
 			MyNotify notify = new MyNotify();
 			Rb.call(main_c, "SetNotifySink", new object[]{notify});
 			
-			// init done
+			// init done, return AppDomain.CurrentDomain.BaseDirectory
+			return AppDomain.CurrentDomain.BaseDirectory;
 		}
 		
 		// get plugin's Version info
@@ -466,8 +469,9 @@ namespace lyp_bridge {
 			// init plugin first, and process ERROR
 			bool flag_err = false;
 			string err_str = "";
+			string init_info = "";
 			try {
-				Bridge.init();
+				init_info = Bridge.init();
 			} catch (Exception e) {
 				// save ERROR msg
 				flag_err = true;
@@ -486,6 +490,10 @@ namespace lyp_bridge {
 				string[] o = new string[2];
 				o[0] = "";
 				o[1] = "[ OK ] lyp_bridge started. ";
+				// add init_info
+				if ((init_info != null) && (init_info != "")) {
+					o[1] += "\n" + init_info;
+				}
 				IOb.o(o);
 			}
 			// do works until exit
@@ -500,6 +508,17 @@ namespace lyp_bridge {
 			}
 		}
 		
+		// exe this in new domain
+		private static int exe_in_new_domain(string sub_domain_base_dir, string exe_name, string[] args) {
+			// set domain setup info
+			AppDomainSetup s = new AppDomainSetup();
+			s.ApplicationBase = sub_domain_base_dir;
+			// create domain
+			AppDomain d = AppDomain.CreateDomain("lyp_bridge.host_sub_domain", null, s);
+			// just exe in sub domain
+			return d.ExecuteAssembly(exe_name, args);	// done
+		}
+		
 		// main function, entry point of this program
 		public static int Main(string[] a) {
 			// check args
@@ -507,6 +526,13 @@ namespace lyp_bridge {
 				// get first arg as Bridge.dll_name
 				string dll_name = a[0];
 				Bridge.dll_name = dll_name;
+			}
+			if (a.Length > 2) {
+				// get second arg as Bridge.domain_base_dir
+				string domain_base_dir = a[1];
+				string exe_self_name = a[2];
+				// just execute exe in sub domain, only pass first arg
+				return exe_in_new_domain(domain_base_dir, exe_self_name, new string[]{a[0]});
 			}
 			
 			// just start mainloop
