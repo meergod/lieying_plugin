@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # get_nosalt.py for lyp_bridge, lib/nosalt/get_nosalt, sceext <sceext@foxmail.com> 
-# version 0.0.3.0 test201508190132
+# version 0.0.4.0 test201508190138
 
 # import 
 
@@ -66,10 +66,10 @@ def try_decode_json(raw):
             if len(rest) < 2:
                 raise Exception('get_nosalt :: try_decode_json failed. \n' + raw + '')
             # try to remove something before and after rest string
-            if test.startswith('{'):
+            if rest.startswith('{'):
                 rest = rest[1:]
             rest = '{' + rest.split('{', 1)[1]
-            if test.endswith('}'):
+            if rest.endswith('}'):
                 rest = rest[:-1]
             rest = rest.rsplit('}', 1)[0] + '}'
     # process done
