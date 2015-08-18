@@ -26,6 +26,8 @@
 
 using System;
 using System.Reflection;
+// used for create domain
+using System.Runtime.Remoting;
 
 // add version info
 [assembly: AssemblyVersion("0.1.2.0")]
@@ -202,30 +204,10 @@ namespace lyp_bridge {
 		// global config
 		public static string dll_name = "Run.dll";
 		public static string attr_name = "PluginFace.PluginAttribute";
-		// used to CreateDomain()
-		public static string domain_base_dir = "";
 		
 		// instance of plugin's main class, and main attribute
 		private static object main_attr = null;
 		private static object main_c = null;
-		private static string main_c_name = "";
-		
-		// create instance in domain
-		public static object[] create_instance_in_domain(string to_load_dll_name, string main_class_name, string base_dir) {
-			// set domain setup info
-			AppDomainSetup s = new AppDomainSetup();
-			s.ApplicationBase = base_dir;
-			// create domain
-			AppDomain d = AppDomain.CreateDomain("lyp_bridge.host_sub_domain", null, s);
-			// create instance in this domain
-			Runtime.Remoting.ObjectHandle h = d.CreateInstanceFrom(to_load_dll_name, main_class_name);
-			// get the instance object
-			object i = h.Unwrap();
-			// done, ready to return info
-			string sub_domain_base_dir = d.BaseDirectory;
-			object[] r = new object[]{i, sub_domain_base_dir};
-			return r;
-		}
 		
 		// plugin init function
 		public static string init() {
@@ -239,24 +221,14 @@ namespace lyp_bridge {
 			// get the main attribute
 			main_attr = Rb.get_attr_by_name(c, attr_name);
 			
-			string init_info = "";
-			// check args to create instance of main class
-			if (domain_base_dir == "") {
-				// create an instance of main class
-				main_c = Rb.create_instance(c);
-			} else {
-				// create instance in domain
-				object[] r = create_instance_in_domain(dll_name, main_c_name, domain_base_dir);
-				main_c = r[0];
-				init_info = (string)r[1];
-			}
-			
+			// create an instance of main class
+			main_c = Rb.create_instance(c);
 			// set INotify to main class
 			MyNotify notify = new MyNotify();
 			Rb.call(main_c, "SetNotifySink", new object[]{notify});
 			
-			// init done
-			return init_info;
+			// init done, return AppDomain.CurrentDomain.BaseDirectory
+			return AppDomain.CurrentDomain.BaseDirectory;
 		}
 		
 		// get plugin's Version info
@@ -331,6 +303,33 @@ namespace lyp_bridge {
 		
 		// exit code
 		public static int exit_code = 0;
+		
+		// exe this in new domain
+		private static int exe_in_new_domain(string sub_domain_name, string exe_name, string[] args) {
+		
+		// TODO start
+		// create instance in domain
+		public static object[] create_instance_in_domain(string to_load_dll_name, string main_class_name, string base_dir) {
+			// set domain setup info
+			AppDomainSetup s = new AppDomainSetup();
+			s.ApplicationBase = base_dir;
+			// create domain
+			AppDomain d = AppDomain.CreateDomain("lyp_bridge.host_sub_domain", null, s);
+			// create instance in this domain
+			object h = d.CreateInstanceFromAndUnwrap(to_load_dll_name, main_class_name);
+			// get the instance object
+			// FIXME debug here
+			object i = null;
+			/*
+			object i = h.Unwrap();
+			*/
+			// done, ready to return info
+			string sub_domain_base_dir = d.BaseDirectory;
+			object[] r = new object[]{i, sub_domain_base_dir};
+			return r;
+		}
+		// TODO end
+		}
 		
 		// output ERROR
 		private static void print_err(Exception e, string name) {
