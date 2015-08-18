@@ -12,10 +12,11 @@ from . import io_one_line_only as ioo
 # global vars
 
 etc = {}	# global conf info
-etc['bin_exe'] = '../lyp_bridge.exe'
+etc['bin_exe'] = '../lyp_bridge.exe'	# path from now_dir
 etc['p'] = None	# subprocess.Popen() object
 
-etc['dll_name'] = '../Run2.dll'
+# path from now_dir
+etc['dll_name'] = '../../_EA078240_D566_42BC_A9FD_2F5B5FBBCD8B/Run.dll'
 
 # to fix sub pass args
 etc['fix_parse_url_i_min'] = 0
