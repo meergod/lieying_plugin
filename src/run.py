@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # run.py for lyp_bridge, lieying_plugin python3 to C# .net bridge, sceext <sceext@foxmail.com> 
-# version 0.0.3.0 test201508181842
+# version 0.0.4.0 test201508181912
 
 # import
 
@@ -59,18 +59,17 @@ def make_version(raw_info):
     
     # try to add filter
     if not 'filter' in out:
-        out['filter'] = FILTER_DEFUALT
+        out['filter'] = FILTER_DEFAULT
     
     # make plugin name
     raw_name = [
-        'lyp_bridge-sceext-pp-wuyan-', 
+        'lyp_bridge-wuyan-pp-', 
         ' version ', 
     ]
     
     name = raw_name[0] + raw['name'] + ' '
     name += str(ver['pack_version']) + raw_name[1]
-    name += out['version'] + '('
-    name += out['license'] + ') '
+    name += out['version'] + ' [sceext] '
     out['name'] = name
     
     # done
