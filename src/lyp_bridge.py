@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # lyp_bridge.py, a bridge from python3 to .net C# lieying_plugin .dll, sceext <sceext@foxmail.com>
-# version 0.1.2.0 test201508181749
+# version 0.1.3.0 test201508182247
 
 # import
 
@@ -110,15 +110,20 @@ def sub_do(c):
     # done
 
 # really start sub
-def real_start():
+def real_start(domain_path=''):
     # get bin file path
     now_dir = os.path.abspath(os.path.dirname(__file__))
     bin_file = os.path.normpath(os.path.join(now_dir, etc['bin_exe']))
     # make dll path
     dll_file = os.path.normpath(os.path.join(now_dir, etc['dll_name']))
+    # make args
+    arg = [bin_file, dll_file]
+    # check domain_path
+    if domain_path != '':
+        arg += [domain_path, bin_file]
     # create sub process
     PIPE = subprocess.PIPE
-    p = subprocess.Popen([bin_file, dll_file], stdin=PIPE, stdout=PIPE, stderr=sys.stderr, shell=False)
+    p = subprocess.Popen(arg, stdin=PIPE, stdout=PIPE, stderr=sys.stderr, shell=False)
     etc['p'] = p
     # wait until sub successfully started
     i = get_sub_out()
@@ -131,11 +136,11 @@ def real_start():
 # export functions
 
 # start sub process
-def start():
+def start(domain_path=''):
     # check now status
     if (etc['p'] == None) or (etc['p'].poll() != None):
         # sub is not running
-        return real_start()	# do start it
+        return real_start(domain_path)	# do start it
     else:	# sub is running
         return 'WARNING: sub is already running. '
     # check and start sub done
