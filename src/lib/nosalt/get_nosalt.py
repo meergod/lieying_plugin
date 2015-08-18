@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # get_nosalt.py for lyp_bridge, lib/nosalt/get_nosalt, sceext <sceext@foxmail.com> 
-# version 0.0.2.0 test201508190108
+# version 0.0.3.0 test201508190132
 
 # import 
 
@@ -54,6 +54,26 @@ def gen_paths():
     # done
     return False
 
+# try to decode, json should be {} format
+def try_decode_json(raw):
+    rest = raw
+    while True:
+        try:
+            info = json.loads(rest)
+            return info
+        except Exception as e:
+            # check string length
+            if len(rest) < 2:
+                raise Exception('get_nosalt :: try_decode_json failed. \n' + raw + '')
+            # try to remove something before and after rest string
+            if test.startswith('{'):
+                rest = rest[1:]
+            rest = '{' + rest.split('{', 1)[1]
+            if test.endswith('}'):
+                rest = rest[:-1]
+            rest = rest.rsplit('}', 1)[0] + '}'
+    # process done
+
 # run sub
 def run_sub(url):
     s_bin = etc['slimerjs_bin']
@@ -71,11 +91,11 @@ def run_sub(url):
         # FIXME may be decode BUG here
         # decode, just as utf-8
         stdout = stdout.decode('utf-8')
-        info = json.loads(stdout)
+        info = try_decode_json(stdout)
         return info	# done
     except Exception as e:
         stderr = stderr.decode('utf-8', 'ignore')
-        raise Exception('get_nosalt :: ERROR: get info from slimerjs sub failed. \n' + stderr + ' ', e)
+        raise Exception('get_nosalt :: ERROR: get info from slimerjs sub failed. \n' + stdout + '\n' + stderr + ' ', e)
     # process done
 
 # end get_nosalt.py
