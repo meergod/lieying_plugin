@@ -216,8 +216,6 @@ namespace lyp_bridge {
 			Type[] aa = Rb.get_types(a);	// get types
 			// find main class
 			Type c = Rb.get_class_by_attr(aa, attr_name);
-			// save main_c_name
-			main_c_name = c.FullName;
 			// get the main attribute
 			main_attr = Rb.get_attr_by_name(c, attr_name);
 			
@@ -518,7 +516,7 @@ namespace lyp_bridge {
 			// create domain
 			AppDomain d = AppDomain.CreateDomain("lyp_bridge.host_sub_domain", null, s);
 			// just exe in sub domain
-			return d.ExecuteAssembly(exe_name, null, args);	// done
+			return d.ExecuteAssembly(exe_name, args);	// done
 		}
 		
 		// main function, entry point of this program
