@@ -9,6 +9,11 @@ import json
 
 from . import lyp_bridge as b
 
+from . import conf
+from . import cache
+
+from .nosalt import get_nosalt
+
 # global vars
 PACK_VERSION = 2
 
