@@ -2,6 +2,9 @@
 
 enable_nosalt = False
 
+# path from plugin root path
+slimerjs_bin = 'slimerjs/slimerjs.bat'
+
 # end conf.py
 
 

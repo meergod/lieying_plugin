@@ -4,13 +4,10 @@
 
 # import
 
-import os
-import json
+import os, json
 
 from . import lyp_bridge as b
-
-from . import conf
-from . import cache
+from . import conf, cache
 
 from .nosalt import get_nosalt
 
