@@ -1,52 +1,34 @@
 # -*- coding: utf-8 -*-
-# main.py for lieying_plugin
-# o/update/main: plugin update function, main file
-# version 0.0.11.0 test201507272237
+# main.py for lieying_plugin/module-update (plugin)
+# plugin/update/main: plugin update function, main file
+# version 0.0.13.0 test201508071702
 
 # import
 
 import os
 import json
 
-from . import base
 from . import github
 from . import make_zip
+from . import update
+
+from ..tool import base
 
 # global vars
-etc = {}	# global config info
+etc = update.etc	# NOTE this is the same as update.etc
 
-etc['conf'] = {}	# loaded from config file
 etc['conf_loaded'] = False	# prevent reload flag
-etc['root_path'] = ''	# plugin root path
-
-CONFIG_FILE = 'etc/update_config.json'
-
-PLUGIN_ROOT_PATH = '../../'
-PLUGIN_UPDATE_PATH = 'o/update'
 
 # function
 
-# read given config file (json) and put info in etc
-def load_config(fpath=CONFIG_FILE, force_reload=False):
+# just use update.load_conf
+def load_config(force_reload=False):
     # check loaded flag
     if etc['conf_loaded'] and (not force_reload):
         return True	# not reload by default
     
-    # add plugin root path
-    now_path = os.path.dirname(__file__)
-    root_path = os.path.join(now_path, PLUGIN_ROOT_PATH)
-    etc['root_path'] = root_path
-    
-    # fpath is from plugin root_path
-    conf_file = os.path.join(root_path, fpath)
-    # read file
-    with open(conf_file) as f:
-        raw_text = f.read()
-    
-    # parse json
-    info = json.loads(raw_text)
-    # load config file done
-    etc['conf'] = info
+    # do load it
+    update.load_conf()
     
     # update loaded flag
     etc['conf_loaded'] = True
@@ -58,7 +40,7 @@ def load_config(fpath=CONFIG_FILE, force_reload=False):
 # check github latest commit
 def check_github_latest_commit(github_page_url):
     # download page html_text
-    html_text = github.easy_dl(github_page_url)
+    html_text = base.easy_dl(github_page_url)
     # get latest commit str
     latest_commit = github.get_latest_commit(html_text)
     
@@ -131,6 +113,9 @@ def mv_file(path_from, path_to):
     base.mv_R(path_from, path_to)
     # done
 
+# set root_path
+def set_root_path(root_path):
+    etc['root_path'] = root_path
 
 # end main.py
 

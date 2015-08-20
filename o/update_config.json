@@ -1,54 +1,23 @@
 {
-	"__note__" : "lieying_plugin/module-update, update_tool sample update config info", 
+	"__note__" : "lieying_plugin update config file for lieying_plugin/module-update", 
 	
 	"local" : {
 		"tmp_path" : "tmp", 
 		
-		"update_version" : "etc/update_version", 
-		"plugin_zip_file" : "tmp/lieying_plugin_youtube-dl-AUTO_PACK--.zip", 
+		"update_version" : "o/update_version", 
+		"plugin_zip_file" : "tmp/lieying_plugin-module-update-AUTO_PACK--.zip", 
 		
-		"extract_path" : "lieying_plugin_youtube-dl", 
-		"__note__" : "will extract to tmp_path", 
+		"extract_path" : "lieying_plugin-module-update", 
 		
-		"__note__" : "re_pack_file, just reserved now", 
-		"re_pack_file" : "lieying_plugin_youtube-dl-AUTO-PACK-", 
-		
-		"__note__" : "local config"
+		"re_pack_file" : "lieying_plugin-module-update-AUTO-PACK-"
 	}, 
 	
 	"remote" : {
-		"update_version" : "https://raw.githubusercontent.com/sceext2/lieying_plugin/plugin-youtube-dl/etc/update_version", 
-		"plugin_zip" : "https://github.com/sceext2/lieying_plugin/archive/plugin-youtube-dl.zip", 
-		
-		"__note__" : "remote config"
+		"update_version" : "https://raw.githubusercontent.com/sceext2/lieying_plugin/module-update/o/update_version", 
+		"plugin_zip" : "https://github.com/sceext2/lieying_plugin/archive/module-update.zip"
 	}, 
-	
-	"__note__" : "if sub is not [], will update all sub item and re-pack plugin zip, else will just return URL", 
-	"sub" : [
-		{
-			"sub_type" : "github", 
-			"__note__" : "now only support github type", 
-			
-			"sub_name" : "youtube-dl", 
-			
-			"sub_path" : "youtube-dl", 
-			"__note__" : "from plugin root_path", 
-			
-			"extract_path" : "youtube-dl", 
-			"__note__" : "will extract to tmp path", 
-			
-			"local_latest_commit" : "etc/youtube_dl_latest_commit", 
-			"sub_home" : "https://github.com/sceext2/youtube_dl", 
-			
-			"__note__" : "another type is url to a zip file, will also be extracted", 
-			"sub_type" : "url", 
-			"sub_url" : "https://github.com/rg3/youtube-dl/archive/master.zip", 
-			
-			"__note__" : "one sub item"
-		}
-	], 
-	
+	"__note__" : "no sub item", 
+	"sub" : [ ], 
 	"__note__" : "end update_config.json"
 }
-
 
