@@ -1,7 +1,7 @@
 :: lieying_plugin.md, language *Chinese* (`zh_cn`)
-:: *last_update* `2015-08-14 22:52 GMT+0800 CST`
+:: *last_update* `2015-08-20 14:28 GMT+0800 CST`
 
-# 猎影 python 插件接口定义 version 0.3.0-test.7
+# 猎影 python 插件接口定义 version 0.3.0-test.8
 
 author: `sceext <sceext@foxmail.com>`
 
@@ -151,6 +151,9 @@ author: `sceext <sceext@foxmail.com>`
 `run.py` 中定义有若干 **接口函数**. 
 
 使用 插件 时, 猎影会先 **导入** `run.py` 这个 python 模块, 然后调用其中的函数. 
+
+**注意**: 如果没有另外的 特殊说明, *猎影* 是 **单线程调用** 猎影插件. 
+就是说, 对猎影插件接口函数的 调用, 会在 一个线程中 排队进行, 不会在多个线程中同时调用. 
 
 **举例说明**: 猎影导入 `run.py` 的动作 相当于 python 中的 `import run`, 
 调用其中 `GetVersion()` 函数的动作相当于 python 中的 `run.GetVersion()` 
@@ -766,6 +769,12 @@ raise Exception('can not load page: http 404')
                   "name" : "", 
                   "url" : ""
               }
+          ], 
+          "formats" : [
+              {
+                  "label" : "", 
+                  "ext" : ""
+              }
           ]
       }
   ]
@@ -814,6 +823,14 @@ raise Exception('can not load page: http 404')
     此视频的 URL. 
     
     当进行 *单视频解析* 时, 此字符串会被 **按原样** 传入 `Parse()` 的 `url` 参数. 
+  
+  **注意**: 以下项目是 **可选**的, 插件也可以不返回这样的信息. 
+  
+  + **`formats`** 类型: 数组 (`list`, `[]`, `Array`) <br />
+    视频的可选格式列表. 
+    
+    数组内容为若干 `dict` (`{}`, `Object`). 
+    其中的 `label`, `ext` 与 *单视频解析* 中的 `label`, `ext` 定义相同. 
 
 + **更多说明**
   
