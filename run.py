@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
+<<<<<<< HEAD
 # run.py for lieying_plugin/module-py-htmldom (plugin)
 # run: lieying_plugin entry file. 
 # version 0.0.1.0 test201507291751
+=======
+# run.py for lieying_plugin/module-update (plugin)
+# run: lieying_plugin entry file. 
+# version 0.0.1.0 test201507301823
+>>>>>>> module-update
 
 # import
 
@@ -25,8 +31,14 @@ GetVersion = main.lieying_plugin_GetVersion		# GetVersion()
 # StartConfig = main.lieying_plugin_StartConfig		# StartConfig()
 # Update = main.lieying_plugin_Update			# Update(local_path='')
 
+<<<<<<< HEAD
 # exports functions for other plugins to use
 get_htmldom = main.get_htmldom		# get_htmldom()
+=======
+
+# exports functions for other plugins to use
+# TODO
+>>>>>>> module-update
 
 # NOTE add p() function for DEBUG
 def p(o):
