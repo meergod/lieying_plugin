@@ -27,6 +27,8 @@ class Test {
 		
 		// create a window
 		Form f = new Form();
+		f.Name = "wb_proxy";
+		f.Text = "wb_proxy title test";
 		
 		// FIXME
 		print("DEBUG: got here 2, set proxy done ");
@@ -40,6 +42,7 @@ class Test {
 		
 		// add it to Form
 		f.Controls.Add(wb);
+		wb.Show();	// show it
 		
 		print("DEBUG: got here 4, created web browser ");
 		// load page
@@ -50,6 +53,10 @@ class Test {
 		
 		print("DEBUG: got here 6, set Url finished ");
 		// FIXME maybe should do more
+		
+		// FIXME TODO try to show window
+		f.ResumeLayout(false);
+		f.PerformLayout();
 		
 		// done
 		return f;
@@ -67,6 +74,8 @@ class Test {
 		
 		// just start test
 		Form f = test(url, proxy);
+		// show it
+		f.Show();
 		
 		// run the window
 		Application.Run(f);
