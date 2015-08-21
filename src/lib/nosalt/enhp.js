@@ -1,0 +1,119 @@
+/* p.js for enhp : Easy node.js HTTP Proxy, sceext <sceext@foxmail.com> 2015.08 
+ * version 0.0.3.0 test201508212307
+ *
+ * NOTE please run this proxy server with
+ *	node --harmony p.js
+ * to enable use of ECMAScript6
+ */
+'use strict';	// use ECMAScript6
+
+/* require import */
+const http = require('http');
+const url = require('url');
+// NOTE chalk used for log and DEBUG
+const chalk = require('chalk');
+
+// global vars
+
+const etc = {};	// global config info obj
+etc.port = 18080;	// http proxy server will listen this port
+
+/* functions */
+
+// log functions
+	function server_log(req, raw_url) {
+		// get info
+		const method = req.method;
+		const req_url = req.url;
+		
+		// make log text
+		let t = '';
+		t += chalk.gray('request: ');
+		t += chalk.bold(method);
+		t += ' ' + chalk.italic(req_url) + ' ';
+		
+		// do log
+		console.log(t);
+	}
+	
+	// log when got response
+	function server_log_res(req_url, res) {
+		const code = res.statusCode;
+		// make log text
+		let t = '';
+		t += chalk.gray('res: ');
+		t += chalk.bold(code);
+		t += ' ' + chalk.blue.italic.underline(req_url);
+		// do log
+		console.log(t);
+	}
+
+// process incoming request
+	function server_on_req(req, res) {
+		// get request info
+		const req_method = req.method;	// looks like GET
+		const req_url = req.url;	// looks like http://www.sogou.com/
+		const req_header = req.headers;	// request HTTP headers
+		// just parse request url with url
+		const req_info = url.parse(req_url);
+		// add more info to req_info
+		req_info.method = req_method;
+		req_info.headers = req_header;
+		// proxy start request, and set proxy response listener
+		const proxy = http.request(req_info, function (imsg) {
+			// imsg : IncommingMessage
+			
+			// print log
+			server_log_res(req_url, imsg);
+			
+			// get res info
+			const res_code = imsg.statusCode;
+			const res_msg = imsg.statusMessage;
+			const res_header = imsg.headers;
+			// write head to res
+			res.writeHead(res_code, res_msg, res_header);
+			
+			// process returned data by set event listeners
+			imsg.on('data', function (chunk) {
+				res.write(chunk);
+			});
+			imsg.on('end', function () {
+				res.end();
+			});
+		
+		});
+		// set event listeners for post data
+		req.on('data', function (chunk) {
+			proxy.write(chunk);
+		});
+		req.on('end', function () {
+			proxy.end();
+		});
+		
+		// just a very simple log
+		server_log(req, req_url);
+	}
+
+// start http proxy server, port : to listen
+	function start_server(port) {
+		// create server
+		const server = http.createServer(server_on_req);
+		server.listen(port);	// start server
+		return server;	// done
+	}
+
+// main function
+	function main() {
+		// just start server
+		let port = etc.port;
+		start_server(port);
+		// log for debug
+		console.log(chalk.bold('[ OK ]') + ' ' + chalk.italic.underline.bold.yellow('enhp') + ' server started ' + chalk.blue.bold('listen') + ' ' + chalk.green(port) + ' ');
+	}
+
+// exports is not needed for main scripts, just start from main
+	main();
+
+/* end p.js */
+
+
