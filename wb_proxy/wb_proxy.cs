@@ -1,5 +1,5 @@
 /* wb_proxy.cs, use webbrowser to load page with http proxy, sceext <sceext@foxmail.com> 2015.08 
- * version 0.0.1.0 test201508220102
+ * version 0.0.2.0 test201508220212
  */
 
 using System;
@@ -8,64 +8,45 @@ using System.Windows.Forms;
 
 using SetProxy;
 
-// FIXME main test class
-class Test {
+// wb_proxy main class
+class WbProxy {
 	
-	// simple print function
+	// simple print function, for DEBUG
 	private static void print(string text) {
 		Console.WriteLine(text);
 	}
 	
-	// main test function
-	private static Form test(string url, string proxy) {
+	// create main window, set proxy, and create WebBrowser
+	private static Form create(string url, string proxy) {
 		
-		// FIXME debug here
-		print("DEBUG: got here 1, ready to set proxy to \"" + proxy + "\" ");
-		
+		// print log for DEBUG
+		print("INFO: set http_proxy to \"" + proxy + "\" ");
 		// set http proxy
 		WinInetInterop.SetConnectionProxy(proxy);
 		
-		// create a window
+		print("INFO: creating main window ");
+		// create main window
 		Form f = new Form();
-		f.Name = "wb_proxy";
-		f.Text = "wb_proxy title test";
+		f.Text = "wb_proxy main window for IE ";	// set window title
 		
-		// FIXME
-		print("DEBUG: got here 2, set proxy done ");
-		
-		print("DEBUG: got here 3, ready to create WebBrowser ");
 		// create web browser
 		WebBrowser wb = new WebBrowser();
+		wb.Dock = DockStyle.Fill;	// set dock style of wb
+		f.Controls.Add(wb);		// add it to Form
 		
-		// set dock of wb
-		wb.Dock = DockStyle.Fill;
-		
-		// add it to Form
-		f.Controls.Add(wb);
-		wb.Show();	// show it
-		
-		print("DEBUG: got here 4, created web browser ");
+		print("INFO: loading page \"" + url + "\" ");
 		// load page
 		Uri uri = new Uri(url);
-		// FIXME
-		print("DEBUG: got here 5, created uri ");
 		wb.Url = uri;
 		
-		print("DEBUG: got here 6, set Url finished ");
-		// FIXME maybe should do more
-		
-		// FIXME TODO try to show window
+		// show main window
 		f.ResumeLayout(false);
 		f.PerformLayout();
 		
-		// done
-		return f;
+		return f; // done
 	}
 	
-	// function for BeginInvoke
-	
-	// main function
-	[STAThread]
+	[STAThread]	// main function
 	public static int Main(string[] arg) {
 		
 		// get args from command line
@@ -73,15 +54,13 @@ class Test {
 		string url = arg[1];
 		
 		// just start test
-		Form f = test(url, proxy);
-		// show it
-		f.Show();
+		Form f = create(url, proxy);
 		
-		// run the window
+		print("[ OK ] init done. ");
+		// run the app
 		Application.Run(f);
 		
-		// FIXME just for DEBUG
-		return 0;
+		return 0;	// done
 	}
 }
 
