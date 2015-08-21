@@ -1,3 +1,1 @@
-@ cd ..
-@cmd
-
+../../o/DEBUG-open.bat
