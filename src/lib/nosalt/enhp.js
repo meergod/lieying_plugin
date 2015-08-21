@@ -1,8 +1,8 @@
-/* p.js for enhp : Easy node.js HTTP Proxy, sceext <sceext@foxmail.com> 2015.08 
- * version 0.0.3.0 test201508212307
+/* enhp.js, enhp : Easy node.js HTTP Proxy, sceext <sceext@foxmail.com> 2015.08 
+ * version 0.0.5.0 test201508220741
  *
  * NOTE please run this proxy server with
- *	node --harmony p.js
+ *	node --harmony enhp.js
  * to enable use of ECMAScript6
  */
 'use strict';	// use ECMAScript6
@@ -10,13 +10,12 @@
 /* require import */
 const http = require('http');
 const url = require('url');
-// NOTE chalk used for log and DEBUG
-const chalk = require('chalk');
 
 // global vars
 
 const etc = {};	// global config info obj
-etc.port = 18080;	// http proxy server will listen this port
+etc.port = 18080;	// http proxy server will listen this port, default is 18080
+etc.flag_debug = false;
 
 /* functions */
 
@@ -27,10 +26,7 @@ etc.port = 18080;	// http proxy server will listen this port
 		const req_url = req.url;
 		
 		// make log text
-		let t = '';
-		t += chalk.gray('request: ');
-		t += chalk.bold(method);
-		t += ' ' + chalk.italic(req_url) + ' ';
+		let t = 'request: ' + method + ' ' + req_url;
 		
 		// do log
 		console.log(t);
@@ -38,12 +34,14 @@ etc.port = 18080;	// http proxy server will listen this port
 	
 	// log when got response
 	function server_log_res(req_url, res) {
+		// check flag_debug
+		if (!etc.flag_debug) {
+			return;
+		}
+		
 		const code = res.statusCode;
 		// make log text
-		let t = '';
-		t += chalk.gray('res: ');
-		t += chalk.bold(code);
-		t += ' ' + chalk.blue.italic.underline(req_url);
+		let t = 'res: ' + code + ' ' + req_url;
 		// do log
 		console.log(t);
 	}
@@ -102,13 +100,35 @@ etc.port = 18080;	// http proxy server will listen this port
 		return server;	// done
 	}
 
+// get args from command line
+	function get_args(raw) {
+		let rest = raw;
+		while (rest.length > 0) {
+			let one = rest[0];
+			rest = rest.slice(1);
+			switch (one) {
+			case '--debug':	// should turn on debug flag
+				etc.flag_debug = true;
+				break;
+			default:	// this should be the port
+				try {
+					let port = parseInt(one);
+					etc.port = port;
+				} catch (e) {
+				}	// just ignore it
+			}
+		}	// process command line args done
+	}
+
 // main function
 	function main() {
+		// get command options
+		get_args(process.argv.slice(2))
 		// just start server
 		let port = etc.port;
 		start_server(port);
-		// log for debug
-		console.log(chalk.bold('[ OK ]') + ' ' + chalk.italic.underline.bold.yellow('enhp') + ' server started ' + chalk.blue.bold('listen') + ' ' + chalk.green(port) + ' ');
+		// print one line log after init OK
+		console.log('[ OK ] enhp server started listen ' + port + ' ');
 	}
 
 // exports is not needed for main scripts, just start from main
