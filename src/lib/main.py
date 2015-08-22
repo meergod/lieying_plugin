@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # main.py for lyp_bridge, lib/main, sceext <sceext@foxmail.com> 
-# version 0.1.1.0 test201508220852
+# version 0.1.2.0 test201508220923
 
 # import
 
@@ -88,11 +88,12 @@ def make_version(raw_info):
     # make plugin name
     raw_name = [
         'lyp_bridge-wuyan2-wbnp-(', 
-        ' 外挂) version ', 
+        ' 外挂) ', 
+        ' version ', 
     ]
     
-    name = raw_name[0] + raw['name'] + ' '
-    name += str(ver['pack_version']) + raw_name[1]
+    name = raw_name[0] + raw['name'] + raw_name[1]
+    name += str(ver['pack_version']) + raw_name[2]
     name += out['version'] + ' [sceext] '
     out['name'] = name
     
