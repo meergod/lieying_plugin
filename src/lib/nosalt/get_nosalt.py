@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # get_nosalt.py for lyp_bridge, lib/nosalt/get_nosalt, sceext <sceext@foxmail.com> 
-# version 0.1.1.0 test201508220818
+# version 0.1.2.0 test201508220845
 
 # import 
 
@@ -34,8 +34,10 @@ def get_info(url):
     # gen paths
     gen_paths()
     # call sub and get info
-    info = get_target(url)
+    url = get_target(url)
     # done
+    info = {}
+    info['url'] = url
     return info
 
 # base functions
@@ -51,7 +53,7 @@ def gen_paths():
     enhp_bin = os.path.normpath(os.path.join(now_dir, etc['raw_enhp_bin']))
     etc['enhp_bin'] = enhp_bin	# save it
     # gen wb_proxy bin path
-    w_bin = os.path.normpath(os.path.join(root_path, etc['raw_wb_proxy_bin']))
+    w_bin = os.path.normpath(os.path.join(root_path, conf.wb_proxy_bin))
     etc['wb_proxy_bin'] = w_bin
     # done
     return False
@@ -72,7 +74,7 @@ def get_target(url):
     
     PIPE = subprocess.PIPE
     # start enhp
-    p_arg = [node_bin, '--harmony', p_bin, p_port]
+    p_arg = [node_bin, '--harmony', p_bin, str(p_port)]
     # print for DEBUG
     print('DEBUG: start enhp proxy server at port ' + str(p_port) + ' ')
     pp = subprocess.Popen(p_arg, stdout=PIPE, stderr=sys.stderr, shell=False)
@@ -99,7 +101,7 @@ def get_target(url):
         # decode it
         url = parse_enhp(one)
         # check url
-        if re.match(re_target, url):
+        if len(re.findall(re_target, url)) > 0:
             # kill both process
             pw.kill()
             pp.kill()
