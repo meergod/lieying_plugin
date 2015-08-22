@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 # get_nosalt.py for lyp_bridge, lib/nosalt/get_nosalt, sceext <sceext@foxmail.com> 
-# version 0.1.0.0 test201508190326
+# version 0.1.1.0 test201508220818
 
 # import 
 
-import os, json
+import re, os, sys
 import subprocess
 
 from .. import conf
@@ -15,13 +15,15 @@ etc = {}
 etc['flag_gen_ed_path'] = False
 
 # config items
-etc['raw_slimerjs_bin'] = conf.slimerjs_bin	# path from plugin root path
-
-etc['raw_open_page_bin'] = 'open_page.js'	# path from now_dir
+etc['raw_enhp_bin'] = 'enhp.js'	# path from now_dir
 etc['raw_root_path'] = '../../'	# from now_dir to plugin root path
+etc['node_bin'] = 'node'
 # should be generated
-etc['slimerjs_bin'] = ''
-etc['open_page_bin'] = ''
+etc['wb_proxy_bin'] = ''
+etc['enhp_bin'] = ''
+
+# TODO fix encoding BUG here
+etc['stdout_encoding'] = 'utf-8'
 
 # functions
 
@@ -32,7 +34,7 @@ def get_info(url):
     # gen paths
     gen_paths()
     # call sub and get info
-    info = run_sub(url)
+    info = get_target(url)
     # done
     return info
 
@@ -45,62 +47,65 @@ def gen_paths():
     # get now_dir
     now_dir = os.path.normpath(os.path.dirname(__file__))
     root_path = os.path.normpath(os.path.join(now_dir, etc['raw_root_path']))
-    # gen open_page_bin
-    open_page_bin = os.path.normpath(os.path.join(now_dir, etc['raw_open_page_bin']))
-    etc['open_page_bin'] = open_page_bin	# save it
-    # gen slimerjs bin path
-    s_bin = os.path.normpath(os.path.join(root_path, etc['raw_slimerjs_bin']))
-    etc['slimerjs_bin'] = s_bin
+    # gen enhp_bin
+    enhp_bin = os.path.normpath(os.path.join(now_dir, etc['raw_enhp_bin']))
+    etc['enhp_bin'] = enhp_bin	# save it
+    # gen wb_proxy bin path
+    w_bin = os.path.normpath(os.path.join(root_path, etc['raw_wb_proxy_bin']))
+    etc['wb_proxy_bin'] = w_bin
     # done
     return False
 
-# try to decode, json should be {} format
-def try_decode_json(raw):
-    rest = raw
-    while True:
-        try:
-            info = json.loads(rest)
-            return info
-        except Exception as e:
-            # check string length
-            if len(rest) < 2:
-                raise Exception('get_nosalt :: try_decode_json failed. \n' + raw + '')
-            # try to remove something before and after rest string
-            if rest.startswith('{'):
-                rest = rest[1:]
-            rest = '{' + rest.split('{', 1)[1]
-            if rest.endswith('}'):
-                rest = rest[:-1]
-            rest = rest.rsplit('}', 1)[0] + '}'
-    # process done
+# parse enhp output
+def parse_enhp(raw):
+    part = raw.split(' ', 2)
+    url = part[2]
+    return url
 
-# run sub
-def run_sub(url):
-    s_bin = etc['slimerjs_bin']
-    op_bin = etc['open_page_bin']
+# get target, main work function
+def get_target(url):
+    w_bin = etc['wb_proxy_bin']
+    p_bin = etc['enhp_bin']
+    node_bin = etc['node_bin']
     
-    # check slimerjs_bin
-    if not os.path.isfile(s_bin):
-        raise Exception('get_nosalt :: ERROR: slimerjs not installed. File not exist \"' + s_bin + '\" ')
+    p_port = conf.local_proxy_port
     
-    # make args
-    arg = [s_bin, op_bin, url]
-    # start sub process
     PIPE = subprocess.PIPE
-    p = subprocess.Popen(arg, stdout=PIPE, stderr=PIPE, shell=False)
-    # get output
-    stdout, stderr = p.communicate()
-    # try to decdoe and load as json
-    try:
-        # FIXME may be decode BUG here
-        # decode, just as utf-8
-        stdout = stdout.decode('utf-8')
-        info = try_decode_json(stdout)
-        return info	# done
-    except Exception as e:
-        stderr = stderr.decode('utf-8', 'ignore')
-        raise Exception('get_nosalt :: ERROR: get info from slimerjs sub failed. \n' + stdout + '\n' + stderr + ' ', e)
-    # process done
+    # start enhp
+    p_arg = [node_bin, '--harmony', p_bin, p_port]
+    # print for DEBUG
+    print('DEBUG: start enhp proxy server at port ' + str(p_port) + ' ')
+    pp = subprocess.Popen(p_arg, stdout=PIPE, stderr=sys.stderr, shell=False)
+    # wait until enhp init finished
+    pp.stdout.readline()
+    
+    # make args for wb_proxy
+    local_proxy = '127.0.0.1:' + str(p_port)
+    # start wb_proxy.exe
+    w_arg = [w_bin, local_proxy, url]
+    pw = subprocess.Popen(w_arg, stdout=None, stderr=sys.stderr, shell=False)
+    
+    # get and check enhp output
+    encoding = etc['stdout_encoding']
+    re_target = conf.re_target_url
+    while True:
+        raw = pp.stdout.readline()
+        one = raw.decode(encoding)
+        # remove \r \n after end
+        if one.endswith('\r\n'):
+            one = one[:-len('\r\n')]
+        elif one.endswith('\r') or one.endswith('\n'):
+            one = one[:-1]
+        # decode it
+        url = parse_enhp(one)
+        # check url
+        if re.match(re_target, url):
+            # kill both process
+            pw.kill()
+            pp.kill()
+            # just return the result
+            return url
+    # check done, and get target URL, done OK
 
 # end get_nosalt.py
 
