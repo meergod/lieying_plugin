@@ -14,7 +14,7 @@ except Exception:
 
 # exports functions, just call functions in main.py
 GetVersion = main.GetVersion
-Config = main.Config
+#Config = main.Config
 # NOTE not support Update function now
 #Update = main.Update
 Parse = main.Parse

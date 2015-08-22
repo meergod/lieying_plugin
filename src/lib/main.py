@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # main.py for lyp_bridge, lib/main, sceext <sceext@foxmail.com> 
-# version 0.1.0.0 test201508190329
+# version 0.1.2.0 test201508220923
 
 # import
 
@@ -15,7 +15,7 @@ from .plist import entry as plist
 from .plist import output as plisto
 
 # global vars
-PACK_VERSION = 4
+PACK_VERSION = 5
 
 FILTER_DEFAULT = [	# default filter info for lieying_plugin
     '^http://.+', 
@@ -47,14 +47,14 @@ def make_version(raw_info):
     
     # version info by lyp_bridge
     ver = {
-        'port_version' : '0.3.0-test.7', 
-        'uuid' : '2280f81b-7447-47e2-b7a8-3f760f8fa62b', 
-        'version' : '0.4.0', 
+        'port_version' : '0.3.0-test.8', 
+        'uuid' : '9eb959fe-36e5-4d0c-88c6-fd779254b4ee', 
+        'version' : '0.5.0', 
         
         'author' : 'sceext <sceext@foxmail.com>', 
         'license' : 'unlicense <http://unlicense.org/>', 
-        'home' : 'https://github.com/sceext2/lieying_plugin/tree/lyp_bridge-pp-wuyan', 
-        'note' : 'A lieying python3 plugin, use lyp_bridge to provide functions of piaopiao wuyan programs. ', 
+        'home' : 'https://github.com/sceext2/lieying_plugin', 
+        'note' : 'A lieying python3 plugin, use lyp_bridge to provide functions of piaopiao wuyan programs. \n With wuyan2 : C# WebBrowser + node.js enhp http proxy server to get target key url. ', 
         'pack_version' : PACK_VERSION, 
     }
     
@@ -87,12 +87,13 @@ def make_version(raw_info):
     
     # make plugin name
     raw_name = [
-        'lyp_bridge-wuyan-pp-', 
+        'lyp_bridge-wuyan2-wbnp-(', 
+        ' 外挂) ', 
         ' version ', 
     ]
     
-    name = raw_name[0] + raw['name'] + ' '
-    name += str(ver['pack_version']) + raw_name[1]
+    name = raw_name[0] + raw['name'] + raw_name[1]
+    name += str(ver['pack_version']) + raw_name[2]
     name += out['version'] + ' [sceext] '
     out['name'] = name
     
